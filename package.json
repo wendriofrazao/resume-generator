@@ -1,0 +1,21 @@
+{
+  "name": "resume-generator",
+  "version": "1.0.0",
+  "description": "Crie seu portfólio online em minutos! Nosso gerador de portfólios permite que você personalize seu espaço profissional de forma rápida, simples e elegante, sem precisar programar. Mostre suas habilidades, projetos e conquiste oportunidades.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wendriofrazao/resume-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/wendriofrazao/resume-generator/issues"
+  },
+  "homepage": "https://github.com/wendriofrazao/resume-generator#readme"
+}
