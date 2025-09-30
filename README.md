@@ -26,7 +26,7 @@ Com ele, qualquer pessoa pode montar um portfólio elegante e responsivo em pouc
 ## 🛠️ Tecnologias utilizadas  
 - **Frontend:** HTML, CSS, JavaScript  
 - **Backend:** Node.js / Express (se aplicável)  
-- **Banco de Dados:** MongoDB (ou outro escolhido)  
+- **Banco de Dados:** MongoDB  
 
 ---
 
