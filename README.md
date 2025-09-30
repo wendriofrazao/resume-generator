@@ -1,12 +1,12 @@
-# Gerador de Portfólios  
+# Gerador de Currículos
 
-Um site simples e prático para criar e compartilhar portfólios online.  
+Um site simples e prático para criar e compartilhar currículos online.  
 Com ele, qualquer pessoa pode montar um portfólio elegante e responsivo em poucos cliques, sem precisar de conhecimentos técnicos.  
 
 ---
 
 ## ✨ Funcionalidades  
-- Criação de portfólio online em minutos  
+- Criação de currículos online em minutos  
 - Personalização de informações (nome, bio, habilidades, projetos, contatos)  
 - Design responsivo e moderno  
 - Compartilhamento fácil via link único  
