@@ -1,2 +1,33 @@
-# portfolio-generator
-Crie seu portfólio online em minutos! Nosso gerador de portfólios permite que você personalize seu espaço profissional de forma rápida, simples e elegante, sem precisar programar. Mostre suas habilidades, projetos e conquiste oportunidades.
+# Gerador de Portfólios  
+
+Um site simples e prático para criar e compartilhar portfólios online.  
+Com ele, qualquer pessoa pode montar um portfólio elegante e responsivo em poucos cliques, sem precisar de conhecimentos técnicos.  
+
+---
+
+## ✨ Funcionalidades  
+- Criação de portfólio online em minutos  
+- Personalização de informações (nome, bio, habilidades, projetos, contatos)  
+- Design responsivo e moderno  
+- Compartilhamento fácil via link único  
+- Edição rápida e intuitiva  
+
+---
+
+## 🚀 Como usar  
+1. Acesse o site.  
+2. Preencha seus dados pessoais e profissionais.  
+3. Adicione seus projetos e habilidades.  
+4. Clique em **Gerar Portfólio**.  
+5. Compartilhe o link e pronto!  
+
+---
+
+## 🛠️ Tecnologias utilizadas  
+- **Frontend:** HTML, CSS, JavaScript  
+- **Backend:** Node.js / Express (se aplicável)  
+- **Banco de Dados:** MongoDB (ou outro escolhido)  
+
+---
+
+## 📂 Estrutura do projeto  
