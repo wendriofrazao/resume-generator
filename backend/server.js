@@ -4,62 +4,76 @@ import exphbs from 'express-handlebars';
 import session from 'express-session';
 import flash from 'express-flash';
 import path from 'path';
-import FileStore from 'session-file-store';
+import os from 'os';
+import { fileURLToPath } from 'url';
+import connectFileStore from 'session-file-store';
 
-// middlewares
+import router from './routes/authRoutes.js';
 import flashMessageLocals from './middlewares/flashMessage.js';
 import setSession from './middlewares/setSession.js';
-
-// conexão import
 import connectionDB from './configs/db.js';
 
-// ativar conexão
+// config dotenv
+dotenv.config();
+
+// conexão DB
 connectionDB();
 
-//configuration dotenv
-dotenv.config();
+// __dirname no ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
-
-// middlewares
+// body parser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// static
+app.use(express.static(path.join(__dirname, 'public')));
+
+// template engine
 app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.static('public'));
+// session store
+const FileStore = connectFileStore(session);
 
-
-// session middleware
+// session middleware 
 app.use(
-    session({
-        name: 'auth',
-        secret: process.env.SECRETE_KEY,
-        resave: false,
-        saveUninitialized: false,
-        store: new FileStore({
-            logFn: () => {},
-            path: require('path').join(require('os').tmpdir(), 'sessions'),
-        }),
-        cookie: {
-            secure: false,
-            maxAge: 1000 * 60 * 60 * 24,
-            httpOnly: true
-        }
+  session({
+    name: 'auth',
+    secret: process.env.SECRETE_KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: new FileStore({
+      logFn: () => {},
+      path: path.join(os.tmpdir(), 'sessions'),
     }),
-)
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+    },
+  })
+);
 
-// flash messages
+// flash
 app.use(flash());
 
-// middleware flash messages to views through locals
-app.use(flashMessageLocals());
-app.use(setSession());
+// middlewares custom 
+app.use(flashMessageLocals);
+app.use(setSession);
 
+// routes
+app.use('/auth', router);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Seridor rodando com sucesso!, na url: http://localhost:${process.env.PORT}`);
+app.get('/', (req, res) => {
+    res.send("teste");
 })
+
+// start server
+app.listen(process.env.PORT, () => {
+  console.log(`Servidor rodando: http://localhost:${process.env.PORT}`);
+});

@@ -1,4 +1,4 @@
-import User from './models/User.js'
+import  User from '../models/User.js'
 import bcrypt from 'bcrypt'
 
 export const checkEmailExists = async (email) => {
@@ -11,7 +11,7 @@ export const FindUserById = async (id) => {
 }
 
 
-export const registerService  = async (fullname, email, password) => {
+export const registerService  = async (fullname, email, password, confirmpass) => {
 
     const EmailExists = await Promise(checkEmailExists(email))
 
@@ -30,5 +30,11 @@ export const registerService  = async (fullname, email, password) => {
 }
 
 export const loginService = async (req, res) => {
-    
+
+    const userVerify = await Promise(checkEmailExists(email));
+
+    if (!userVerify) {
+      throw new Error('Email não existente');
+    }
+
 }
