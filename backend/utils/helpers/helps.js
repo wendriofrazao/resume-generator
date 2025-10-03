@@ -1,1 +1,0 @@
-console.log("crinado as pastas essenciais do projeto");
