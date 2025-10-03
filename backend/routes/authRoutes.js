@@ -1,1 +1,6 @@
-console.log("crinado as pastas essenciais do projeto");
+import express from 'express'
+
+const router = express.Router();
+
+
+router.post('/register', Register)

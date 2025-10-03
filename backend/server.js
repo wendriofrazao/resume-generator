@@ -1,7 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import exphbs from 'express-handlebars';
+import session from 'express-session';
+import flash from 'express-flash';
+import path from 'path';
 
-import connectionDB from './configs/db';
+import connectionDB from './configs/db.js';
 
 // ativar conexão
 connectionDB();
