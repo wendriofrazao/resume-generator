@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import connectFileStore from 'session-file-store';
 
 import router from './routes/authRoutes.js';
+import otpRouter from './routes/otpRoutes.js'
 import flashMessageLocals from './middlewares/flashMessage.js';
 import setSession from './middlewares/setSession.js';
 import connectionDB from './configs/db.js';
@@ -68,6 +69,7 @@ app.use(setSession);
 
 // routes
 app.use('/auth', router);
+app.use("/otp", otpRouter);
 
 app.get('/', (req, res) => {
     res.send("teste");
