@@ -1,1 +1,16 @@
 /* estilização principal */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  background: #f8f9fb; /* fundo claro */
+  color: #2d2d2d;
+}

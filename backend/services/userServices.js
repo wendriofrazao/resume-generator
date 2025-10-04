@@ -1,4 +1,5 @@
 import  User from '../models/User.js'
+import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt'
 
 export const checkEmailExists = async (email) => {
@@ -11,13 +12,13 @@ export const FindUserById = async (id) => {
 }
 
 
-export const registerService  = async (fullname, email, password, confirmpass) => {
+export const registerService  = async (fullname, email, password) => {
 
-    const EmailExists = await Promise(checkEmailExists(email))
+    const EmailExists = await checkEmailExists(email);
 
     if (EmailExists) throw new Error('Email já existe');
 
-    const passwordHash = bcrypt.hash(password, 12)
+    const passwordHash = await bcrypt.hash(password, 12)
 
     const newUser = new User({
      fullname, 
@@ -29,12 +30,22 @@ export const registerService  = async (fullname, email, password, confirmpass) =
     return newUser
 }
 
-export const loginService = async (req, res) => {
+export const loginService = async (email, password) => {
 
-    const userVerify = await Promise(checkEmailExists(email));
+    const userVerify = await checkEmailExists(email);
 
     if (!userVerify) {
-      throw new Error('Email não existente');
+      throw new Error('Email não encontrado');
     }
+
+    const comparePass = await bcrypt.compare(password, userVerify.password);
+
+    if (!comparePass) {
+      throw new Error('As senha não confere');
+    } 
+
+    const { password: _, userWithinfPassword } = userVerify;
+
+    return userWithinfPassword;
 
 }

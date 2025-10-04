@@ -73,6 +73,7 @@ app.get('/', (req, res) => {
     res.send("teste");
 })
 
+
 // start server
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando: http://localhost:${process.env.PORT}`);
