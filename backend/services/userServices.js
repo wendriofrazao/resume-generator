@@ -13,9 +13,9 @@ export const FindUserById = async (id) => {
 
 export const registerService  = async (fullname, email, password) => {
 
-    const EmailExists = await checkEmailExists(email);
+    const emailExists = await checkEmailExists(email);
 
-    if (EmailExists) throw new Error('Email já existe');
+    if (emailExists) throw new Error('Email já existe');
 
     const passwordHash = await bcrypt.hash(password, 12)
 
