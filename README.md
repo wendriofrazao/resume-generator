@@ -18,7 +18,7 @@ Com ele, qualquer pessoa pode montar um portfólio elegante e responsivo em pouc
 1. Acesse o site.  
 2. Preencha seus dados pessoais e profissionais.  
 3. Adicione seus projetos e habilidades.  
-4. Clique em **Gerar Portfólio**.  
+4. Clique em **Baixar Currículo**.  
 5. Compartilhe o link e pronto!  
 
 ---
