@@ -12,7 +12,26 @@ const templateSchema = new mongoose.Schema({
   category: {
     type: String,
     required: false
+  },
+  
+  htmlContent: {
+    type: String,
+    required: true
+  },
+  cssContent: {
+    type: String,
+    default: ''
+  },
+  variables: [{
+    name: String,
+    type: String, 
+    required: Boolean,
+    defaultValue: String
+  }],
+  isActive: {
+    type: Boolean,
+    default: true
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Template", templateSchema);
+export default mongoose.model("Template", templateSchema);

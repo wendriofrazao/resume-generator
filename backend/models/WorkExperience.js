@@ -13,4 +13,4 @@ const workExperienceSchema = new mongoose.Schema({
   description: {type: String }
 }, { timestamps: true });
 
-module.exports = mongoose.model("WorkExperience", workExperienceSchema);
+export default mongoose.model("WorkExperience", workExperienceSchema);

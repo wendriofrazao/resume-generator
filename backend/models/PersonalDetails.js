@@ -20,4 +20,4 @@ const personalDetailsSchema = new mongoose.Schema({
   githubURL: { type: String }
 }, { timestamps: true });
 
-module.exports = mongoose.model("PersonalDetails", personalDetailsSchema);
+export default mongoose.model("PersonalDetails", personalDetailsSchema);

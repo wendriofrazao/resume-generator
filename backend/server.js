@@ -8,8 +8,12 @@ import os from 'os';
 import { fileURLToPath } from 'url';
 import connectFileStore from 'session-file-store';
 
+// import routes
 import router from './routes/authRoutes.js';
 import otpRouter from './routes/otpRoutes.js'
+import resumeRouter from './routes/resumeRoute.js';
+
+// import middleware
 import flashMessageLocals from './middlewares/flashMessage.js';
 import setSession from './middlewares/setSession.js';
 import connectionDB from './configs/db.js';
@@ -70,6 +74,7 @@ app.use(setSession);
 // routes
 app.use('/auth', router);
 app.use("/otp", otpRouter);
+app.use("/layout", resumeRouter);
 
 app.get('/', (req, res) => {
     res.send("teste");

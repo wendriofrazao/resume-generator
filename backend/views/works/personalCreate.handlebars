@@ -1,0 +1,63 @@
+ <!-- FORMULÁRIO -->
+    <section class="panel" aria-labelledby="form-title">
+      <h2 id="form-title">Editar Perfil</h2>
+      <p class="lead">Preencha os dados do perfil. Use os botões para atualizar a pré-visualização.</p>
+
+      <form id="profileForm" action="/layout/personal" method="post">
+        <div class="grid">
+          <div>
+            <label for="fullName">Nome completo</label>
+            <input id="fullName" name="fullName" type="text" placeholder="Ex: Ana Silva" required />
+          </div>
+
+          <div>
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" placeholder="seu@exemplo.com" required />
+          </div>
+
+          <div>
+            <label for="phoneNumber">Telefone</label>
+            <input id="phoneNumber" name="phoneNumber" type="text" placeholder="+55 (11) 9 9999-9999" />
+          </div>
+
+          <div>
+            <label for="country">País</label>
+            <input id="country" name="country" type="text" placeholder="Brasil" />
+          </div>
+
+          <div>
+            <label for="state">Estado</label>
+            <input id="state" name="state" type="text" placeholder="SP" />
+          </div>
+
+          <div>
+            <label for="city">Cidade</label>
+            <input id="city" name="city" type="text" placeholder="São Paulo" />
+          </div>
+
+          <div class="full-width">
+            <label for="professionalSummary">Resumo profissional</label>
+            <textarea id="professionalSummary" name="professionalSummary" placeholder="Breve resumo — quem é você, cores, ênfases, stack, objetivos..."></textarea>
+          </div>
+
+          <div>
+            <label for="linkedInURL">LinkedIn (URL)</label>
+            <input id="linkedInURL" name="linkedInURL" type="url" placeholder="https://linkedin.com/in/usuario" />
+          </div>
+
+          <div>
+            <label for="githubURL">GitHub (URL)</label>
+            <input id="githubURL" name="githubURL" type="url" placeholder="https://github.com/usuario" />
+          </div>
+
+          <div class="full-width">
+            <label for="portfolioURL">Portfólio / Site (URL)</label>
+            <input id="portfolioURL" name="portfolioURL" type="url" placeholder="https://meuportfolio.com" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn">Atualizar pré-visualização</button>
+        </div>
+      </form>
+    </section>

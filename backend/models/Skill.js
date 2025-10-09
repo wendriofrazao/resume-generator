@@ -9,4 +9,4 @@ const skillSchema = new mongoose.Schema({
   skillName: { type: String, required: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Skill", skillSchema);
+export default mongoose.model("Skill", skillSchema);

@@ -1,0 +1,11 @@
+p {margin: 0; padding: 0;}	.ft10{font-size:16px;font-family:DQEVOW+CMBX12;color:#000000;}
+	.ft11{font-size:10px;font-family:UWGHMM+FontAwesome5Free-Solid;color:#000000;}
+	.ft12{font-size:10px;font-family:BJOFNU+CMR10;color:#000000;}
+	.ft13{font-size:10px;font-family:UWGHMM+FontAwesome5Free-Solid;color:#0000ff;}
+	.ft14{font-size:10px;font-family:BJOFNU+CMR10;color:#0000ff;}
+	.ft15{font-size:10px;font-family:PNYVII+FontAwesome5Brands;color:#0000ff;}
+	.ft16{font-size:13px;font-family:DQEVOW+CMBX12;color:#000000;}
+	.ft17{font-size:10px;font-family:GPXVLE+CMBX10;color:#000000;}
+	.ft18{font-size:10px;font-family:FIZSCB+CMSY10;color:#000000;}
+	.ft19{font-size:10px;font-family:NVMGAB+CMTI10;color:#000000;}
+	.ft110{font-size:10px;font-family:MULJMX+SFRM1000;color:#000000;}
