@@ -31,7 +31,7 @@ Com ele, qualquer pessoa pode montar um portfólio elegante e responsivo em pouc
 ---
 
 ## 📂 Estrutura do projeto  
-- Backend:
+Backend:
 ```bash
 ├── 📁 configs/
 │   ├── 📄 db.js
