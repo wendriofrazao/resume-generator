@@ -37,10 +37,15 @@ app.use(express.json());
 // static
 app.use(express.static(path.join(__dirname, 'public')));
 
-// template engine
-app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }));
-app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
+
+// template engine
+app.engine('handlebars', exphbs.engine({
+  defaultLayout: 'main',
+  layoutsDir: path.join(__dirname, 'views', 'layouts'),
+  partialsDir: path.join(__dirname, 'views', 'partials')
+}));
+app.set('view engine', 'handlebars');
 
 // session store
 const FileStore = connectFileStore(session);
@@ -74,7 +79,7 @@ app.use(setSession);
 // routes
 app.use('/auth', router);
 app.use("/otp", otpRouter);
-app.use("/layout", resumeRouter);
+app.use("/", resumeRouter);
 
 app.get('/', (req, res) => {
     res.send("teste");

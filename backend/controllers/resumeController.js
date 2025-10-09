@@ -52,23 +52,8 @@ res.json({
 
 export async function personalController(req, res) {
 
-    try {
-        
-    const {
-      fullName,
-      email,
-      phoneNumber,
-      country,
-      state,
-      city,
-      professionalSummary,
-      linkedInURL,
-      githubURL,
-      portfolioURL
-    } = req.body
-
-    
-    const personal = await personalService(
+   try {
+        const {
             fullName,
             email,
             phoneNumber,
@@ -78,20 +63,40 @@ export async function personalController(req, res) {
             professionalSummary,
             linkedInURL,
             githubURL,
-            portfolioURL
-        );
+            portfolioURL,
+            resumeId
+        } = req.body;
+
+        if (!resumeId) {
+            return res.status(400).json({
+                success: false,
+                message: "O campo 'resumeId' é obrigatório."
+            });
+        }
+
+        const personal = await personalService({
+            fullName,
+            email,
+            phoneNumber,
+            country,
+            state,
+            city,
+            professionalSummary,
+            linkedInURL,
+            githubURL,
+            portfolioURL,
+            resumeId
+        });
 
         res.status(201).json({
             success: true,
-            message: 'Informações pesoais salvas com sucesso!',
+            message: 'Informações pessoais salvas com sucesso!',
             data: personal
-        })
-        
+        });
     } catch (error) {
         res.status(400).json({
             success: false,
             message: error.message
-        })
+        });
     }
-
 }
