@@ -12,7 +12,7 @@ resumeRouter.get('/work', (req, res) => {
 })
 
 resumeRouter.get('/personal', (req, res) => {
-        res.render('works/personal');
+    res.render('works/personal');
 })
 
 resumeRouter.post('/personal', personalController);
