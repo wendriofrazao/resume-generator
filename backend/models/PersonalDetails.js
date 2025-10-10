@@ -14,10 +14,7 @@ const personalDetailsSchema = new mongoose.Schema({
     state: { type: String },
     country: { type: String }
   },
-  linkedInURL: { type: String },
-  portfolioURL: { type: String },
   professionalSummary: { type: String },
-  githubURL: { type: String }
 }, { timestamps: true });
 
 export default mongoose.model("PersonalDetails", personalDetailsSchema);

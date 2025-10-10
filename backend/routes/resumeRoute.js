@@ -1,5 +1,6 @@
 import express from 'express';
-import { personalController } from '../controllers/resumeController.js';
+import { checkAuth} from '../middlewares/authMiddleware.js'
+import { createResume } from '../controllers/resumeController.js';
 
 const resumeRouter = express.Router();
 
@@ -11,15 +12,7 @@ resumeRouter.get('/work', (req, res) => {
     res.render('template/work', { layout: 'templates' });
 });
 
-resumeRouter.get('/personal', async (req, res) => {
 
-        res.render('works/personalCreate', {
-            layout: 'templates',
-            resumeId: "650f1a2b3c4d5e6f7a8b9c0d"
-        });
-
-});
-
-resumeRouter.post('/personal', personalController);
+resumeRouter.post("/create-resume", checkAuth, createResume)
 
 export default resumeRouter;

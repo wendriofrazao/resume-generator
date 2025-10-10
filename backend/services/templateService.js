@@ -35,3 +35,11 @@ export async function getTemplateById(templateId) {
     throw new Error(`Erro ao buscar template: ${error.message}`);
   }
 }
+
+export async function getTemplateByName(templateName) {
+  try {
+    return await Template.findOne({ name: templateName, isActive: true });
+  } catch (error) {
+    throw new Error(`Erro ao buscar template: ${error.message}`);
+  }
+}

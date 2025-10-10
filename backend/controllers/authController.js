@@ -27,9 +27,8 @@ export const Login = async (req, res) => {
         
         const user = await loginService(email, password);
 
-        req.session.userId = user.id;
-
-        req.session.save();
+        req.session.userId = user._id;
+        await req.session.save();
 
         return res.status(200).json({ 
             success: true, 
