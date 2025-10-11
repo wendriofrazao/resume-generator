@@ -1,8 +1,8 @@
 import { personalService, findResumeById, findPersonalDetailsById, createResumeService, getCompleteResume }from '../services/resumeService.js';
-import { renderTemplate, getTemplateByName } from '../services/templateService.js';
-import Education from '../models/Education.js'
-import Experience from '../models/WorkExperience.js'
-
+import { renderTemplate } from '../services/templateService.js';
+import { experienceWorkService } from '../services/resumeService.js';
+import { skillService } from '../services/resumeService.js';
+import { educationService } from '../services/resumeService.js';
 
 export async function createResume(req, res) {
   try {
@@ -91,14 +91,14 @@ export async function previewTemplate(req, res) {
 export async function savePersonalDetails(req, res) {
   try {
     const { resumeId } = req.params;
-    const personalData = { ...req.body, resumeId };
+    const personalData = req.body;
     
-    const result = await personalService(personalData);
+    const result = await personalService(personalData, resumeId);
     
     res.json({
       success: true,
       data: result,
-      message: 'Dados pessoais salvos com sucesso'
+      message: 'Dados pessoais salvos com sucesso!'
     });
   } catch (error) {
     res.status(400).json({
@@ -106,4 +106,81 @@ export async function savePersonalDetails(req, res) {
       error: error.message
     });
   }
+}
+
+export async function saveExperienceWorkController(req, res) {
+
+    try {
+      const { resumeId } = req.params;
+      const XpWorkData = req.body;
+
+      const createWorkXP = await experienceWorkService(XpWorkData, resumeId);
+
+      res.json({
+        success: true,
+        data: createWorkXP,
+        message: 'Experiências profissionais salvas com sucesso!'
+      });
+
+    } catch (error) {
+      
+      res.status(400).json({
+      success: false,
+      error: error.message
+    });
+
+    }
+
+}
+
+export async function saveEducationController(req, res) {
+
+    try {
+      const { resumeId } = req.params;
+      const educationData = req.body;
+
+      const createEducation = await educationService(educationData, resumeId);
+
+      res.json({
+        success: true,
+        data: createEducation,
+        message: 'Educação salvas com sucesso!'
+      });
+
+    } catch (error) {
+      
+      res.status(400).json({
+      success: false,
+      error: error.message
+    });
+
+    }
+
+}
+
+
+
+export async function saveSkillController(req, res) {
+
+    try {
+      const { resumeId } = req.params;
+      const skillName = req.body;
+
+      const createSkill = await skillService(skillName, resumeId);
+
+      res.json({
+        success: true,
+        data: createSkill,
+        message: 'Habilidades salvas com sucesso!'
+      });
+
+    } catch (error) {
+      
+      res.status(400).json({
+      success: false,
+      error: error.message
+    });
+
+    }
+
 }

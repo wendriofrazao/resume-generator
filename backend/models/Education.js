@@ -6,11 +6,11 @@ const educationSchema = new mongoose.Schema({
     ref: "Resume",
     required: true
   },
-  degree: { type: String, required: true },
-  institution: { type: String, required: true },
+  degree: { type: String },
+  institution: { type: String },
   description: { type: String },
   period: { type: String },
-  startDate: { type: Date, required: true },
+  startDate: { type: Date },
   endDate: { type: Date }
 }, { timestamps: true });
 

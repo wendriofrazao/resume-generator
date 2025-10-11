@@ -6,11 +6,12 @@ const workExperienceSchema = new mongoose.Schema({
     ref: "Resume",
     required: true
   },
-  jobTitle: {type: String},
+  jobDegree: {type: String},
   company: {type: String},
+  description: {type: String },
+  period: {type: String},
   startDate: {type: Date},
   endDate: {type: Date },
-  description: {type: String }
 }, { timestamps: true });
 
 export default mongoose.model("WorkExperience", workExperienceSchema);

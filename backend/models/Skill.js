@@ -6,7 +6,7 @@ const skillSchema = new mongoose.Schema({
     ref: "Resume",
     required: true
   },
-  skillName: { type: String, required: true }
+  skillName: { type: String }
 }, { timestamps: true });
 
 export default mongoose.model("Skill", skillSchema);
