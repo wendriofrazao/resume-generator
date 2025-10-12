@@ -36,11 +36,13 @@ Backend:
 ```bash
 ├── 📁 configs/
 │   ├── 📄 db.js
-│   └── 📄 mailtrap.js
+│   ├── 📄 mailtrap.js
+│   └── 📄 template.js
 ├── 📁 controllers/
 │   ├── 📄 authController.js
 │   ├── 📄 otpController.js
-│   └── 📄 resumeController.js
+│   ├── 📄 resumeController.js
+│   └── 📄 templateController.js
 ├── 📁 middlewares/
 │   ├── 📄 authMiddleware.js
 │   ├── 📄 authValidateMiddleware.js
@@ -59,15 +61,18 @@ Backend:
 │   └── 📁 css/
 │       ├── 🎨 404.css
 │       ├── 🎨 500.css
+│       ├── 🎨 personal.css
 │       ├── 🎨 style.css
 │       └── 🎨 workTemplate.css
 ├── 📁 routes/
 │   ├── 📄 authRoutes.js
 │   ├── 📄 otpRoutes.js
-│   └── 📄 resumeRoute.js
+│   ├── 📄 resumeRoute.js
+│   └── 📄 templateRoute.js
 ├── 📁 services/
 │   ├── 📄 otpService.js
 │   ├── 📄 resumeService.js
+│   ├── 📄 templateService.js
 │   └── 📄 userServices.js
 ├── 📁 sessions/
 │   └── 📄 session.js
@@ -87,12 +92,13 @@ Backend:
 │   │   ├── 📄 erros.handlebars
 │   │   ├── 📄 main.handlebars
 │   │   └── 📄 templates.handlebars
-│   └── 📁 template/
-│       ├── 📄 internship.handlebars
-│       └── 📄 work.handlebars
+│   ├── 📁 template/
+│   │   ├── 📄 internship.handlebars
+│   │   └── 📄 work.handlebars
+│   └── 📁 works/
+│       └── 📄 personalCreate.handlebars
 ├── 📄 package-lock.json
 ├── 📄 package.json
-├── 📄 server.js
-└── 📄 text.txt
+└── 📄 server.js
 ```
 Frontend:
