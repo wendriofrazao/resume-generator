@@ -8,16 +8,10 @@ import Skill from '../models/Skill.js'
 
 export async function createResumeService(userId, title, templateName = "CV Template") {
   try {
-    const template = await getTemplateByName(templateName);
-
-    if (!template) {
-      throw new Error("Template não encontrado ou não está ativo");
-    }
-
     const newResume = new Resume({
-      userId,
-      title,
-      templateId: template._id,
+      userId: userId,
+      title: title,
+      templateName: templateName
     });
 
     const savedResume = await newResume.save();
@@ -68,7 +62,7 @@ export async function getCompleteResume(resumeId) {
 export async function personalService(data, resumeId) {
     try {
 
-       const isVerifyResume = findResumeById(resumeId);
+    const isVerifyResume = findResumeById(resumeId);
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');      
 
@@ -118,8 +112,8 @@ export async function experienceWorkService(data, resumeId) {
     return newXPWork;
 
   } catch (error) {
-    throw error;
-  }
+    throw error; 
+  }  
 
 }
 
@@ -175,18 +169,108 @@ export async function skillService(data, resumeId) {
 
 }
 
-// finds
-export async function findResumeById(resumeId) {
-  const result = await Resume.findById(resumeId).populate('templateId').populate('userId');
-  return result;
+// services editatios
+
+export async function resume_Edit_Service(resumeId, resumeData) {
+  const existingDetails = await Resume.findOne({ 
+    _id: resumeId
+  });
+  
+  if (!existingDetails) {
+    throw new Error('Currículo não foi encontrado');
+  }
+   return await Resume.findOneAndUpdate({resumeId}, resumeData,{ new: true, upsert: true });
 }
 
-export async function findPersonalDetailsById(resumeId){
-  const result = await PersonalDetails.findOne({ resumeId });
-  return result;
+export async function personaDatail_Edit_Service(personalDetailsId, resumeId, personal) {
+  const existingDetails = await PersonalDetails.findOne({ 
+    _id: personalDetailsId, 
+    resumeId: resumeId 
+  });
+  
+  if (!existingDetails) {
+    throw new Error('Detalhes pessoais não encontrados para este currículo');
+  }
+  
+  return await PersonalDetails.findOneAndUpdate(
+    { _id: personalDetailsId, resumeId: resumeId }, 
+    personal, 
+    { new: true, runValidators: true }
+  );
 }
 
-export async function findExperienceWorkById(resumeId){
-  const result = await Experience.findOne({ resumeId });
-  return result;
+export async function experienceWork_Edit_Service(experienceId, resumeId, experience) {
+  const existingDetails = await Experience.findOne({ 
+    _id: experienceId, 
+    resumeId: resumeId 
+  });
+  
+  if (!existingDetails) {
+    throw new Error('Detalhes de trabalho não encontrados para este currículo');
+  }
+
+  return await Experience.findOneAndUpdate({_id:experienceId , resumeId}, experience,{ new: true, upsert: true });
 }
+
+export async function education_Edit_Service(educationId, resumeId, education) {
+   const existingDetails = await Experience.findOne({ 
+    _id: educationId, 
+    resumeId: resumeId 
+  });
+  
+  if (!existingDetails) {
+    throw new Error('Detalhes de trabalho não encontrados para este currículo');
+  }
+
+  return await Education.findOneAndUpdate({_id:educationId , resumeId}, education, {new: true, upsert: true})
+}
+
+export async function skills_Edit_Service(skillId, resumeId, skill) {
+   const existingDetails = await Experience.findOne({ 
+    _id: skillId, 
+    resumeId: resumeId 
+  });
+  
+  if (!existingDetails) {
+    throw new Error('Detalhes de trabalho não encontrados para este currículo');
+  }
+ return await Skill.findOneAndUpdate({_id:skillId , resumeId}, skill, { new: true, upsert: true });
+} 
+
+
+// services delete
+export async function deleteResumeService(resumeId) {
+  return await Resume.findByIdAndDelete(resumeId);
+};
+
+export async function deletePersonalDetailsService(personalDetailsId, resumeId) {
+  return await PersonalDetails.findOneAndDelete({_id: personalDetailsId, resumeId})
+}
+
+export async function deleteWorkExperienceService(experienceId, resumeId) {
+  return await Experience.findOneAndDelete({ _id: experienceId, resumeId });
+}
+
+export async function deleteEducationService(educationId, resumeId) {
+  return await Education.findOneAndDelete({ _id: educationId, resumeId });
+}
+
+export async function deleteSkillService(skillId, resumeId) {
+  return await Skill.findOneAndDelete({ _id: skillId, resumeId });
+}
+
+  // finds
+  export async function findResumeById(resumeId) {
+    const result = await Resume.findById(resumeId).populate('templateId').populate('userId');
+    return result;
+  }
+  
+  export async function findPersonalDetailsById(resumeId){
+    const result = await PersonalDetails.findOne({ resumeId });
+    return result;
+  }
+  
+  export async function findExperienceWorkById(resumeId){
+    const result = await Experience.findOne({ resumeId });
+    return result;
+  }

@@ -1,8 +1,31 @@
-import { personalService, findResumeById, findPersonalDetailsById, createResumeService, getCompleteResume }from '../services/resumeService.js';
+import { findResumeById, findPersonalDetailsById, getCompleteResume }from '../services/resumeService.js';
 import { renderTemplate } from '../services/templateService.js';
+
+// imports create
+import { createResumeService } from '../services/resumeService.js'
+import { personalService } from '../services/resumeService.js'
 import { experienceWorkService } from '../services/resumeService.js';
 import { skillService } from '../services/resumeService.js';
 import { educationService } from '../services/resumeService.js';
+
+// imports editatios
+import { 
+  resume_Edit_Service,
+  personaDatail_Edit_Service, 
+  skills_Edit_Service, 
+  education_Edit_Service, 
+  experienceWork_Edit_Service  
+} from '../services/resumeService.js';
+
+// imports deletes
+import {
+  deleteResumeService,
+  deletePersonalDetailsService,
+  deleteWorkExperienceService,
+  deleteSkillService,
+  deleteEducationService,
+  // deleteProjectsService
+} from "../services/resumeService.js";
 
 export async function createResume(req, res) {
   try {
@@ -25,6 +48,7 @@ export async function createResume(req, res) {
     });
   }
 }
+
 
 export async function generateResume(req, res) {
 try{
@@ -86,6 +110,9 @@ export async function previewTemplate(req, res) {
       });
     }
   }
+
+
+
 
 
 export async function savePersonalDetails(req, res) {
@@ -158,8 +185,6 @@ export async function saveEducationController(req, res) {
 
 }
 
-
-
 export async function saveSkillController(req, res) {
 
     try {
@@ -184,3 +209,152 @@ export async function saveSkillController(req, res) {
     }
 
 }
+
+// editatios controllers
+
+export async function updateResumeController(req, res) {
+  try {
+    const { resumeId} = req.params;
+    const resumeData = req.body;
+    
+    const result = await resume_Edit_Service(resumeId, resumeData);
+    
+    res.json({
+      success: true,
+      data: result,
+      message: 'currículo atualizado com sucesso!'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+}
+
+export async function updatePersonalDetailsController(req, res) {
+  try {
+    const { resumeId, personalDetailsId } = req.params;
+    const personalDetailsData = req.body;
+    
+    const result = await personaDatail_Edit_Service(personalDetailsId, resumeId, personalDetailsData);
+
+    res.json({
+      success: true,
+      data: result,
+      message: 'Informações pessoais atualizadas com sucesso!'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+}
+
+export async function updateEducationController(req, res) {
+  try {
+    const { resumeId, educationId } = req.params;
+    const educationData = req.body;
+    
+    const result = await education_Edit_Service(resumeId, educationId, educationData);
+    
+    res.json({
+      success: true,
+      data: result,
+      message: 'Educação atualizada com sucesso!'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+}
+
+export async function updateSkillController(req, res) {
+  try {
+    const { resumeId, skillId } = req.params;
+    const skillData = req.body;
+    
+    const result = await skills_Edit_Service(resumeId, skillId, skillData);
+    
+    res.json({
+      success: true,
+      data: result,
+      message: 'Skills atualizadas com sucesso!'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+}
+
+export async function updateExperienceController(req, res) {
+  try {
+    const { resumeId, expirienceId } = req.params;
+    const expirienceData = req.body;
+    
+    const result = await experienceWork_Edit_Service(resumeId, expirienceId, expirienceData);
+    
+    res.json({
+      success: true,
+      data: result,
+      message: 'Experiências de trabalho atualizadas com sucesso!'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+}
+
+// delete controllers
+
+export const deleteResumeController = async (req, res) => {
+  try {
+    await deleteResumeService(req.params.resumeId);
+    res.status(200).json({ success: true, message: "Resume deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+export const deletePersonalDetailsController = async (req, res) => {
+  try {
+    await deletePersonalDetailsService(req.params.personalDetailsId, req.params.resumeId);
+    res.status(200).json({ success: true, message: "Personal details deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+export const deleteExperienceWorkController = async (req, res) => {
+  try {
+    await deleteWorkExperienceService(req.params.experienceId, req.params.resumeId);
+    res.status(200).json({ success: true, message: "Experience work deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+export const deleteSkillsController = async (req, res) => {
+  try {
+    await deleteSkillService(req.params.skillId, req.params.resumeId);
+    res.status(200).json({ success: true, message: "Skills deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+export const deleteEducationController = async (req, res) => {
+  try {
+    await deleteEducationService(req.params.educationId, req.params.resumeId);
+    res.status(200).json({ success: true, message: "Educatio deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+} 
