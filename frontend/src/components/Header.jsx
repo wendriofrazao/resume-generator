@@ -1,35 +1,49 @@
+import { LogIn, FileText } from "lucide-react";
 
-export function Header (){
-    return(
+export function Header() {
+  return (
+    <header className="bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-20 px-0 py-3 flex items-center justify-between">
+        <div className="flex items-center space-x-12">
 
-    <header className=" border-b/39 flex items-center justify-between px-6 py-3 bg-white shadow-sm">
-      {/* Logo e título */}
-      <div className="flex items-center space-x-2">
-        <div className="w-6 h-6 rounded-full bg-[#4B4BFF]" />
-        <span className="text-sm font-semibold text-[var(--color-text)]">Resume Maker</span>
-      </div>
+          {/* Logo e título */}
+          <div className="flex items-center space-x-5">
+            <div className="w-8 h-8 bg-blue-600 rounded-full"></div>
+            <span className="text-lg font-semibold text-purple-900">
+              Resume Maker
+            </span>
+          </div>
 
-      {/* Navegação */}
-      <nav className="flex items-center space-x-6 text-sm font-semibold text-black/90">
-        <a href="#">Home</a>
-        <a href="#">Sobre</a>
-      </nav>
+          {/* NavBar*/}
+          <nav className="flex items-center space-x-8">
+            <a
+              href="#"
+              className="text-lg font-semibold text-black hover:text-gray-700"
+            >
+              Home
+            </a>
+            <a
+              href="#"
+              className="text-lg font-semibold text-black hover:text-gray-700"
+            >
+              Sobre
+            </a>
+          </nav>
+        </div>
 
-      {/* Botões */}
-      <div className="flex items-center space-x-2">
-        <button className="flex items-center space-x-1 px-3 py-1.5 border rounded-md text-sm text-gray-700 hover:bg-gray-50">
-          {/* <User size={16} /> */}
-          <span>Entrar</span>
-        </button>
-        <button className="flex items-center space-x-1 px-3 py-1.5 border rounded-md text-sm text-gray-700 bg-gray-100 hover:bg-gray-200">
-          {/* <FileText size={16} /> */}
-          <span>Cadastrar</span>
-        </button>
+        {/* Botões */}
+        <div className="flex items-center -mx-65 space-x-5">
+          <button className="flex items-center gap-2 px-4 py-1.5 border border-gray-300 rounded-md text-sm cursor-pointer hover:bg-gray-100">
+            <LogIn size={14} />
+            Entrar
+          </button>
+          <button className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm bg-gray-200 border border-gray-300 cursor-pointer hover:bg-gray-200">
+            <FileText size={14} />
+            Cadastrar
+          </button>
+        </div>
+    
       </div>
     </header>
-
-    )
+  );
 }
-
-
-

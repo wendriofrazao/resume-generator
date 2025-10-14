@@ -1,0 +1,42 @@
+import { useState } from "react";
+import {Box, Tabs, Tab, Typography} from "@mui/material";
+import {Login} from '../components/Login'
+import { Register } from "../components/Register";
+
+export const LoginNRegister = () => {
+  const [tabValue, setTabValue] = useState("login");
+
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background:"linear-gradient(135deg, rgba(25,118,210,0.1), rgba(156,39,176,0.1))",
+        p: 2,}}>
+      <Box sx={{ width: "100%", maxWidth: 400 }}>
+
+        {/* Cabeçalho */}
+        <Box textAlign="center" mb={4}>
+          <Typography variant="h4" fontWeight="bold">
+            Gerador de Currículos
+          </Typography>
+          <Typography color="text.secondary">
+            Crie seu currículo profissional
+          </Typography>
+        </Box>
+
+        <Tabs value={tabValue} onChange={(_, newValue) => setTabValue(newValue)} centered>
+          <Tab value="login" label="Login" />
+          <Tab value="signup" label="Criar Conta" />
+        </Tabs>
+
+        {tabValue === "login" && (<Login/>)}
+        {tabValue === "signup" && (<Register/>)}
+      </Box>
+    </Box>
+  );
+};
+
+export default LoginNRegister;
