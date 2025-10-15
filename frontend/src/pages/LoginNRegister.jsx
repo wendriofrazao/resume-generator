@@ -2,6 +2,7 @@ import { useState } from "react";
 import {Box, Tabs, Tab, Typography} from "@mui/material";
 import {Login} from '../components/Login'
 import { Register } from "../components/Register";
+import React from "react";
 
 export const LoginNRegister = () => {
   const [tabValue, setTabValue] = useState("login");

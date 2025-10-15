@@ -1,5 +1,5 @@
+import React from "react";
 import resumeIcon from '../assets/img/curriculoIcon.svg'
-
 
 export function PageHeader() {
 

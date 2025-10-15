@@ -1,49 +1,129 @@
-import { LogIn, FileText } from "lucide-react";
+import React from "react";
+
+import { AppBar, Toolbar, Box, Button, Typography, Container } from "@mui/material";
+import { FileText, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Header() {
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-20 px-0 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-12">
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{
+        backgroundColor: "white",
+        borderBottom: "1px solid #f0f0f0",
+      }}
+    >
+      <Container maxWidth="lg">
+        <Toolbar
+          disableGutters
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            py: 1,
+          }}
+        >
+          {/* Logo + Nome */}
+          <Box sx={{ display: "flex", marginLeft: "-15%" ,alignItems: "center", gap: 1.5 }}>
+            <Box
+              sx={{
+                width: 35,
+                height: 35,
+                borderRadius: "50%",
+                background: "linear-gradient(to right, #6366F1, #8B5CF6)",
+              }}
+            />
+            <Typography
+              component={Link}
+              to="/"
+              sx={{
+                textDecoration: "none",
+                fontWeight: 700,
+                fontSize: "1.2em",
+                background: "linear-gradient(to right, #6366F1, #8B5CF6)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Stage Maker
+            </Typography>
+          </Box>
 
-          {/* Logo e título */}
-          <div className="flex items-center space-x-5">
-            <div className="w-8 h-8 bg-blue-600 rounded-full"></div>
-            <span className="text-lg font-semibold text-purple-900">
-              Resume Maker
-            </span>
-          </div>
-
-          {/* NavBar*/}
-          <nav className="flex items-center space-x-8">
-            <a
-              href="#"
-              className="text-lg font-semibold text-black hover:text-gray-700"
+          {/* Navegação */}
+          <Box sx={{ display: "flex", marginLeft: "-82%",alignItems: "center", gap: 4 }}>
+            <Typography
+              component={Link}
+              to="/"
+              sx={{
+                color: "text.primary",
+                fontWeight: 700,
+                textDecoration: "none",
+                fontSize: "1.05rem",
+                "&:hover": { color: "primary.main" },
+              }}
             >
               Home
-            </a>
-            <a
-              href="#"
-              className="text-lg font-semibold text-black hover:text-gray-700"
+            </Typography>
+            <Typography
+              component={Link}
+              to="/sobre"
+              sx={{
+                color: "text.primary",
+                fontWeight: 700,
+                textDecoration: "none",
+                fontSize: "1.05rem",
+                "&:hover": { color: "primary.main" },
+              }}
             >
               Sobre
-            </a>
-          </nav>
-        </div>
+            </Typography>
+          </Box>
 
-        {/* Botões */}
-        <div className="flex items-center -mx-65 space-x-5">
-          <button className="flex items-center gap-2 px-4 py-1.5 border border-gray-300 rounded-md text-sm cursor-pointer hover:bg-gray-100">
-            <LogIn size={14} />
-            Entrar
-          </button>
-          <button className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm bg-gray-200 border border-gray-300 cursor-pointer hover:bg-gray-200">
-            <FileText size={14} />
-            Cadastrar
-          </button>
-        </div>
-    
-      </div>
-    </header>
+          {/* Botões */}
+          <Box sx={{ display: "flex",  marginRight: "-20%",alignItems: "center", gap: 3 }}>
+            <Button
+              component={Link}
+              to="/auth"
+              variant="outlined"
+              size="small"
+              startIcon={<User size={16} 
+              style={{ verticalAlign: "middle" }}
+              />}
+              sx={{
+                textTransform: "none",
+                borderColor: "#e5e7eb",
+                color: "#505050",
+                fontWeight: 600,
+              }}
+            >
+              Entrar
+            </Button>
+
+            <Button
+              component={Link}
+              to="/auth"
+              variant="contained"
+              size="small"
+              startIcon={<FileText size={15} 
+              style={{ verticalAlign: "middle" }} 
+              />}
+              
+              sx={{
+                textTransform: "none",
+                backgroundColor: "#E2EAEF",
+                color: "#505050",
+                fontWeight: 600,
+                boxShadow: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              Cadastrar
+            </Button>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }

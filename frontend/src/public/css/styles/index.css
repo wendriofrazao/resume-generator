@@ -1,9 +1,0 @@
-@import "tailwindcss";
-
-
-
-@theme {
-  --color-bg-register: #E2EAEF,
-  --color-bg-footer: #F9FAFB,
-  --color-bg-img: #3C8BFF
-} 

@@ -1,8 +1,8 @@
-import Routes from "./routes/Routes";
+import React from "react";
+import AppRoutes from "./routes/Routes";
 
 function App() {
-  return (
-    <Routes />
-  );
+  return <AppRoutes />;
 }
-export default App
+
+export default App;
