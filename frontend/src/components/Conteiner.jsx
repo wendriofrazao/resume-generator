@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Container as MUIContainer, Grid, Typography, Button } from "@mui/material";
+import { Box, Container as MUIContainer, Grid, Typography, Button, Card, CardContent  } from "@mui/material";
 import FileTextIcon from "@mui/icons-material/Article";
 import SparklesIcon from "@mui/icons-material/AutoAwesome";
+import { Bolt, AutoAwesome, Download } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import heroImage from "../assets/img/imagem_do_resume.jpg";
@@ -109,7 +110,15 @@ export const Conteiner = ({ user }) => {
 
             {/* Right Side */}
             <Grid  xs={12} lg={6}>
-              <motion.div initial="hidden" animate="visible" variants={slideUp}>
+              <motion.div 
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
+                  variants={{
+                    hidden: { opacity: 0, y: 40 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2 } },
+                  }}
+              >
                 <Box 
                   component="img"
                   src={heroImage}
@@ -129,6 +138,7 @@ export const Conteiner = ({ user }) => {
         <Box
           sx={{
             position: "absolute",
+            display: "flex",
             bottom: -128,
             left: -128,
             width: 256,
@@ -155,18 +165,19 @@ export const Conteiner = ({ user }) => {
       </Box>
 
       {/* How it Works Section */}
-      <Box component="section" sx={{ py: 20, backgroundColor: "grey.100" }}>
-        <MUIContainer maxWidth="lg">
+      <Box component="section" sx={{ py: 8, backgroundColor: "grey.100"
+       }}>
+        <MUIContainer maxWidth="lg" >
           <Box textAlign="center" mb={8}>
-            <Typography variant="h2" mb={0.9}>
+            <Typography variant="h3" sx={{ fontWeight: 600 }} mb={0.9}>
               Como funciona?
             </Typography>
-            <Typography variant="h5" color="text.secondary">
+            <Typography variant="h6" color="text.secondary">
               Três passos simples para seu currículo profissional
             </Typography>
           </Box>
 
-          <Grid container spacing={12} alignItems="center" columns={3}>
+          <Grid container spacing={5}  sx={{  display: "flex", justifyContent: "center", alignItems: "flex-start",}}>
             {[
               {
                 step: 1,
@@ -187,7 +198,8 @@ export const Conteiner = ({ user }) => {
                   "Exporte seu currículo em PDF de alta qualidade e envie para as empresas dos seus sonhos.",
               },
             ].map((item, index) => (
-              <Grid xs={12} md={4} key={item.step} textAlign="center">
+              <Grid xs={12} md={4} sx={{ textAlign: "center",}} key={item.step}>
+                
                 <motion.div
                   initial="hidden"
                   whileInView="visible"
@@ -200,17 +212,18 @@ export const Conteiner = ({ user }) => {
                   <Box
                     sx={{
                       mb: 3,
-                      display: "inline-flex",
+                      display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      width: 80,
-                      height: 80,
+                      width: 60,
+                      height: 60,
                       borderRadius: "50%",
                       backgroundColor: "primary.main",
                       color: "primary.contrastText",
-                      fontSize: 32,
+                      fontSize: "2rem",
                       fontWeight: "bold",
                       mx: "auto",
+                      
                     }}
                   >
                     {item.step}
@@ -218,7 +231,7 @@ export const Conteiner = ({ user }) => {
                   <Typography variant="h5" mb={1} fontWeight="bold">
                     {item.title}
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary">
                     {item.description}
                   </Typography>
                 </motion.div>
@@ -227,6 +240,148 @@ export const Conteiner = ({ user }) => {
           </Grid>
         </MUIContainer>
       </Box>
+ <Box component="section" sx={{ py: 10 }}>
+      <MUIContainer maxWidth="lg">
+        {/* Cabeçalho */}
+        <Box textAlign="center" mb={8}>
+          <Typography variant="h4" fontWeight="bold" mb={2}>
+            Por que escolher o nosso site?
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            Ferramentas poderosas para criar o currículo dos seus sonhos
+          </Typography>
+        </Box>
+
+        {/* Cards */}
+        <Grid container spacing={2}>
+          {/* Card 1 */}
+          <Grid  xs={12} md={10}>
+            <motion.div whileHover={{ scale: 1.03 }}>
+              <Card
+                sx={{
+                  p: 4,
+                  height: "100%",
+                  transition: "all 0.3s ease",
+                  boxShadow: "none",
+                  "&:hover": {
+                    boxShadow: 6,
+                  },
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{
+                      mb: 3,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 56,
+                      height: 56,
+                      borderRadius: 2,
+                      bgcolor: "primary.main",
+                      color: "white",
+                    }}
+                  >
+                    <Bolt />
+                  </Box>
+                  <Typography variant="h6" fontWeight="bold" textAlign={"center"} mb={1}>
+                    Rápido e Intuitivo
+                  </Typography>
+                  <Typography color="text.secondary">
+                    Interface simples e intuitiva que permite criar seu currículo em poucos
+                    minutos, sem complicações.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+
+          {/* Card 2 */}
+          <Grid item xs={12} md={4}>
+            <motion.div whileHover={{ scale: 1.03 }}>
+              <Card
+                sx={{
+                  p: 4,
+                  height: "100%",
+                  transition: "all 0.3s ease",
+                  boxShadow: "none",
+                  "&:hover": {
+                    boxShadow: 6,
+                  },
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{
+                      mb: 3,
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 56,
+                      height: 56,
+                      borderRadius: 2,
+                      bgcolor: "secondary.main",
+                      color: "white",
+                    }}
+                  >
+                    <AutoAwesome />
+                  </Box>
+                  <Typography variant="h6" fontWeight="bold" mb={1}>
+                    Design Profissional
+                  </Typography>
+                  <Typography color="text.secondary">
+                    Templates modernos e elegantes que destacam suas qualificações e impressionam
+                    recrutadores.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+
+          {/* Card 3 */}
+          <Grid item xs={12} md={4}>
+            <motion.div whileHover={{ scale: 1.03 }}>
+              <Card
+                sx={{
+                  p: 4,
+                  height: "100%",
+                  transition: "all 0.3s ease",
+                  boxShadow: "none",
+                  "&:hover": {
+                    boxShadow: 6,
+                  },
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{
+                      mb: 3,
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 56,
+                      height: 56,
+                      borderRadius: 2,
+                      bgcolor: "primary.main",
+                      color: "white",
+                    }}
+                  >
+                    <Download />
+                  </Box>
+                  <Typography variant="h6" fontWeight="bold" mb={1}>
+                    Exportação Fácil
+                  </Typography>
+                  <Typography color="text.secondary">
+                    Baixe seu currículo em PDF de alta qualidade, pronto para enviar para
+                    oportunidades de emprego.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+        </Grid>
+      </MUIContainer>
+    </Box>
     </>
   );
 };

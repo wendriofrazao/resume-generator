@@ -1,6 +1,7 @@
 import {LoggedHeader} from '../components/LoggedHeader'
 import {PageHeader} from '../components/PageHeader'
 import {Welcome} from '../components/Welcome'
+import { Footer } from "../components/Footer.jsx";
 import React from "react";
 
 
@@ -10,7 +11,8 @@ return (
 <>
  <LoggedHeader/>
  <PageHeader/>
- <Welcome/> 
+ <Welcome/>
+<Footer/>  
 </>
 )
 

@@ -1,5 +1,7 @@
 import React from "react";
 
+// import userAuth from '../hooks/userAuth.jsx';
+
 import { AppBar, Toolbar, Box, Button, Typography, Container } from "@mui/material";
 import { FileText, User } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -7,11 +9,12 @@ import { Link } from "react-router-dom";
 export function Header() {
   return (
     <AppBar
-      position="static"
+      position=""
       elevation={0}
       sx={{
         backgroundColor: "white",
         borderBottom: "1px solid #f0f0f0",
+        
       }}
     >
       <Container maxWidth="lg">
@@ -82,6 +85,9 @@ export function Header() {
 
           {/* Botões */}
           <Box sx={{ display: "flex",  marginRight: "-20%",alignItems: "center", gap: 3 }}>
+
+              
+
             <Button
               component={Link}
               to="/auth"

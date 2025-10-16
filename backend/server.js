@@ -7,6 +7,9 @@ import path from 'path';
 import os from 'os';
 import { fileURLToPath } from 'url';
 import connectFileStore from 'session-file-store';
+import cors from "cors";
+
+
 
 // import routes
 import router from './routes/authRoutes.js';
@@ -68,6 +71,12 @@ app.use(
     },
   })
 );
+
+// cors config
+app.use(cors({
+  origin: ["http://localhost:5173", "http://localhost:5174"], 
+  credentials: true,               
+}));
 
 // flash
 app.use(flash());
