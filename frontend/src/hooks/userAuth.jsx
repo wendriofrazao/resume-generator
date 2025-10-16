@@ -15,7 +15,7 @@ export function useAuth() {
 
   //   const [loading, setLoading] = useState(true);
 
-  // 🔹 Checa sessão ao montar
+  // Checa sessão ao montar
 //   useEffect(() => {
 //     async function loadUser() {
 //       try {
