@@ -3,6 +3,8 @@ import { Box, Container as MUIContainer, Grid, Typography, Button, Card, CardCon
 import FileTextIcon from "@mui/icons-material/Article";
 import SparklesIcon from "@mui/icons-material/AutoAwesome";
 import { Bolt, AutoAwesome, Download } from "@mui/icons-material";
+import { FileText } from "lucide-react";
+import { Sparkles, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import heroImage from "../assets/img/imagem_do_resume.jpg";
@@ -22,118 +24,66 @@ export const Conteiner = ({ user }) => {
   return (
     <>
       {/* Section */}
+    <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
+      <div className="container mx-auto px-6 py-20 md:py-20">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          {/* Texto principal */}
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-600">
+              <Sparkles className="h-4 w-4" />
+              Crie seu currículo profissional
+            </div>
+
+            <h1 className="text-5xl font-bold leading-tight tracking-tight text-gray-900 md:text-6xl lg:text-7xl">
+              Seu currículo perfeito em{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                minutos
+              </span>
+            </h1>
+
+            <p className="text-xl text-gray-600 max-w-xl">
+              Plataforma profissional para criar currículos impressionantes que
+              destacam suas conquistas e experiências. Simples, rápido e eficaz.
+            </p>
+
+            {/* Botões */}
+            <div className="flex flex-wrap gap-4">
+              <Link to={user ? "/dashboard" : "/auth/login"}>
+                <button className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-lg font-semibold text-white shadow-md transition hover:bg-blue-700">
+                  <FileText className="h-5 w-5" />
+                  {user ? "Meus Currículos" : "Criar Meu Currículo"}
+                </button>
+              </Link>
+
+              <button className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-lg font-semibold text-gray-700 transition hover:bg-gray-50">
+                Ver Exemplos
+              </button>
+            </div>
+          </div>
+
+          {/* Imagem */}
+          <div className="animate-slide-up flex justify-center">
+            <img
+              src={heroImage}
+              alt="Plataforma de criação de currículos"
+              className=" rounded-2xl shadow-xl w-3xl max-w-6xl"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Elementos decorativos suaves */}
+      <div className="absolute -bottom-32 -left-32 h-64 w-64 rounded-full bg-blue-200/40 blur-3xl" />
+      <div className="absolute -right-32 -top-32 h-64 w-64 rounded-full bg-purple-200/40 blur-3xl" />
+    </section>
+
       <Box
         component="section"
         sx={{
           position: "relative",
           overflow: "hidden",
-          backgroundColor: "#F9FAFB",
-          py: { xs: 10, md: 8 },
         }}
       >
-        <MUIContainer maxWidth="xl">
-          <Grid container spacing={3} alignItems="center"  columns={12}>
-            {/* Left Side */}
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                  <Box
-                    sx={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 1,
-                      px: 2,
-                      py: 1,
-                      borderRadius: "999px",
-                      backgroundColor: "#3c8aff25",
-                      fontWeight: 500,
-                      color: "#3C8BFF",
-                      maxWidth: '42%',
-                      maxHeight: "32px"
-                    }}
-                  >
-                    <SparklesIcon sx={{ fontSize: 16 }} />
-                    Crie seu currículo profissional
-                  </Box>
-
-                  <Typography
-                    variant="h1"
-                    sx={{
-                      fontSize: { xs: "2.5rem", md: "4rem", lg: "5rem" },
-                      fontWeight: "bold",
-                      lineHeight: 1.1,
-                    }}
-                  >
-                    Seu currículo perfeito em{" "}
-                    <Box
-                      component="span"
-                      sx={{
-                        background: "linear-gradient(to right, #3C8BFF, #8B4DFF)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                      }}
-                    >
-                      minutos
-                    </Box>
-                  </Typography>
-
-                  <Typography sx={{ fontSize: "1.3rem", fontWeight: "500", color: "#777777" }} variant="body3" color="text.secondary">
-                    Plataforma profissional para criar currículos impressionantes que destacam suas
-                    conquistas e experiências. Simples, rápido e eficaz.
-                  </Typography>
-
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-                    <Link to={user ? "/dashboard" : "/auth"} style={{ textDecoration: "none" }}>
-                      <Button variant="contained" size="large" sx={{
-                          background: "linear-gradient(to right, #3C8BFF, #8B4DFF)",
-                          border: "1px #00000028 solid",
-                          boxShadow: "none",
-                          color: "#FFFFFF",
-                          fontWeight: "600"
-                      }}
-                      startIcon={<FileTextIcon />}>
-                      {user ? "Meus Currículos" : "Criar Meu Currículo"}
-                      </Button>
-                    </Link>
-                    <Button variant="outlined" size="large" sx={{
-                        border: "1px #E5E7EB solid",
-                        color: "#111827",
-                        fontWeight: "600",
-                        backgroundColor: "#FFFFFF"
-                    }}>
-                      Ver Exemplos
-                    </Button>
-                  </Box>
-                </Box>
-              </motion.div>
-            </Grid>
-
-            {/* Right Side */}
-            <Grid  xs={12} lg={6}>
-              <motion.div 
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.3 }}
-                  variants={{
-                    hidden: { opacity: 0, y: 40 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2 } },
-                  }}
-              >
-                <Box 
-                  component="img"
-                  src={heroImage}
-                  alt="Plataforma de criação de currículos"
-                  sx={{ borderRadius: 3, boxShadow: 3, height: "70%" ,width: "48%",position: "absolute",
-                    top: 100,
-                    right: 50,
-                  }}
-            
-                />
-              </motion.div>
-            </Grid>
-          </Grid>
-        </MUIContainer>
-
         {/* Decorative Elements */}
         <Box
           sx={{
@@ -177,28 +127,28 @@ export const Conteiner = ({ user }) => {
             </Typography>
           </Box>
 
-          <Grid container spacing={5}  sx={{  display: "flex", justifyContent: "center", alignItems: "flex-start",}}>
+          <Grid container spacing={4}  sx={{  display: "flex", justifyContent: "center", alignItems: "flex-start",}}>
             {[
               {
                 step: 1,
                 title: "Cadastre-se Grátis",
                 description:
-                  "Crie sua conta em segundos. Sem taxas, sem compromisso. Comece imediatamente.",
+                  "Crie sua conta em segundos. Sem taxas, sem compromisso. \nComece imediatamente.",
               },
               {
                 step: 2,
                 title: "Preencha suas Informações",
                 description:
-                  "Adicione suas experiências, formação acadêmica, habilidades e conquistas profissionais.",
+                  "Adicione suas experiências, formação acadêmica, \nhabilidades e conquistas profissionais.",
               },
               {
                 step: 3,
                 title: "Baixe e Compartilhe",
                 description:
-                  "Exporte seu currículo em PDF de alta qualidade e envie para as empresas dos seus sonhos.",
+                  "Exporte seu currículo em PDF de alta qualidade e envie \npara as empresas dos seus sonhos.",
               },
             ].map((item, index) => (
-              <Grid xs={12} md={4} sx={{ textAlign: "center",}} key={item.step}>
+              <Grid xs={12} md={4} sx={{ textAlign: "center" ,}} key={item.step}>
                 
                 <motion.div
                   initial="hidden"
@@ -231,7 +181,7 @@ export const Conteiner = ({ user }) => {
                   <Typography variant="h5" mb={1} fontWeight="bold">
                     {item.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{whiteSpace: "pre-line"}} >
                     {item.description}
                   </Typography>
                 </motion.div>
@@ -240,148 +190,133 @@ export const Conteiner = ({ user }) => {
           </Grid>
         </MUIContainer>
       </Box>
- <Box component="section" sx={{ py: 10 }}>
-      <MUIContainer maxWidth="lg">
+
+      {/* Por que escolher nossa plataforma */}
+    <section className="bg-slate-50 py-20">
+      <div className="container mx-auto px-6">
         {/* Cabeçalho */}
-        <Box textAlign="center" mb={8}>
-          <Typography variant="h4" fontWeight="bold" mb={2}>
+        <div className="mb-16 text-center">
+          <h2 className="mb-4 text-4xl font-bold text-gray-900">
             Por que escolher o nosso site?
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
+          </h2>
+          <p className="text-xl text-gray-600">
             Ferramentas poderosas para criar o currículo dos seus sonhos
-          </Typography>
-        </Box>
+          </p>
+        </div>
 
         {/* Cards */}
-        <Grid container spacing={2}>
+        <div className="grid gap-8 md:grid-cols-3">
           {/* Card 1 */}
-          <Grid  xs={12} md={10}>
-            <motion.div whileHover={{ scale: 1.03 }}>
-              <Card
-                sx={{
-                  p: 4,
-                  height: "100%",
-                  transition: "all 0.3s ease",
-                  boxShadow: "none",
-                  "&:hover": {
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <CardContent>
-                  <Box
-                    sx={{
-                      mb: 3,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 56,
-                      height: 56,
-                      borderRadius: 2,
-                      bgcolor: "primary.main",
-                      color: "white",
-                    }}
-                  >
-                    <Bolt />
-                  </Box>
-                  <Typography variant="h6" fontWeight="bold" textAlign={"center"} mb={1}>
-                    Rápido e Intuitivo
-                  </Typography>
-                  <Typography color="text.secondary">
-                    Interface simples e intuitiva que permite criar seu currículo em poucos
-                    minutos, sem complicações.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </Grid>
+          <div className="group rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 text-blue-600 transition-all group-hover:scale-110">
+              <Zap className="h-6 w-6" />
+            </div>
+            <h3 className="mb-3 text-2xl font-bold text-gray-900">Rápido e Intuitivo</h3>
+            <p className="text-gray-600">
+              Interface simples e intuitiva que permite criar seu currículo em poucos minutos, sem complicações.
+            </p>
+          </div>
 
           {/* Card 2 */}
-          <Grid item xs={12} md={4}>
-            <motion.div whileHover={{ scale: 1.03 }}>
-              <Card
-                sx={{
-                  p: 4,
-                  height: "100%",
-                  transition: "all 0.3s ease",
-                  boxShadow: "none",
-                  "&:hover": {
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <CardContent>
-                  <Box
-                    sx={{
-                      mb: 3,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 56,
-                      height: 56,
-                      borderRadius: 2,
-                      bgcolor: "secondary.main",
-                      color: "white",
-                    }}
-                  >
-                    <AutoAwesome />
-                  </Box>
-                  <Typography variant="h6" fontWeight="bold" mb={1}>
-                    Design Profissional
-                  </Typography>
-                  <Typography color="text.secondary">
-                    Templates modernos e elegantes que destacam suas qualificações e impressionam
-                    recrutadores.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </Grid>
+          <div className="group rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 text-purple-600 transition-all group-hover:scale-110">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <h3 className="mb-3 text-2xl font-bold text-gray-900">Design Profissional</h3>
+            <p className="text-gray-600">
+              Templates modernos e elegantes que destacam suas qualificações e impressionam recrutadores.
+            </p>
+          </div>
 
           {/* Card 3 */}
-          <Grid item xs={12} md={4}>
-            <motion.div whileHover={{ scale: 1.03 }}>
-              <Card
-                sx={{
-                  p: 4,
-                  height: "100%",
-                  transition: "all 0.3s ease",
-                  boxShadow: "none",
-                  "&:hover": {
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <CardContent>
-                  <Box
-                    sx={{
-                      mb: 3,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 56,
-                      height: 56,
-                      borderRadius: 2,
-                      bgcolor: "primary.main",
-                      color: "white",
-                    }}
-                  >
-                    <Download />
-                  </Box>
-                  <Typography variant="h6" fontWeight="bold" mb={1}>
-                    Exportação Fácil
-                  </Typography>
-                  <Typography color="text.secondary">
-                    Baixe seu currículo em PDF de alta qualidade, pronto para enviar para
-                    oportunidades de emprego.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </Grid>
-        </Grid>
-      </MUIContainer>
-    </Box>
+          <div className="group rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 transition-all group-hover:scale-110">
+              <Download className="h-6 w-6" />
+            </div>
+            <h3 className="mb-3 text-2xl font-bold text-gray-900">Exportação Fácil</h3>
+            <p className="text-gray-600">
+              Baixe seu currículo em PDF de alta qualidade, pronto para enviar para oportunidades de emprego.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Perguntas frequentes */}
+     <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-4xl font-bold">Perguntas Frequentes</h2>
+            <p className="text-xl text-muted-foreground">
+              Tire suas dúvidas sobre nossa plataforma
+            </p>
+          </div>
+          <div className="mx-auto max-w-3xl space-y-6">
+            <Card className="p-6">
+              <h3 className="mb-3 text-xl font-bold">É realmente gratuito?</h3>
+              <p className="text-muted-foreground">
+                Sim! Nosso site é 100% gratuita. Você pode criar, editar e baixar quantos 
+                currículos quiser sem pagar nada.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="mb-3 text-xl font-bold">Preciso de conhecimentos técnicos?</h3>
+              <p className="text-muted-foreground">
+                Não! Nossa interface foi projetada para ser extremamente intuitiva. Se você sabe 
+                usar email, você consegue criar seu currículo aqui.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="mb-3 text-xl font-bold">Posso editar meu currículo depois?</h3>
+              <p className="text-muted-foreground">
+                Com certeza! Você pode editar seu currículo quantas vezes quiser. Todas as suas 
+                alterações são salvas automaticamente.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="mb-3 text-xl font-bold">Em que formato posso baixar?</h3>
+              <p className="text-muted-foreground">
+                Você pode exportar seu currículo em PDF de alta qualidade, pronto para enviar 
+                para empresas ou imprimir.
+              </p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="mb-3 text-xl font-bold">Meus dados estão seguros?</h3>
+              <p className="text-muted-foreground">
+                Absolutamente! Utilizamos as melhores práticas de segurança para proteger suas 
+                informações pessoais e profissionais.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Pode criar seu currículo */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-6">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-400 to-indigo-500 p-12 text-center shadow-2xl">
+            {/* Padrão de fundo sutil */}
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4xIi8+PC9nPjwvc3ZnPg==')] opacity-20" />
+
+            {/* Conteúdo */}
+            <div className="relative z-10">
+              <h2 className="mb-4 text-4xl font-bold text-white">
+                Pronto para criar seu currículo?
+              </h2>
+              <p className="mb-8 text-xl text-white/90">
+                Comece agora e dê o próximo passo na sua carreira profissional
+              </p>
+
+              <Link to={user ? "/dashboard" : "/auth"}>
+                <button className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-lg font-medium text-gray-800 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5">
+                  <FileText className="h-5 w-5 text-blue-600" />
+                  {user ? "Acessar Dashboard" : "Começar Agora - É Grátis"}
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

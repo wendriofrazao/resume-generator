@@ -1,9 +1,25 @@
 import React from "react";
 import { LogOut } from 'lucide-react';
 import profile from '../assets/img/profileDefault.svg'
+import { useAuth } from '../hooks/userAuth.jsx';
 
 
 export function LoggedHeader() {
+   const { logout } = useAuth();
+
+   const handleSubmit = async (event) => {
+      event.preventDefault();
+
+     const res = await logout();
+     console.log(res)
+
+    if (res) {
+      setMessage("logout feito com sucesso!");
+      navigate("/auth/login"); 
+    } else {
+      setMessage(res?.message || "Erro ao fazer logout");
+    } 
+  }
   return (
     <header className="bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-20 px-0 py-1 flex items-center justify-between">
@@ -20,7 +36,7 @@ export function LoggedHeader() {
 
         {/* Botões */}
         <div className="flex items-center -mx-65 space-x-5">
-          <button className="flex items-center gap-2 px-4 py-1.5 border border-gray-300 rounded-md text-sm cursor-pointer hover:bg-gray-100">
+          <button onClick={handleSubmit} className="flex items-center gap-2 px-4 py-1.5 border border-gray-300 rounded-md text-sm cursor-pointer hover:bg-gray-100">
            <LogOut size={14} />
             Sair
           </button>

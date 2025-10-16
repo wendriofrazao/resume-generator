@@ -1,10 +1,15 @@
 import bcrypt from "bcrypt";
-import transport, { mailSender } from "../configs/mailtrap.js";
 import { generateOtp } from "../utils/helpers/generateOtp.js"
 import { checkEmailExists } from "./userServices.js";
+import {Resend} from "resend"
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 
 const OTP_TTL_MS = 5 * 60 * 1000;
+
+const resend = new Resend(process.env.RESEND_TOKEN);
 
 export async function createAndSendOtp(email, otpType = 'verify') {
   try {
@@ -14,6 +19,10 @@ export async function createAndSendOtp(email, otpType = 'verify') {
     const otp = generateOtp();
     const hash = await bcrypt.hash(otp, 10);
     const expiresAt = new Date(Date.now() + OTP_TTL_MS);
+
+    if(otpType === 'verify' && user.isAccountVerified == true){
+      throw new Error('Usuário já está verificado');
+    }
 
     if (otpType === 'verify') {
       user.verifyOtp = hash;
@@ -30,8 +39,8 @@ export async function createAndSendOtp(email, otpType = 'verify') {
     const text = `Seu código OTP é: ${otp}\nExpira em 5 minutos.`;
     const html = `<p>Seu código OTP é: <b>${otp}</b></p><p>Expira em 5 minutos.</p>`;
 
-    await transport.sendMail({
-      from: mailSender,
+   await resend.emails.send({
+      from: 'onboarding@resend.dev',
       to: email,
       subject: otpType === 'verify'
         ? 'Código de Verificação (OTP)'

@@ -1,34 +1,18 @@
-import { useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import {
   registerUser,
   loginUser,
   logoutUser,
-//   getUser,
   sendOtp,
   verifyOtp,
   resetPassword
 } from "../service/authService.jsx";
 
-export function useAuth() {
+const AuthContext = createContext(null);
+
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-
-  //   const [loading, setLoading] = useState(true);
-
-  // Checa sessão ao montar
-//   useEffect(() => {
-//     async function loadUser() {
-//       try {
-//         const res = await getUser();
-//         if (res?.user) setUser(res.user);
-//       } catch (err) {
-//         console.error(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     }
-//     loadUser();
-//   }, []);
 
   // Registro
   async function register(fullname, email, password) {
@@ -67,9 +51,9 @@ export function useAuth() {
   }
 
   // Enviar OTP
-  async function sendOtpEmail(email) {
+  async function sendOtpEmail(email, otpType = "verify") {
     try {
-      const res = await sendOtp(email);
+      const res = await sendOtp(email, otpType);
       return res;
     } catch (err) {
       setError(err.message);
@@ -78,9 +62,9 @@ export function useAuth() {
   }
 
   // Verificar OTP
-  async function verifyOtpCode(email, otp) {
+  async function verifyOtpCode(email, otp, otpType = "verify") {
     try {
-      const res = await verifyOtp(email, otp);
+      const res = await verifyOtp(email, otp, otpType);
       return res;
     } catch (err) {
       setError(err.message);
@@ -89,9 +73,9 @@ export function useAuth() {
   }
 
   // Resetar senha
-  async function resetUserPassword(email, newPassword) {
+  async function resetUserPassword(email, newPassword, otpType = "reset") {
     try {
-      const res = await resetPassword(email, newPassword);
+      const res = await resetPassword(email, otpType, newPassword);
       return res;
     } catch (err) {
       setError(err.message);
@@ -99,14 +83,29 @@ export function useAuth() {
     }
   }
 
-  return {
-    user,
-    error,
-    register,
-    login,
-    logout,
-    sendOtpEmail,
-    verifyOtpCode,
-    resetUserPassword
-  };
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        error,
+        register,
+        login,
+        logout,
+        sendOtpEmail,
+        verifyOtpCode,
+        resetUserPassword
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
+

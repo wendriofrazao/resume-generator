@@ -1,1 +1,5 @@
-console.log("");
+
+
+export async function Editation() {
+    
+}

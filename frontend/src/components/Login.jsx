@@ -1,27 +1,33 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { Box, TextField, Button, Card, CardContent, CardHeader } from "@mui/material";
 import { useAuth } from '../hooks/userAuth.jsx';
+import {useNavigate} from 'react-router-dom'
 
 export function Login() {
-    const { login } = useAuth();
+    const navigate = useNavigate()
+
+    const { login, user } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
+    useEffect(() => {
+      if (user) { navigate("/dashboard")}}, [user, navigate]);
 
     const handleSubmit = async (event) => {
       event.preventDefault();
 
-      const res = await login(email, password);
+     const res = await login(email, password);
+     console.log(res)
 
-        if (res?.user) {
-           setMessage("Conta logada com sucesso!");
-        } else {
-           setMessage(res?.message || "Erro ao entar na suas conta");
-        } 
-  
-    }
+    if (res?.user) {
+      setMessage("Conta logada com sucesso!");
+      navigate("/dashboard"); 
+    } else {
+      setMessage(res?.message || "Erro ao entrar na sua conta");
+    } 
+  }
 
 
   return (

@@ -32,7 +32,7 @@ export const Login = async (req, res) => {
 
         return res.status(200).json({ 
             success: true, 
-            user: { id: user._id, fullname: user.fullname, email: user.email } 
+            user: { id: user._id, fullname: user.fullname, email: user.email, isAccountVerified: user.isAccountVerified } 
         });
 
     } catch (error) {
