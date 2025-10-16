@@ -6,7 +6,7 @@ import { AppBar, Toolbar, Box, Button, Typography, Container } from "@mui/materi
 import { FileText, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export function Header() {
+export function Header({ onChangeTab }) {
   return (
     <AppBar
       position=""
@@ -90,7 +90,7 @@ export function Header() {
 
             <Button
               component={Link}
-              to="/auth"
+              to="/auth/login"
               variant="outlined"
               size="small"
               startIcon={<User size={16} 
@@ -102,19 +102,20 @@ export function Header() {
                 color: "#505050",
                 fontWeight: 600,
               }}
+              onClick={() => onChangeTab("login")}
             >
               Entrar
             </Button>
 
             <Button
               component={Link}
-              to="/auth"
+              to="/auth/signup"
               variant="contained"
               size="small"
               startIcon={<FileText size={15} 
               style={{ verticalAlign: "middle" }} 
               />}
-              
+              onClick={() => onChangeTab("signup")}
               sx={{
                 textTransform: "none",
                 backgroundColor: "#E2EAEF",

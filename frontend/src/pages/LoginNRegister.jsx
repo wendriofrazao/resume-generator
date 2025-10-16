@@ -72,4 +72,3 @@ export const LoginNRegister = () => {
 };
 
 export default LoginNRegister;
-

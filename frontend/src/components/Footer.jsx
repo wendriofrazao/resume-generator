@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <Box component="footer" sx={{ borderTop: 1, borderColor: "divider", bgcolor: "#e7eaeda4", pt: 8, pb: 4 }}>
+    <Box component="footer" sx={{ borderTop: 1, borderColor: "divider", bgcolor: "#e7eaed58", pt: 8, pb: 4 }}>
       <Container maxWidth="lvw" >
         <Grid container spacing={8}>
           {/* Brand Section */}
@@ -45,7 +45,7 @@ export const Footer = () => {
               <MuiLink component={Link} to="/" underline="hover" color="text.secondary">
                 Início
               </MuiLink>
-              <MuiLink component={Link} to="/auth" underline="hover" color="text.secondary">
+              <MuiLink component={Link} to="/auth/login" underline="hover" color="text.secondary">
                 Criar Conta
               </MuiLink>
               <MuiLink component={Link} to="/dashboard" underline="hover" color="text.secondary">
@@ -87,7 +87,7 @@ export const Footer = () => {
               <Box display="flex" alignItems="center" gap={1}>
                 <Mail size={16} color="#1976d2" />
                 <Typography variant="body2" color="text.secondary">
-                  geradordeCV@gmail.com
+                  kijm.lima@outlook.com
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
