@@ -5,7 +5,7 @@ import { Conteiner } from "../components/Conteiner.jsx";
 
 export function Home() {
   return (
-    <div className="">
+    <div>
       <Header />
       <Conteiner />
       <Footer />

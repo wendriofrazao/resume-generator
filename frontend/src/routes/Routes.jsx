@@ -5,7 +5,8 @@ import { LoginNRegister } from "../pages/LoginNRegister";
 import { DashBoard } from "../pages/DashBoard";
 import { ProtectedRoute} from "../components/ProtectRoute"
 import {EmailVerificationPage } from '../pages/EmailVerificationPage'
-// import { Editation } from '../pages/Editation'
+import { Editation } from '../pages/Editation'
+import { DicaDeCarreira } from '../pages/DicaDeCarreira.jsx'
 
 const AppRoutes = () => {
   return (
@@ -29,7 +30,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      {/* <Route path='/edit' element={<Editation/>} /> */}
+      <Route path='/edit' element={<Editation/>} />
+      <Route path='/dicas-carreira' element={<DicaDeCarreira/>} />
     </Routes>
   );
 };

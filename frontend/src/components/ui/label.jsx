@@ -1,11 +1,11 @@
 import React from "react";
 import { cn } from "../../lib/utils";
 
-export function Card({ className, ...props }) {
+export function Label({ className, ...props }) {
   return (
-    <div
+    <label
       className={cn(
-        "rounded-xl border border-gray-200 bg-white shadow-sm",
+        "text-sm font-medium text-gray-700 dark:text-gray-200",
         className
       )}
       {...props}
