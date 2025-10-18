@@ -22,16 +22,18 @@ export function TabsList({ children, className, value, setValue }) {
   );
 }
 
-export function TabsTrigger({ value: tabValue, value, setValue, children }) {
-  const active = value === tabValue;
+export function TabsTrigger({ value: tabValue, valueActive, setValue, children }) {
+  const active = valueActive === tabValue;
+
   return (
     <button
       onClick={() => setValue(tabValue)}
       className={cn(
-        "flex-1 px-4 py-2 text-sm font-medium border-b-2 transition-all",
+        "flex-1 flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium select-none border-b-2",
+        "transition-all duration-150 ease-in-out transform cursor-pointer",
         active
-          ? "border-primary text-primary"
-          : "border-transparent text-gray-500 hover:text-primary"
+          ? "border-primary text-primary bg-background shadow-sm scale-100"
+          : "border-transparent text-gray-500 hover:text-primary hover:bg-background/60 hover:shadow-sm active:scale-95"
       )}
     >
       {children}

@@ -2,24 +2,24 @@ import React from "react";
 import { useState, useEffect} from "react";
 import { Box, TextField, Button, Card, CardContent, CardHeader } from "@mui/material";
 import { useAuth } from '../hooks/userAuth.jsx';
-import {useNavigate} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 
 export function Login() {
     const navigate = useNavigate()
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/dashboard";
 
     const { login, user } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
-    useEffect(() => {
-      if (user) { navigate("/dashboard")}}, [user, navigate]);
+    useEffect(() => {if (user) {navigate(from, { replace: true });}}, [user, navigate, from]);
 
     const handleSubmit = async (event) => {
       event.preventDefault();
 
      const res = await login(email, password);
-     console.log(res)
 
     if (res?.user) {
       setMessage("Conta logada com sucesso!");

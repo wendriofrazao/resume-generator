@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  Me,
   sendOtp,
   verifyOtp,
   resetPassword
@@ -13,6 +14,20 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const res = await Me()
+        const data = await res.json();
+        if (data.user) setUser(data.user);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   // Registro
   async function register(fullname, email, password) {
@@ -46,7 +61,8 @@ export function AuthProvider({ children }) {
       await logoutUser();
       setUser(null);
     } catch (err) {
-      console.error(err);
+      setError(err.message);
+      return { ok: false, message: err.message };
     }
   }
 

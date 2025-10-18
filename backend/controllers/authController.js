@@ -1,5 +1,6 @@
 import { registerService } from "../services/userServices.js";
 import { loginService } from "../services/userServices.js";
+import { FindUserById } from '../services/userServices.js'
 
 export const Register = async (req, res) => {
     const {fullname, email, password} = req.body;
@@ -54,4 +55,13 @@ export const Logout = async (req, res) => {
      res.status(500).json({success: false, message:`${error}`});
      
     }
+}
+
+export const Me = async (req, res) => {
+    if (req.session.userId) {
+    const user = FindUserById(req.session.userId);
+    return res.json({ user });
+  } else {
+    return res.json({ user: null });
+  }
 }

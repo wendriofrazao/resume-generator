@@ -112,8 +112,7 @@ export const Footer = () => {
             © 2025 Gerador de Currículos. Todos os direitos reservados.
           </Typography>
           <Box display="flex" alignItems="center" gap={1} color="text.secondary">
-            <Typography variant="body2">Feito com</Typography>
-            <Sparkles size={16} color="#1976d2" />
+            <Typography variant="body2">Feito com ❤️</Typography>
             <Typography variant="body2">para sua carreira</Typography>
           </Box>
         </Box>

@@ -6,6 +6,7 @@ export const checkEmailExists = async (email) => {
     return user;
   };
 
+
 export const FindUserById = async (id) => {
   return await User.findById(id)
 }

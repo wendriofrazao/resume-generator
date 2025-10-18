@@ -1,9 +1,14 @@
 import React from "react";
-import {Box, Button, Typography, Container } from "@mui/material";
-
-
-export async function DicaDeCarreira() {
+import { ConteinerDicas } from "../components/ConteinerDicas.jsx";
+import { Header } from "../components/Header";
+import { Footer } from "../components/Footer.jsx";
+export function DicaDeCarreira() {
     return (
-        <div>teste</div>
+        <div>
+            <Header />
+            <ConteinerDicas/>
+            <Footer />
+           
+        </div>
     );
 }

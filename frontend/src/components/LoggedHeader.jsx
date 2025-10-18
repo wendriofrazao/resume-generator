@@ -9,16 +9,10 @@ export function LoggedHeader() {
 
    const handleSubmit = async (event) => {
       event.preventDefault();
-
-     const res = await logout();
-     console.log(res)
-
+      const res = await logout();
     if (res) {
-      setMessage("logout feito com sucesso!");
       navigate("/auth/login"); 
-    } else {
-      setMessage(res?.message || "Erro ao fazer logout");
-    } 
+    }
   }
   return (
     <header className="bg-white border-b border-gray-200">

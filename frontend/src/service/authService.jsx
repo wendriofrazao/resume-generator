@@ -40,6 +40,14 @@ export async function logoutUser() {
   });
 }
 
+export async function Me(){
+  const res = await fetch(`${API_URL}/me`, {
+    method: "GET",
+    credentials: "include",
+  });
+  return res
+}
+
 // Enviar OTP
 export async function sendOtp(email, otpType) {
   const res = await fetch(`${API_URL_OTP}/send-otp`, {

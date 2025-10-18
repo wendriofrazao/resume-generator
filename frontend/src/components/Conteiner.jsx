@@ -55,9 +55,11 @@ export const Conteiner = ({ user }) => {
                 </button>
               </Link>
 
-              <button className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-lg font-semibold text-gray-700 transition hover:bg-gray-50">
-                Ver Exemplos
-              </button>
+              <Link to={"/sobre"}>
+                <button className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-lg font-semibold text-gray-700 transition hover:bg-gray-50">
+                  Saiba Mais
+                </button>
+              </Link>
             </div>
           </div>
 
