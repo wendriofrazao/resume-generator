@@ -31,7 +31,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
       }
       />*/}
-      <Route path='/edit' element={
+      <Route path='/dashboard/edit' element={
         <ProtectedRoute>
           <Editation/>
         </ProtectedRoute>
