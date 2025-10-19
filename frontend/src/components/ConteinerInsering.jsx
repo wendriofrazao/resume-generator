@@ -1,25 +1,33 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Textarea } from "../components/ui/textarea";
-import { Label } from "../components/ui/label";
-import { Card } from "../components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import { Card } from "./ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { FileText, User, Briefcase, GraduationCap, Award, Download } from "lucide-react";
-import { ResumePreview } from "../components/ResumePreview"; 
+import { ResumePreview } from "./ResumePreview"; 
 
-export function Edit() {
+import { ResumeProvide } from "../hooks/resumeHook";
+
+export function InseringDatasResume() {
   const [tabValue, setTabValue] = useState("personal");
+
+  const resume = new ResumeProvide();
+
+  // personal
+  const [ fullname, setFullname ] = useState("");
+  const [ email, setEmail ] = useState("");
+  const [ phone, setPhone ] = useState("");
+  const [ city, setCity ] = useState("");
+  const [ state, setState ] = useState("");
+  const [ country, setCountry ] = useState("");
+  const [ summary, setSummary ] = useState("");
+  
   const [resumeData, setResumeData] = useState({
-    personalInfo: {
-      fullName: "",
-      email: "",
-      phone: "",
-      location: "",
-      summary: "",
-    },
+
     experiences: [],
     education: [],
     skills: [],
@@ -27,12 +35,29 @@ export function Edit() {
 
   const [newSkill, setNewSkill] = useState("");
 
-  const updatePersonalInfo = (field, value) => {
-    setResumeData((prev) => ({
-      ...prev,
-      personalInfo: { ...prev.personalInfo, [field]: value },
-    }));
-  };
+const HandlePersonalInfo = async (event) => {
+  event.preventDefault();
+
+  const resumeId = localStorage.getItem("resumeId");
+
+  if (!resumeId) {
+    console.error("Nenhum resumeId encontrado. Crie o currículo primeiro!");
+    return;
+  }
+
+  const response = await resume.PersonalResumeProvide(
+    fullname,
+    email,
+    phone,
+    city,
+    state,
+    country,
+    summary,
+    resumeId
+  );
+
+  console.log("Resposta do backend:", response);
+};
 
   const addExperience = () => {
     setResumeData((prev) => ({
@@ -117,7 +142,7 @@ export function Edit() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          {/* Editor Form */}
+          {/* Insering Form */}
           <div className="space-y-6">
             <Tabs defaultValue="personal" className="w-full space-y-6">
               
@@ -154,15 +179,19 @@ export function Edit() {
                     )}
 
                     { tabValue === "personal" && (
+
+                      <form method="post" onSubmit={HandlePersonalInfo}>
+
                         <TabsContent value="personal" className="mt-4">
                           <Card className="p-6 shadow-lg space-y-4">
                             <div className="space-y-4">
                               <div>
-                                <Label htmlFor="fullName">Nome Completo</Label>
+                                <Label htmlFor="fullname">Nome Completo</Label>
                                 <Input
-                                  id="fullName"
-                                  value={resumeData.personalInfo.fullName}
-                                  onChange={(e) => updatePersonalInfo("fullName", e.target.value)}
+                                  id="fullname"
+                                  name="fullname"
+                                  value={fullname}
+                                  onChange={(e) => setFullname(e.target.value)}
                                   placeholder="João Silva"
                                 />
                               </div>
@@ -170,9 +199,10 @@ export function Edit() {
                                 <Label htmlFor="email">Email</Label>
                                 <Input
                                   id="email"
+                                  name="email"
                                   type="email"
-                                  value={resumeData.personalInfo.email}
-                                  onChange={(e) => updatePersonalInfo("email", e.target.value)}
+                                  value={email}
+                                  onChange={(e) => setEmail(e.target.value)}
                                   placeholder="joao@email.com"
                                 />
                               </div>
@@ -180,33 +210,58 @@ export function Edit() {
                                 <Label htmlFor="phone">Telefone</Label>
                                 <Input
                                   id="phone"
-                                  value={resumeData.personalInfo.phone}
-                                  onChange={(e) => updatePersonalInfo("phone", e.target.value)}
+                                  name="phone"
+                                  value={phone}
+                                  onChange={(e) => setPhone(e.target.value)}
                                   placeholder="(11) 99999-9999"
                                 />
                               </div>
                               <div>
-                                <Label htmlFor="location">Localização</Label>
+                                <Label htmlFor="city">Cidade</Label>
                                 <Input
-                                  id="location"
-                                  value={resumeData.personalInfo.location}
-                                  onChange={(e) => updatePersonalInfo("location", e.target.value)}
-                                  placeholder="São Paulo, SP"
+                                  id="city"
+                                  name="city"
+                                  value={city}
+                                  onChange={(e) => setCity(e.target.value)}
+                                  placeholder="São Paulo"
                                 />
+                              </div>
+                              <div>
+                                <Label htmlFor="state">Estado</Label>
+                                <Input
+                                  id="state"
+                                  name="state"
+                                  value={state}
+                                  onChange={(e) => setState(e.target.value)}
+                                  placeholder="SP"
+                                  />
+                              </div>
+                              <div>
+                                <Label htmlFor="country">País</Label>
+                                <Input
+                                  id="country"
+                                  name="country"
+                                  value={country}
+                                  onChange={(e) => setCountry(e.target.value)}
+                                  placeholder="Brasil"
+                                  />
                               </div>
                               <div>
                                 <Label htmlFor="summary">Resumo Profissional</Label>
                                 <Textarea
                                   id="summary"
-                                  value={resumeData.personalInfo.summary}
-                                  onChange={(e) => updatePersonalInfo("summary", e.target.value)}
+                                  name="summary"
+                                  value={summary}
+                                  onChange={(e) => setSummary(e.target.value)}
                                   placeholder="Descreva brevemente sua experiência e objetivos profissionais..."
                                   rows={4}
-                                />
+                                  />
                               </div>
                             </div>
                           </Card>
                         </TabsContent>
+                      <button type="submit">enviar</button>
+                      </form>
                     ) }
 
                     {tabValue === "experience" && (
@@ -226,6 +281,7 @@ export function Edit() {
                                     <Label>Cargo</Label>
                                     <Input
                                       value={exp.title}
+                                      fullName="jobDegree"
                                       onChange={(e) => updateExperience(exp.id, "title", e.target.value)}
                                       placeholder="Desenvolvedor Full Stack"
                                     />
@@ -234,6 +290,7 @@ export function Edit() {
                                     <Label>Empresa</Label>
                                     <Input
                                       value={exp.company}
+                                      fullName="company"
                                       onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
                                       placeholder="Empresa XYZ"
                                     />
@@ -242,6 +299,7 @@ export function Edit() {
                                     <Label>Período</Label>
                                     <Input
                                       value={exp.period}
+                                      fullName="period"
                                       onChange={(e) => updateExperience(exp.id, "period", e.target.value)}
                                       placeholder="Jan 2020 - Dez 2023"
                                     />
@@ -250,6 +308,7 @@ export function Edit() {
                                     <Label>Descrição</Label>
                                     <Textarea
                                       value={exp.description}
+                                      fullName="description"
                                       onChange={(e) => updateExperience(exp.id, "description", e.target.value)}
                                       placeholder="Descreva suas responsabilidades e conquistas..."
                                       rows={3}
@@ -290,6 +349,7 @@ export function Edit() {
                                       <Label>Grau / Curso</Label>
                                       <Input
                                         value={edu.degree}
+                                        fullName="degree"
                                         onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
                                         placeholder="Bacharelado em Ciência da Computação"
                                       />
@@ -298,16 +358,27 @@ export function Edit() {
                                       <Label>Instituição</Label>
                                       <Input
                                         value={edu.institution}
+                                        fullName="institution"
                                         onChange={(e) => updateEducation(edu.id, "institution", e.target.value)}
-                                        placeholder="Universidade de São Paulo"
+                                        placeholder="Universidade Anhanguera"
                                       />
                                     </div>
                                     <div>
                                       <Label>Período</Label>
                                       <Input
                                         value={edu.period}
+                                        fullName="period"
                                         onChange={(e) => updateEducation(edu.id, "period", e.target.value)}
                                         placeholder="2016 - 2020"
+                                      />
+                                    </div>
+                                    <div>
+                                      <Label>Descrição</Label>
+                                      <Input
+                                        value={edu.description}
+                                        fullName="description"
+                                        onChange={(e) => updateEducation(edu.id, "description", e.target.value)}
+                                        placeholder="Descreva como seu curso"
                                       />
                                     </div>
                                     <Button

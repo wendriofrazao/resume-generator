@@ -41,7 +41,7 @@ export async function createResume(req, res) {
       message: "Resume criado com sucesso",
     });
   } catch (error) {
-    console.error("❌ Erro em createResume:", error);
+    console.error("Erro em createResume:", error);
     res.status(400).json({
       success: false,
       error: error.message,

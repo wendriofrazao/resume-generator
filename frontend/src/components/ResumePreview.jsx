@@ -7,28 +7,30 @@ export function ResumePreview({ data }) {
   return (
     <Card className="p-10 shadow-xl rounded-xl bg-white border border-gray-200">
       {/* Cabeçalho */}
-      <div className="text-center mb-6">
+      {/* <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">
-          {personalInfo.fullName || "Seu Nome"}
+          {personalInfo.fullname || "Seu Nome"}
         </h2>
         <div className="w-24 h-[2px] bg-primary mx-auto mt-2 mb-4"></div>
 
-        {(personalInfo.email || personalInfo.phone || personalInfo.location) && (
+        {(personalInfo.email || personalInfo.phone || personalInfo.city || personalInfo.state || personalInfo.country) && (
           <div className="text-sm text-gray-600 space-y-1">
             {personalInfo.email && <p>{personalInfo.email}</p>}
             {personalInfo.phone && <p>{personalInfo.phone}</p>}
-            {personalInfo.location && <p>{personalInfo.location}</p>}
+            {personalInfo.city && <p>{personalInfo.city}</p>}
+            {personalInfo.state && <p>{personalInfo.state}</p>}
+            {personalInfo.country && <p>{personalInfo.country}</p>}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Resumo Profissional */}
-      {personalInfo.summary && (
+      {/* {personalInfo.summary && (
         <section className="mb-6">
           <h3 className="text-lg font-semibold text-primary mb-2">Resumo Profissional</h3>
           <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
         </section>
-      )}
+      )} */}
 
       {/* Experiências */}
       {experiences?.length > 0 && (
@@ -59,7 +61,7 @@ export function ResumePreview({ data }) {
               <div key={edu.id}>
                 <h4 className="font-medium text-gray-800">{edu.degree || "Curso"}</h4>
                 <p className="text-sm text-gray-600 italic">
-                  {edu.institution || "Instituição"} — {edu.period || "Período"}
+                  {edu.institution || "Instituição"} — {edu.period || "Período"} — {edu.description || "Descrição"}
                 </p>
               </div>
             ))}

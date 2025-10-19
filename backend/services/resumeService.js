@@ -9,9 +9,9 @@ import Skill from '../models/Skill.js'
 export async function createResumeService(userId, title, templateName = "CV Template") {
   try {
     const newResume = new Resume({
-      userId: userId,
-      title: title,
-      templateName: templateName
+      userId,
+      title,
+      templateName
     });
 
     const savedResume = await newResume.save();
@@ -66,7 +66,7 @@ export async function personalService(data, resumeId) {
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');      
 
-        const requiredFields = ["fullName", "email", "phoneNumber", "professionalSummary"];
+        const requiredFields = ["fullname", "email", "phone", "summary"];
 
   for (const field of requiredFields) {
     if (!data[field]) throw new Error(`O campo "${field}" é obrigatório.`);

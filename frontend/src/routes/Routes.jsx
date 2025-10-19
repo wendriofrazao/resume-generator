@@ -5,7 +5,7 @@ import { LoginNRegister } from "../pages/LoginNRegister";
 import { DashBoard } from "../pages/DashBoard";
 import { ProtectedRoute} from "../components/ProtectRoute"
 import {EmailVerificationPage } from '../pages/EmailVerificationPage'
-import { Editation } from '../pages/Editation'
+import { InseringData } from '../pages/InseringDataResume.jsx'
 import { DicaDeCarreira } from '../pages/DicaDeCarreira.jsx'
 import { AboutPages } from '../pages/AboutPages.jsx';
 
@@ -23,21 +23,26 @@ const AppRoutes = () => {
       />
       <Route path="/auth/login" element={<LoginNRegister type="login" />} />
       <Route path="/auth/signup" element={<LoginNRegister type="signup" />} />
-      {/*<Route
+      {<Route
         path="/auth/Account-Verification"
         element={
           <ProtectedRoute>
             <EmailVerificationPage/>
           </ProtectedRoute>
       }
-      />*/}
-      <Route path='/dashboard/edit' element={
-        <ProtectedRoute>
-          <Editation/>
-        </ProtectedRoute>
-        } />
-      <Route path='/dicas-carreira' element={<DicaDeCarreira/>} />
+      />}
+      {<Route path='/dashboard/insering-data-resume' element={
+        //<ProtectedRoute>
+          <InseringData/>
+       // </ProtectedRoute>
+        } />}
       <Route path='/sobre' element={<AboutPages/>} />
+
+      {/* rotas de recursos */}
+      <Route path='/dicas-carreira' element={<DicaDeCarreira/>} />
+      {/* <Route path='/como-escrever-cv' element={<DicaDeCarreira/>} />
+      <Route path='/termos' element={<DicaDeCarreira/>} />
+      <Route path='/privacidade' element={<DicaDeCarreira/>} /> */}
     </Routes>
   );
 };

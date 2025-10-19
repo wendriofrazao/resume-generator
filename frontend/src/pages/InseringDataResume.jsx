@@ -1,15 +1,15 @@
 import React from "react";
-import { Edit } from "../components/ConteinerEdit";
+import { InseringDatasResume } from "../components/ConteinerInsering";
 import {PageHeader} from '../components/PageHeader';
 import {LoggedHeader} from '../components/LoggedHeader';
 
-export function Editation() {
+export function InseringData() {
 
     return (
         <>
             <LoggedHeader/>
             <PageHeader/>
-            <Edit/>
+            <InseringDatasResume/>
         </>
     )
 

@@ -25,7 +25,7 @@ export function ConteinerDicas() {
             alignItems: "center",
             justifyContent: "center",
             }}>
-              <Box
+              <Box 
                     sx={{
                       mb: 3,
                       display: "flex",
@@ -43,8 +43,8 @@ export function ConteinerDicas() {
                       
                     }}
                   >
-                    <span>
-                      <Target  />
+                    <span >
+                      <Target size={15} />
                     </span>
                      <Typography  variant="body3" color="" fontWeight="text.secondary">Guia Completo</Typography>
                   </Box>

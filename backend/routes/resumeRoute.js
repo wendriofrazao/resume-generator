@@ -34,10 +34,10 @@ const resumeRouter = express.Router();
 
 // create routes resumes
 resumeRouter.post("/create-resume", checkAuth, createResume);
-resumeRouter.post("/create-personalDetails", checkAuth, savePersonalDetails);
-resumeRouter.post("/create-experienceWork", checkAuth, saveExperienceWorkController);
-resumeRouter.post("/create-skills", checkAuth, saveSkillController);
-resumeRouter.post("/create-education", checkAuth, saveEducationController);
+resumeRouter.post("/create-personalDetails/:resumeId", checkAuth, savePersonalDetails);
+resumeRouter.post("/create-experienceWork/:resumeId", checkAuth, saveExperienceWorkController);
+resumeRouter.post("/create-skills/:resumeId", checkAuth, saveSkillController);
+resumeRouter.post("/create-education/:resumeId", checkAuth, saveEducationController);
 // resumeRouter.post("/create-projects", createResume);
 
 // updated routes resumes
