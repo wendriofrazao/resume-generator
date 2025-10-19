@@ -8,6 +8,7 @@ import {EmailVerificationPage } from '../pages/EmailVerificationPage'
 import { InseringData } from '../pages/InseringDataResume.jsx'
 import { DicaDeCarreira } from '../pages/DicaDeCarreira.jsx'
 import { AboutPages } from '../pages/AboutPages.jsx';
+import { PrivatePolityc } from "../pages/Private.jsx";
 
 const AppRoutes = () => {
   return (
@@ -42,7 +43,8 @@ const AppRoutes = () => {
       <Route path='/dicas-carreira' element={<DicaDeCarreira/>} />
       {/* <Route path='/como-escrever-cv' element={<DicaDeCarreira/>} />
       <Route path='/termos' element={<DicaDeCarreira/>} />
-      <Route path='/privacidade' element={<DicaDeCarreira/>} /> */}
+       */}
+      <Route path='/privacidade' element={<PrivatePolityc/>} />
     </Routes>
   );
 };

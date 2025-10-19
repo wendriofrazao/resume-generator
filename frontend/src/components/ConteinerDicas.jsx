@@ -8,13 +8,27 @@ import { Box, Container , Typography  } from "@mui/material";
 export function ConteinerDicas() {
     return (
     <div> 
+            {/* Header */}
+      <header className="border-b bg-background/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link to="/" className="flex items-center gap-2">
+            <FileText className="h-6 w-6 text-primary" />
+            <span className="font-bold text-xl">Gerador de Currículos</span>
+          </Link>
+          <Link to="/">
+            <Button variant="outline">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Voltar ao Início
+            </Button>
+          </Link>
+        </div>
+      </header>
       
     <Container
-      className="bg-gray-500"
+      className="bg-gray-500 py-20.5"
         maxWidth="max-w-dvw"
         sx={{
           display: "flex",
-          height: 180,
           justifyContent: "center",
           alignItems: "center",
           bgcolor: "#F5F6FC"
@@ -31,13 +45,14 @@ export function ConteinerDicas() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      width: 150,
-                      height: 45,
+                      width: 170,
+                      height: 35,
                       borderRadius: "50px",
                       backgroundColor: "#EAF0FF",
                       color: "#2F6FFF",
                       fontSize: "16px",
                       fontWeight: 600,
+                      gap: 1,
                       mx: "auto",
                       transition: "0.3s",
                       
@@ -48,8 +63,8 @@ export function ConteinerDicas() {
                     </span>
                      <Typography  variant="body3" color="" fontWeight="text.secondary">Guia Completo</Typography>
                   </Box>
-            <Typography variant="h5" sx={{ display: "flex", justifyContent: "center" }} fontWeight="bold">Dicas de Carreira</Typography>
-            <Typography  variant="body2" fontWeight="text.secondary">Estategias e Orientaçoes Essenciais Impulsionaram Sua Carreira Proficional</Typography>
+            <Typography variant="h3" sx={{ display: "flex", justifyContent: "center" }} fontWeight="bold">Dicas de Carreira</Typography>
+            <Typography  variant="body1" sx={{ marginTop: "3%" }} fontWeight="text.secondary">Estategias e Orientaçoes Essenciais Impulsionaram Sua Carreira Proficional</Typography>
           </Box>
       
         
@@ -62,7 +77,18 @@ export function ConteinerDicas() {
             <Card className="p-8">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <TrendingUp className="h-6 w-6" />
+                
+                  <Box sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: 'rgba(99, 102, 241,0.1)',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "8px",
+                  }}>
+                    <TrendingUp className="h-6 w-6 " color="#2f6fff"/>
+                  </Box>
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold mb-4">Invista em Desenvolvimento Contínuo</h2>
@@ -93,7 +119,18 @@ export function ConteinerDicas() {
             <Card className="p-8">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                  <Users className="h-6 w-6" />
+                  
+                  <Box sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: 'rgba(177, 151, 252, 0.1)',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "8px",
+                  }}>
+                    <Users className="h-6 w-6" color="#B197FC" />
+                  </Box>
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold mb-4">Construa sua Rede de Contatos</h2>
@@ -123,7 +160,18 @@ export function ConteinerDicas() {
             <Card className="p-8">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Briefcase className="h-6 w-6" />
+                  
+                  <Box sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: 'rgba(99, 102, 241,0.1)',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "8px",
+                  }}>
+                    <Briefcase className="h-6 w-6" color="#2f6fff" />
+                  </Box>
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold mb-4">Desenvolva Soft Skills</h2>
@@ -153,7 +201,18 @@ export function ConteinerDicas() {
             <Card className="p-8">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                  <BookOpen className="h-6 w-6" />
+                  <Box sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: 'rgba(177, 151, 252, 0.1)',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "8px",
+                  }}>
+                    <BookOpen className="h-6 w-6" color="#B197FC" />
+                  </Box>
+                  
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold mb-4">Construa sua Marca Pessoal</h2>
@@ -183,7 +242,18 @@ export function ConteinerDicas() {
             <Card className="p-8">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Award className="h-6 w-6" />
+                  
+                   <Box sx={{
+                    width: 40,
+                    height: 40,
+                    backgroundColor: 'rgba(99, 102, 241,0.1)',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "8px",
+                  }}>
+                    <Award className="h-6 w-6" color="#2f6fff" />
+                  </Box>
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold mb-4">Busque Feedback e Mentoria</h2>
@@ -210,15 +280,16 @@ export function ConteinerDicas() {
             </Card>
 
             {/* CTA */}
-            <Card className="bg-gradient-to-r from-primary to-accent p-8 text-center">
-              <h2 className="text-3xl font-bold text-primary-foreground mb-4">
+            <Card className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-center">
+              
+              <h2 className="text-3xl font-bold text-primary-foreground mb-4 text-[#FFFFFF]">
                 Pronto para dar o próximo passo?
               </h2>
-              <p className="text-primary-foreground/90 mb-6">
+              <p className="text-primary-foreground/90 mb-6 text-[#FFFFFF]">
                 Comece criando um currículo profissional que destaque suas conquistas
               </p>
-              <Link to="/auth">
-                <Button variant="secondary" size="lg">
+              <Link to="/dashboard/insering-data-resume">
+                <Button className="cursor-pointer hover:bg-gray-200 " variant="secondary" size="lg" >
                   <FileText className="mr-2 h-5 w-5" />
                   Criar Meu Currículo
                 </Button>

@@ -8,7 +8,6 @@ export function DicaDeCarreira() {
             <Header />
             <ConteinerDicas/>
             <Footer />
-           
         </div>
     );
 }
