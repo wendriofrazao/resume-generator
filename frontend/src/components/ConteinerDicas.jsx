@@ -7,16 +7,16 @@ import { Box, Container , Typography  } from "@mui/material";
 
 export function ConteinerDicas() {
     return (
-    <div> 
+    <div className="bg-[#F0F4FA] min-h-screen text-[#0F172A]"> 
             {/* Header */}
       <header className="border-b bg-background/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2">
-            <FileText className="h-6 w-6 text-primary" />
+            <FileText className="h-6 w-6 text-[#2563EB]" />
             <span className="font-bold text-xl">Gerador de Currículos</span>
           </Link>
           <Link to="/">
-            <Button variant="outline">
+            <Button variant="outline" className="border-[#2563EB]/30 text-[#2563EB]">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Voltar ao Início
             </Button>

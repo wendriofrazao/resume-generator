@@ -6,12 +6,12 @@ import Education from '../models/Education.js'
 import Skill from '../models/Skill.js'
 
 
-export async function createResumeService(userId, title, templateName = "CV Template") {
+export async function createResumeService(userId, title, templateId = "68e95913596affb1bbb52718") {
   try {
     const newResume = new Resume({
       userId,
       title,
-      templateName
+      templateId
     });
 
     const savedResume = await newResume.save();
@@ -53,6 +53,15 @@ export async function getCompleteResume(resumeId) {
     };
   } catch (error) {
     throw error;
+  }
+}
+
+export async function getAllResumesByUserService(userId) {
+  try {
+    const resumes = await Resume.find({ userId }).populate('templateId');
+    return resumes;
+  } catch (error) {
+    throw new Error(`Erro ao buscar os currículos: ${error.message}`);
   }
 }
 

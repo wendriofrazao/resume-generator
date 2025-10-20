@@ -1,10 +1,10 @@
 import express from 'express';
 import { listTemplates, getTemplate } from '../controllers/templateController.js';
 
-const router = express.Router();
+const templateRouter = express.Router();
 
-router.get('/', listTemplates);
+templateRouter.get('/get-all-templates', listTemplates);
 
-router.get('/:templateId', getTemplate);
+templateRouter.get('/get-template/:templateId', getTemplate);
 
-export default router;
+export default templateRouter;

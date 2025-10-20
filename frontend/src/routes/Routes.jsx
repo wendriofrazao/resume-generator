@@ -12,6 +12,8 @@ import { DicaDeCarreira } from '../pages/DicaDeCarreira.jsx'
 import { AboutPages } from '../pages/AboutPages.jsx';
 import { PrivatePolityc } from "../pages/Private.jsx";
 import { TermService } from "../pages/TermUse.jsx";
+import { ComoEscreverUmCv } from '../pages/ComoEscreverUmCv.jsx'
+
 
 const AppRoutes = () => {
   return (
@@ -44,8 +46,7 @@ const AppRoutes = () => {
 
       {/* rotas de recursos */}
       <Route path='/dicas-carreira' element={<DicaDeCarreira/>} />
-      {/* <Route path='/como-escrever-cv' element={<DicaDeCarreira/>} />
-       */}
+      <Route path='/como-escrever-cv' element={<ComoEscreverUmCv/>} />
       <Route path='/termos' element={<TermService/>} />
       <Route path='/privacidade' element={<PrivatePolityc/>} />
       

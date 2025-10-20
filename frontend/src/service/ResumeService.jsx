@@ -1,8 +1,27 @@
 const API_URL = "http://localhost:5000";
 
 
+
+export async function getResumes() {
+  try {
+    const response = await fetch("http://localhost:5000/get-all-resumes", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    return data;
+    
+  } catch (error) {
+    console.error("Erro ao encontrar resume:", error.message);
+    throw error;
+  }
+}
 // create resume
-export async function createResume(title, templateName) {
+export async function createResume(title) {
   try {
     const response = await fetch("http://localhost:5000/create-resume", {
       method: "POST",
@@ -11,23 +30,35 @@ export async function createResume(title, templateName) {
       },
       credentials: "include",
       body: JSON.stringify({
-        title,
-        templateName,
+        title
       }),
     });
 
     const data = await response.json();
-
-    if (data.success) {
-      localStorage.setItem("resumeId", data.data._id);
-      console.log("Resume criado e salvo:", data.data._id);
-    } else {
-      console.warn("Nenhum ID retornado pelo backend.");
-    }
-
     return data;
+
   } catch (error) {
     console.error("Erro ao criar resume:", error.message);
+    throw error;
+  }
+}
+
+export async function deleteResume(id) {
+  try {
+    const response = await fetch(`${API_URL}/resume/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Erro ${response.status}: ${errText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao excluir resume:", error.message);
     throw error;
   }
 }

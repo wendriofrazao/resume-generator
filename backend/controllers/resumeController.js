@@ -2,7 +2,7 @@ import { findResumeById, findPersonalDetailsById, getCompleteResume }from '../se
 import { renderTemplate } from '../services/templateService.js';
 
 // imports create
-import { createResumeService } from '../services/resumeService.js'
+import { createResumeService, getAllResumesByUserService} from '../services/resumeService.js'
 import { personalService } from '../services/resumeService.js'
 import { experienceWorkService } from '../services/resumeService.js';
 import { skillService } from '../services/resumeService.js';
@@ -30,10 +30,10 @@ import {
 export async function createResume(req, res) {
   try {
 
-    const { title, templateName } = req.body;
+    const { title } = req.body;
     const userId = req.session.userId;
 
-    const resume = await createResumeService(userId, title, templateName);
+    const resume = await createResumeService(userId, title);
 
     res.status(201).json({
       success: true,
@@ -49,14 +49,31 @@ export async function createResume(req, res) {
   }
 }
 
+export async function getResumesByUser(req, res) {
+  try {
+    const userId = req.session?.userId || req.session.userId; 
+    
+    const resumes = await getAllResumesByUserService(userId);
+    res.status(200).json({
+      success: true,
+      data: resumes,
+      message: "Currículos encontrados com sucesso.",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+}
 
 export async function generateResume(req, res) {
-try{
-const { resumeId } = req.params;
+  try{
+  const { resumeId } = req.params;
 
-const resumeData = await getCompleteResume(resumeId);
+  const resumeData = await getCompleteResume(resumeId);
 
-const templateData = {
+  const templateData = {
       fullName: resumeData.personalDetails?.fullName || '',
       cityCountry: `${resumeData.personalDetails?.city || ''}, ${resumeData.personalDetails?.country || ''}`,
       citizenship: resumeData.personalDetails?.country || '',
@@ -115,7 +132,8 @@ export async function previewTemplate(req, res) {
 
 
 
-export async function savePersonalDetails(req, res) {
+
+ export async function savePersonalDetails(req, res) {
   try {
     const { resumeId } = req.params;
     const personalData = req.body;
@@ -316,12 +334,14 @@ export async function updateExperienceController(req, res) {
 
 export const deleteResumeController = async (req, res) => {
   try {
-    await deleteResumeService(req.params.resumeId);
-    res.status(200).json({ success: true, message: "Resume deleted successfully" });
+    const { id } = req.params; 
+    await deleteResumeService(id);
+    res.status(200).json({ success: true, message: "Currículo excluído com sucesso" });
   } catch (error) {
+    console.error("Erro ao excluir currículo:", error.message);
     res.status(500).json({ success: false, error: error.message });
   }
-}
+};
 
 export const deletePersonalDetailsController = async (req, res) => {
   try {

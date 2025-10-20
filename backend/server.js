@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url';
 import connectFileStore from 'session-file-store';
 import cors from "cors";
 
-
+import templateRouter from './routes/templateRoute.js'
 
 // import routes
 import router from './routes/authRoutes.js';
@@ -89,6 +89,7 @@ app.use(setSession);
 app.use('/auth', router);
 app.use("/otp", otpRouter);
 app.use("/", resumeRouter);
+app.use("/", templateRouter);
 
 app.get('/', (req, res) => {
     res.send("teste");

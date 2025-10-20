@@ -1,6 +1,7 @@
 import express from 'express';
 import { checkAuth} from '../middlewares/authMiddleware.js'
 
+import {getResumesByUser} from '../controllers/resumeController.js'
 // create imports
 import {
     createResume, 
@@ -31,6 +32,8 @@ import {
 
 
 const resumeRouter = express.Router();
+
+resumeRouter.get("/get-all-resumes", checkAuth, getResumesByUser)
 
 // create routes resumes
 resumeRouter.post("/create-resume", checkAuth, createResume);
