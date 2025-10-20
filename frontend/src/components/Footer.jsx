@@ -51,8 +51,8 @@ export const Footer = () => {
               <MuiLink component={Link} to="/dashboard" underline="hover" color="text.secondary">
                 Meus Currículos
               </MuiLink>
-              <MuiLink href="#" underline="hover" color="text.secondary">
-                Ver Exemplos
+              <MuiLink href="/sobre" underline="hover" color="text.secondary">
+                Saiba Mais
               </MuiLink>
             </Box>
           </Grid>
