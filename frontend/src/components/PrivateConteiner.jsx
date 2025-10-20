@@ -230,8 +230,8 @@ export function PrivacyPolicy() {
               <ul className="space-y-2 text-muted-foreground">
                 <li><strong className="text-foreground">Email:</strong> privacidade@geradordeCV.com</li>
                 <li><strong className="text-foreground">Email do Encarregado (DPO):</strong> dpo@geradordeCV.com</li>
-                <li><strong className="text-foreground">Telefone:</strong> +55 (11) 99999-9999</li>
-                <li><strong className="text-foreground">Endereço:</strong> São Paulo, SP - Brasil</li>
+                <li><strong className="text-foreground">Telefone:</strong> +55 (98) 99999-9999</li>
+                <li><strong className="text-foreground">Endereço:</strong> São luís, MA - Brasil</li>
               </ul>
             </Card>
 

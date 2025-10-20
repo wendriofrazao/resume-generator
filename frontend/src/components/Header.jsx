@@ -101,6 +101,14 @@ export function Header({ onChangeTab }) {
                 borderColor: "#e5e7eb",
                 color: "#505050",
                 fontWeight: 600,
+                '&:hover': {
+                  backgroundColor: '#535050ff',
+                  color: '#ffffffff',    
+                  transition: '.6s'  
+                },
+                '&:active': {
+                  transform: 'scale(.5)'
+                }
               }}
               onClick={() => onChangeTab("login")}
             >
@@ -108,6 +116,7 @@ export function Header({ onChangeTab }) {
             </Button>
 
             <Button
+              disableElevation
               component={Link}
               to="/auth/signup"
               variant="contained"
@@ -118,12 +127,21 @@ export function Header({ onChangeTab }) {
               onClick={() => onChangeTab("signup")}
               sx={{
                 textTransform: "none",
-                backgroundColor: "#E2EAEF",
-                color: "#505050",
+                backgroundColor: "#535050ff",
+                color: "#ffffffff",
                 fontWeight: 600,
                 boxShadow: "none",
                 display: "flex",
                 alignItems: "center",
+                '&:hover': {
+                  borderColor: "#e5e7eb",
+                  backgroundColor: '#ffffffff',
+                  color: '#585757ff',    
+                  transition: '.6s',
+                },
+                '&:active': {
+                  transform: 'scale(.5)'
+                }
               }}
             >
               Cadastrar

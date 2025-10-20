@@ -6,9 +6,12 @@ import { DashBoard } from "../pages/DashBoard";
 import { ProtectedRoute} from "../components/ProtectRoute"
 import {EmailVerificationPage } from '../pages/EmailVerificationPage'
 import { InseringData } from '../pages/InseringDataResume.jsx'
+
+// import recursos
 import { DicaDeCarreira } from '../pages/DicaDeCarreira.jsx'
 import { AboutPages } from '../pages/AboutPages.jsx';
 import { PrivatePolityc } from "../pages/Private.jsx";
+import { TermService } from "../pages/TermUse.jsx";
 
 const AppRoutes = () => {
   return (
@@ -42,9 +45,10 @@ const AppRoutes = () => {
       {/* rotas de recursos */}
       <Route path='/dicas-carreira' element={<DicaDeCarreira/>} />
       {/* <Route path='/como-escrever-cv' element={<DicaDeCarreira/>} />
-      <Route path='/termos' element={<DicaDeCarreira/>} />
        */}
+      <Route path='/termos' element={<TermService/>} />
       <Route path='/privacidade' element={<PrivatePolityc/>} />
+      
     </Routes>
   );
 };

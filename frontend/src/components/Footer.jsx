@@ -99,7 +99,7 @@ export const Footer = () => {
               <Box display="flex" alignItems="flex-start" gap={1}>
                 <MapPin size={16} color="#1976d2" />
                 <Typography variant="body2" color="text.secondary">
-                  São Luiz, MA<br />Brasil
+                  São Luís, MA<br />Brasil
                 </Typography>
               </Box>
             </Box>
