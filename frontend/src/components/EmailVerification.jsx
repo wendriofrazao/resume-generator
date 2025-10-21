@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../hooks/userAuth.jsx";
 import { useNavigate } from "react-router-dom";
+import { Me } from "../service/authService.jsx";
 
 export function EmailVerification() {
-  const { user, verifyOtpCode, sendOtpEmail } = useAuth();
+  const { user, verifyOtpCode, sendOtpEmail, setUser } = useAuth();
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -18,16 +19,12 @@ export function EmailVerification() {
   useEffect(() => {
     console.log("[EmailVerification] Checando status do usuário:", user);
     if (user?.isAccountVerified && !isRedirecting.current) {
-      console.log("[EmailVerification] Usuário já verificado. Redirecionando para /dashboard");
       isRedirecting.current = true;
       navigate("/dashboard", { replace: true });
     }
   }, [user?.isAccountVerified, navigate]);
 
   useEffect(() => {
-    console.log("[EmailVerification] useEffect executado - email:", user?.email);
-    console.log("[EmailVerification] hasSentOtp.current:", hasSentOtp.current);
-    console.log("[EmailVerification] user.isAccountVerified:", user?.isAccountVerified);
     
     // ✅ Não enviar OTP se:
     // - Não há email
@@ -45,28 +42,22 @@ export function EmailVerification() {
     }
 
     const sendInitialOtp = async () => {
-      console.log("[EmailVerification] Enviando OTP inicial para:", user.email);
       try {
         setIsSendingOtp(true);
         hasSentOtp.current = true; 
 
         const res = await sendOtpEmail(user.email, "verify");
-        console.log("[EmailVerification] Resposta do envio inicial:", res);
 
         if (!res.ok) {
-          console.error("[EmailVerification] Falha no envio inicial:", res.message);
           setError(res.message || "Falha ao enviar o código. Tente novamente.");
-          hasSentOtp.current = false; // ✅ Permitir nova tentativa em caso de erro
+          hasSentOtp.current = false;
         } else {
-          console.log("[EmailVerification] OTP enviado com sucesso para:", user.email);
         }
       } catch (err) {
-        console.error("[EmailVerification] Erro inesperado ao enviar OTP:", err);
         setError(err.message || "Erro ao enviar o código.");
-        hasSentOtp.current = false; // ✅ Permitir nova tentativa em caso de erro
+        hasSentOtp.current = false; 
       } finally {
         setIsSendingOtp(false);
-        console.log("[EmailVerification] Finalizado processo de envio inicial.");
       }
     };
 
@@ -136,18 +127,15 @@ export function EmailVerification() {
       setError(""); 
       
       const res = await verifyOtpCode(user.email, otpCode);
-      console.log("[EmailVerification] Resposta da verificação:", res);
-
       if (res.ok) {
-        console.log("[EmailVerification] ✅ Código verificado com sucesso!");
+      console.log("[EmailVerification] ✅ Código verificado com sucesso!");
+      if (res.user) {
+        setUser(res.user); 
       } else {
-        console.error("[EmailVerification] ❌ Código inválido:", res.message);
-        setError(res.message || "Código inválido. Tente novamente.");
-        hasVerified.current = false;
-        setCode(["", "", "", "", "", ""]);
-      }
+       await Me();
+       }
+}
     } catch (err) {
-      console.error("[EmailVerification] Erro ao verificar OTP:", err);
       setError(err.message || "Erro ao verificar código.");
       hasVerified.current = false;
     } finally {
@@ -155,16 +143,6 @@ export function EmailVerification() {
     }
   };
 
-  if (isRedirecting.current) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Redirecionando...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">

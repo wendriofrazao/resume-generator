@@ -5,18 +5,18 @@ import { useAuth } from '../hooks/userAuth.jsx';
 
 
 export function LoggedHeader() {
-   const { logout } = useAuth();
+   const { logout, user } = useAuth();
 
    const handleSubmit = async (event) => {
       event.preventDefault();
       const res = await logout();
     if (res) {
-      navigate("/auth/login"); 
+      navigate("/"); 
     }
   }
   return (
     <header className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-20 px-0 py-1 flex items-center justify-between">
+      <div className="max-w-6xl mx-20 px-0 py-1 flex items-center justify-between">
         <div className="flex items-center space-x-12">
 
           {/* Logo e título */}
@@ -36,7 +36,13 @@ export function LoggedHeader() {
           </button>
 
             <div className='flex items-center gap-2 rounded-full text-sm size-12 cursor-pointer hover:bg-gray-200 hover:px-1 duration-100 ease-in'>
-                <img src={profile}/>
+              {user?.profile_picture ? (
+                    <img 
+                      src={user.profile_picture} 
+                      alt={`Foto de ${user.username}`}
+                      className="rounded-2xl"
+                    />
+                  ) : (<img src={profile}/>)}
             </div>
           
         </div>

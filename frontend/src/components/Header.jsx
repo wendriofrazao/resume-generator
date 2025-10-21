@@ -1,7 +1,5 @@
 import React from "react";
 
-// import userAuth from '../hooks/userAuth.jsx';
-
 import { AppBar, Toolbar, Box, Button, Typography, Container } from "@mui/material";
 import { FileText, User } from "lucide-react";
 import { Link } from "react-router-dom";

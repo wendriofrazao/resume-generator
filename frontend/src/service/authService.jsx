@@ -40,12 +40,33 @@ export async function logoutUser() {
   });
 }
 
-export async function Me(){
+export async function googleLoginRegister(token) {
+  const res = await fetch(`${API_URL}/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token }),
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  return res.json();
+}
+
+export async function Me() {
   const res = await fetch(`${API_URL}/me`, {
     method: "GET",
     credentials: "include",
   });
-  return res
+
+  if (!res.ok) {
+    throw new Error(`Erro ${res.status}`);
+  }
+
+  return res.json(); 
 }
 
 // Enviar OTP

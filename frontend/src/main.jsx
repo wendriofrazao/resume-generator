@@ -5,13 +5,22 @@ import './App.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './hooks/userAuth.jsx'
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+if (!clientId) {
+  console.error('Google Client ID não encontrado nas variáveis de ambiente');
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
+    <GoogleOAuthProvider clientId={clientId}>
       <AuthProvider>
         <App />
       </AuthProvider>
+    </GoogleOAuthProvider>
     </BrowserRouter>
   </StrictMode>
 )

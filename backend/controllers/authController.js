@@ -1,4 +1,4 @@
-import { registerService } from "../services/userServices.js";
+import { googleLoginRegisterService, registerService } from "../services/userServices.js";
 import { loginService } from "../services/userServices.js";
 import { FindUserById } from '../services/userServices.js'
 
@@ -57,9 +57,39 @@ export const Logout = async (req, res) => {
     }
 }
 
+export const GoogleLoginNRegister = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ success: false, message: "Token Google não fornecido" });
+    }
+
+    const user = await googleLoginRegisterService(token);
+
+    req.session.userId = user._id;
+    await req.session.save();
+
+    const { password: _, ...userWithoutPassword } = user._doc || user;
+
+    return res.status(200).json({
+      success: true,
+      message: "Login com Google realizado com sucesso",
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    console.error("Erro no GoogleLoginNRegister:", error);
+    return res.status(401).json({
+      success: false,
+      message: `Falha na autenticação com o Google: ${error.message}`,
+    });
+  }
+};
+
+
 export const Me = async (req, res) => {
-    if (req.session.userId) {
-    const user = FindUserById(req.session.userId);
+  if (req.session.userId) {
+    const user = await FindUserById(req.session.userId); 
     return res.json({ user });
   } else {
     return res.json({ user: null });

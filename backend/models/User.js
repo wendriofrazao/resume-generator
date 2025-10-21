@@ -10,21 +10,21 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: function() {
+    return this.provider === "local";}
   },
   fullname: {
     type: String,
     required: true,
     trim: true
   },
-  profilePicture: {
-    type: String,
-    default: null
-  },
+  provider: { type: String, default: "local" },
+  provider_id: String,
+  profile_picture: String,
   verifyOtp: {
     type: String,
     default: ''
-  },
+   },
   verifyOtpExpireAt: {
     type: Number,
     default: 0

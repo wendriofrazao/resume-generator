@@ -87,7 +87,7 @@ export const Footer = () => {
               <Box display="flex" alignItems="center" gap={1}>
                 <Mail size={16} color="#1976d2" />
                 <Typography variant="body2" color="text.secondary">
-                  kijm.lima@outlook.com
+                  example@gmail.com
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
@@ -111,10 +111,6 @@ export const Footer = () => {
           <Typography variant="body2" color="text.secondary">
             © 2025 Gerador de Currículos. Todos os direitos reservados.
           </Typography>
-          <Box display="flex" alignItems="center" gap={1} color="text.secondary">
-            <Typography variant="body2">Feito com ❤️</Typography>
-            <Typography variant="body2">para sua carreira</Typography>
-          </Box>
         </Box>
       </Container>
     </Box>

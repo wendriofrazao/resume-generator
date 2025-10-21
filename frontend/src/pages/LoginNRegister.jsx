@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Tabs, Tab, Typography } from "@mui/material";
+import { FileText } from "lucide-react";
 import { Login } from "../components/Login";
 import { Register } from "../components/Register";
 
@@ -7,67 +7,46 @@ export const LoginNRegister = () => {
   const [tabValue, setTabValue] = useState("login");
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, rgba(25,118,210,0.1), rgba(156,39,176,0.1))",
-        p: 2,
-      }}
-    >
-      <Box sx={{ width: "100%", maxWidth: 400 }}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-background to-secondary/20 p-4">
+      <div className="w-full max-w-md">
         {/* Cabeçalho */}
-        <Box alignItems="center" textAlign="center" mb={2}>
-          <Typography  variant="h4" fontWeight="bold">
-            Gerador de Currículos
-          </Typography>
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <FileText className="h-12 w-12 text-primary" />
+          </div>
+          <h1 className="text-3xl font-bold">Gerador de Currículos</h1>
+          <p className="text-muted-foreground">Crie seu currículo profissional</p>
+        </div>
 
-          <Typography color="text.secondary">
-            Crie seu currículo profissional
-          </Typography>
-        </Box>
+        {/* Tabs */}
+        <div className="w-full mb-4 grid grid-cols-2 rounded-xl bg-gray-200 p-1">
+          <button
+            className={`py-2 rounded-lg font-medium transition ${
+              tabValue === "login"
+                ? "bg-white text-gray-900"
+                : "text-gray-600 hover:bg-gray-300"
+            }`}
+            onClick={() => setTabValue("login")}
+          >
+            Login
+          </button>
+          <button
+            className={`py-2 rounded-lg font-medium transition ${
+              tabValue === "signup"
+                ? "bg-white text-gray-900"
+                : "text-gray-600 hover:bg-gray-300"
+            }`}
+            onClick={() => setTabValue("signup")}
+          >
+            Criar Conta
+          </button>
+        </div>
 
-        <Tabs
-  value={tabValue}
-  onChange={(_, newValue) => setTabValue(newValue)}
-  centered
-  TabIndicatorProps={{ style: { display: "none" } }}
-  sx={{
-    backgroundColor: "#6E7781",
-    borderRadius: "1rem",
-    mb: 1,
-    p: "0.1rem",
-    "& .MuiTab-root": {
-      margin: "0.5rem",
-      color: "#111827da",
-      flex: 1,
-      borderRadius: "8px",
-      textTransform: "none",
-      fontWeight: 500,
-      transition: "all .4s ease-in-out",
-    },
-    "& .Mui-selected": {
-      backgroundColor: "#fff",
-      color: "#111827", 
-    },
-    "& .MuiTab-root.Mui-focusVisible": {
-      backgroundColor: "#fff", 
-      color: "#111827",
-    },
-    "& .MuiTab-root:hover": {
-      backgroundColor: "#f3f4f6", 
-    },
-  }}
->
-  <Tab value="login" label="Login" />
-  <Tab value="signup" label="Criar Conta" />
-</Tabs>
+        {/* Conteúdo */}
         {tabValue === "login" && <Login />}
         {tabValue === "signup" && <Register />}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

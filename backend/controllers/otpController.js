@@ -1,4 +1,5 @@
 import { createAndSendOtp, verifyOtp, resetPasswordService } from "../services/otpService.js";
+import { checkEmailExists } from "../services/userServices.js";
 
 export async function sendOtp(req, res) {
   try {
@@ -23,10 +24,17 @@ export async function verifyOtpController(req, res) {
     }
 
     await verifyOtp(email, otp, otpType);
+    const user = await checkEmailExists(email);
 
     return res.json({ 
       ok: true,
-      message: 'Conta verificada com sucesso!' 
+      message: 'Conta verificada com sucesso!',
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        isAccountVerified: user.isAccountVerified
+      }
     });
   } catch (err) {
     return res.status(400).json({ error: err.message });

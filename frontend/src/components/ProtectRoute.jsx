@@ -12,9 +12,8 @@ export function ProtectedRoute({ children }) {
     </div>
   );}
   
-  if (!user) return <Navigate to="/auth/login" replace state={{ from: location }} />;
+  if (!user) return <Navigate to="/" replace state={{ from: location }} />;
 
-  /*
   if (
     user.isAccountVerified !== true &&
     location.pathname !== "/auth/Account-Verification"
@@ -28,7 +27,6 @@ export function ProtectedRoute({ children }) {
   ) {
     return <Navigate to="/dashboard" replace />;
   }
-    */
     
   return children;
 }

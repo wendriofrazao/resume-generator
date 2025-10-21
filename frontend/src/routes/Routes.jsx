@@ -38,9 +38,9 @@ const AppRoutes = () => {
       }
       />}
       {<Route path='/dashboard/insering-data-resume' element={
-        //<ProtectedRoute>
+        <ProtectedRoute>
           <InseringData/>
-       // </ProtectedRoute>
+       </ProtectedRoute>
         } />}
       <Route path='/sobre' element={<AboutPages/>} />
 
