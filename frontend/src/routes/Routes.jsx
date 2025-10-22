@@ -37,11 +37,13 @@ const AppRoutes = () => {
           </ProtectedRoute>
       }
       />}
-      {<Route path='/dashboard/insering-data-resume' element={
+      {<Route path='/dashboard/insering-data-resume/:resumeId' element={
         <ProtectedRoute>
           <InseringData/>
        </ProtectedRoute>
-        } />}
+      } />}
+
+
       <Route path='/sobre' element={<AboutPages/>} />
 
       {/* rotas de recursos */}

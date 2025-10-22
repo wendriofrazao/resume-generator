@@ -7,7 +7,7 @@ export function ResumePreview({ data }) {
   return (
     <Card className="p-10 shadow-xl rounded-xl bg-white border border-gray-200">
       {/* Cabeçalho */}
-      {/* <div className="text-center mb-6">
+      <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">
           {personalInfo.fullname || "Seu Nome"}
         </h2>
@@ -22,15 +22,15 @@ export function ResumePreview({ data }) {
             {personalInfo.country && <p>{personalInfo.country}</p>}
           </div>
         )}
-      </div> */}
+      </div>
 
       {/* Resumo Profissional */}
-      {/* {personalInfo.summary && (
+      {personalInfo.summary && (
         <section className="mb-6">
           <h3 className="text-lg font-semibold text-primary mb-2">Resumo Profissional</h3>
           <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
         </section>
-      )} */}
+      )}
 
       {/* Experiências */}
       {experiences?.length > 0 && (

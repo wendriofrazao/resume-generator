@@ -135,6 +135,10 @@ export async function previewTemplate(req, res) {
 
  export async function savePersonalDetails(req, res) {
   try {
+
+    console.log("Params:", req.params);
+    console.log("Body:", req.body);
+
     const { resumeId } = req.params;
     const personalData = req.body;
     
@@ -327,6 +331,20 @@ export async function updateExperienceController(req, res) {
       success: false,
       error: error.message
     });
+  }
+}
+
+// find id resume
+
+export async function getResumeById(req, res) {
+  try {
+    console.log("ID recebido no backend:", req.params.resumeId);
+
+    const { resumeId } = req.params;
+    const resume = await findResumeById(resumeId);
+    res.json(resume);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 

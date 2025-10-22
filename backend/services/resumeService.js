@@ -71,7 +71,7 @@ export async function getAllResumesByUserService(userId) {
 export async function personalService(data, resumeId) {
     try {
 
-    const isVerifyResume = findResumeById(resumeId);
+    const isVerifyResume = await findResumeById(resumeId);
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');      
 
@@ -101,7 +101,7 @@ export async function experienceWorkService(data, resumeId) {
 
   try {
 
-    const isVerifyResume = findResumeById(resumeId);
+    const isVerifyResume = await findResumeById(resumeId);
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');
 
@@ -130,7 +130,7 @@ export async function educationService(data, resumeId) {
 
   try {
 
-    const isVerifyResume = findResumeById(resumeId);
+    const isVerifyResume = await findResumeById(resumeId);
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');
 
@@ -159,7 +159,7 @@ export async function skillService(data, resumeId) {
 
   try {
 
-    const isVerifyResume = findResumeById(resumeId);
+    const isVerifyResume = await findResumeById(resumeId);
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');
 

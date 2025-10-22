@@ -1,7 +1,6 @@
 const API_URL = "http://localhost:5000";
 
 
-
 export async function getResumes() {
   try {
     const response = await fetch("http://localhost:5000/get-all-resumes", {
@@ -72,7 +71,13 @@ export async function personalDetails(fullname, email, phone, city, state, count
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ fullname, email, phone, city, state, country, summary }),
+      body: JSON.stringify({
+        fullname,
+        email,
+        phone,
+        summary,
+        location: { city, state, country } 
+      }),
     });
 
     if (!response.ok) {
@@ -87,8 +92,8 @@ export async function personalDetails(fullname, email, phone, city, state, count
 }
 
 
-export async function experienceWork(jobDegree, company, description, period) {
-  const res = await fetch(`${API_URL}/create-experienceWork`, {
+export async function experienceWork(jobDegree, company, description, period, resumeId) {
+  const res = await fetch(`${API_URL}/create-experienceWork/${resumeId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ jobDegree, company, description, period }),
@@ -102,8 +107,8 @@ export async function experienceWork(jobDegree, company, description, period) {
   return await res.json();
 }
 
-export async function education(degree, institution, destructive, period) {
-  const res = await fetch(`${API_URL}/create-education`, {
+export async function education(degree, institution, destructive, period, resumeId) {
+  const res = await fetch(`${API_URL}/create-education/${resumeId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ degree, institution, destructive, period }),
@@ -117,11 +122,11 @@ export async function education(degree, institution, destructive, period) {
   return await res.json();
 }
 
-export async function skills(fullname, email, phone, location, sumary) {
-  const res = await fetch(`${API_URL}/create-skills`, {
+export async function skills(skillName, resumeId) {
+  const res = await fetch(`${API_URL}/create-skills/${resumeId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ fullname, email, password, phone, location, sumary }),
+    body: JSON.stringify({ skillName }),
     credentials: "include", 
   });
 

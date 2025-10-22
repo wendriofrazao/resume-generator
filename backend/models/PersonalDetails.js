@@ -7,14 +7,14 @@ const personalDetailsSchema = new mongoose.Schema({
     required: true
   },
   email: { type: String, required: true, lowercase: true, trim: true },
-  fullName: { type: String, required: true, trim: true },
+  fullname: { type: String, required: true, trim: true },
   phoneNumber: { type: String },
   location: {
     city: { type: String },
     state: { type: String },
     country: { type: String }
   },
-  professionalSummary: { type: String },
+  summary: { type: String },
 }, { timestamps: true });
 
 export default mongoose.model("PersonalDetails", personalDetailsSchema);

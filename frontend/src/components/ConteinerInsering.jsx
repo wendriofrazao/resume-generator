@@ -9,6 +9,7 @@ import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { FileText, User, Briefcase, GraduationCap, Award, Download } from "lucide-react";
 import { ResumePreview } from "./ResumePreview"; 
+import { useParams } from "react-router-dom";
 
 import { ResumeProvide } from "../hooks/resumeHook";
 
@@ -25,8 +26,19 @@ export function InseringDatasResume() {
   const [ state, setState ] = useState("");
   const [ country, setCountry ] = useState("");
   const [ summary, setSummary ] = useState("");
+  const { resumeId } = useParams();
   
   const [resumeData, setResumeData] = useState({
+    personalInfo: {
+      fullname: "",
+      email: "",
+      phone: "",
+      city: "",
+      state: "",
+      country: "",
+      summary: "",
+    },
+
 
     experiences: [],
     education: [],
@@ -35,29 +47,27 @@ export function InseringDatasResume() {
 
   const [newSkill, setNewSkill] = useState("");
 
-const HandlePersonalInfo = async (event) => {
-  event.preventDefault();
+    const HandlePersonalInfo = async (event) => {
+      event.preventDefault();
+      console.log("ID vindo pela URL (useParams):", resumeId);
 
-  const resumeId = localStorage.getItem("resumeId");
 
-  if (!resumeId) {
-    console.error("Nenhum resumeId encontrado. Crie o currículo primeiro!");
-    return;
-  }
+      const response = await resume.PersonalResumeProvide(
+        fullname, email, phone, city, state, country, summary, resumeId
+      );
 
-  const response = await resume.PersonalResumeProvide(
-    fullname,
-    email,
-    phone,
-    city,
-    state,
-    country,
-    summary,
-    resumeId
-  );
+      console.log("Resposta do backend:", response);
+    };
 
-  console.log("Resposta do backend:", response);
-};
+    const updatePersonalInfo = (campo, valor) => {
+      setResumeData((prev) => ({
+       ...prev,
+        personalInfo: {
+          ...prev.personalInfo,
+          [campo]: valor,
+        },
+      }));
+    };
 
   const addExperience = () => {
     setResumeData((prev) => ({
@@ -68,6 +78,7 @@ const HandlePersonalInfo = async (event) => {
       ],
     }));
   };
+
 
   const updateExperience = (id, field, value) => {
     setResumeData((prev) => ({
@@ -149,22 +160,26 @@ const HandlePersonalInfo = async (event) => {
               <div className="w-full max-w-3xl mx-auto space-y-6">
                     {/* Cabeçalho das abas */}
                     <div className="flex w-full justify-between bg-muted p-1 rounded-lg shadow-sm">
-                      <TabsTrigger value="personal" valueActive={tabValue} setValue={setTabValue}>
+                      <TabsTrigger 
+                        value="personal"
+                        valueActive={tabValue}
+                        setValue={setTabValue}
+                      >
                         <User className="h-4 w-4" />
                         Pessoal
                       </TabsTrigger>
 
-                      <TabsTrigger value="experience" valueActive={tabValue} setValue={setTabValue}>
+                      <TabsTrigger value="experience" valueActive={tabValue}  setValue={setTabValue}>
                         <Briefcase className="h-4 w-4" />
                         Experiência
                       </TabsTrigger>
 
-                      <TabsTrigger value="education" valueActive={tabValue} setValue={setTabValue}>
+                      <TabsTrigger value="education" valueActive={tabValue}  setValue={setTabValue}>
                         <GraduationCap className="h-4 w-4" />
                         Educação
                       </TabsTrigger>
 
-                      <TabsTrigger value="skills" valueActive={tabValue} setValue={setTabValue}>
+                      <TabsTrigger value="skills" valueActive={tabValue}  setValue={setTabValue}>
                         <Award className="h-4 w-4" />
                         Habilidades
                       </TabsTrigger>
@@ -191,7 +206,10 @@ const HandlePersonalInfo = async (event) => {
                                   id="fullname"
                                   name="fullname"
                                   value={fullname}
-                                  onChange={(e) => setFullname(e.target.value)}
+                                  onChange={(e) => {
+                                    setFullname(e.target.value)
+                                    updatePersonalInfo("fullname", e.target.value)
+                                  }}
                                   placeholder="João Silva"
                                 />
                               </div>
@@ -202,7 +220,10 @@ const HandlePersonalInfo = async (event) => {
                                   name="email"
                                   type="email"
                                   value={email}
-                                  onChange={(e) => setEmail(e.target.value)}
+                                  onChange={(e) => {
+                                    setEmail(e.target.value)
+                                    updatePersonalInfo("email", e.target.value)
+                                  }}
                                   placeholder="joao@email.com"
                                 />
                               </div>
@@ -212,7 +233,10 @@ const HandlePersonalInfo = async (event) => {
                                   id="phone"
                                   name="phone"
                                   value={phone}
-                                  onChange={(e) => setPhone(e.target.value)}
+                                  onChange={(e) => {
+                                     setPhone(e.target.value) 
+                                     updatePersonalInfo("phone", e.target.value)
+                                    }}
                                   placeholder="(11) 99999-9999"
                                 />
                               </div>
@@ -222,7 +246,10 @@ const HandlePersonalInfo = async (event) => {
                                   id="city"
                                   name="city"
                                   value={city}
-                                  onChange={(e) => setCity(e.target.value)}
+                                  onChange={(e) => { 
+                                    setCity(e.target.value) 
+                                    updatePersonalInfo("city", e.target.value)
+                                  }}
                                   placeholder="São Paulo"
                                 />
                               </div>
@@ -232,7 +259,10 @@ const HandlePersonalInfo = async (event) => {
                                   id="state"
                                   name="state"
                                   value={state}
-                                  onChange={(e) => setState(e.target.value)}
+                                  onChange={(e) => { 
+                                    setState(e.target.value) 
+                                    updatePersonalInfo("state", e.target.value)
+                                  }}
                                   placeholder="SP"
                                   />
                               </div>
@@ -242,7 +272,10 @@ const HandlePersonalInfo = async (event) => {
                                   id="country"
                                   name="country"
                                   value={country}
-                                  onChange={(e) => setCountry(e.target.value)}
+                                  onChange={(e) => { 
+                                    setCountry(e.target.value) 
+                                    updatePersonalInfo("country", e.target.value)
+                                  }}
                                   placeholder="Brasil"
                                   />
                               </div>
@@ -252,7 +285,10 @@ const HandlePersonalInfo = async (event) => {
                                   id="summary"
                                   name="summary"
                                   value={summary}
-                                  onChange={(e) => setSummary(e.target.value)}
+                                  onChange={(e) => { 
+                                    setSummary(e.target.value) 
+                                    updatePersonalInfo("summary", e.target.value)
+                                  }}
                                   placeholder="Descreva brevemente sua experiência e objetivos profissionais..."
                                   rows={4}
                                   />

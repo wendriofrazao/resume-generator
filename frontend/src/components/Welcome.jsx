@@ -38,7 +38,8 @@ export function Welcome() {
       setNewTitle("");
       setShowCreateBox(false);
       fetchResumes();
-      // navigate("/editor", { state: { resumeId: data._id || data.id } });
+
+      navigate(`/dashboard/insering-data-resume/${data.data?._id || data.resume?.id}`);
     } catch (error) {
       console.error("Erro ao criar currículo:", error.message);
     }
