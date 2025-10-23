@@ -17,6 +17,7 @@ export function InseringDatasResume() {
   const [personalSent, setPersonalSent] = useState(false); 
   const [experienceSent, setExperienceSent] = useState(false); 
   const [educationSent, setEducationSent] = useState(false); 
+  // const [skillsSent, setSkillsSent] = useState(false); 
 
   const resume = new ResumeProvide();
   const { resumeId } = useParams();
@@ -39,9 +40,10 @@ export function InseringDatasResume() {
   // educação
   const [degreeEdu, setDegreeEdu] = useState("");
   const [institutionEdu, setinstitutionEdu] = useState("");
-  const [descriptionEdu, setdescriptionEdu] = useState("");
   const [periodEdu, setPeriodEdu] = useState("");
 
+  // habilidade
+  const [skillName, setSkillName] = useState("");
 
   // atualizar os dados no card apresentativo
   const [resumeData, setResumeData] = useState({
@@ -163,6 +165,37 @@ export function InseringDatasResume() {
     }
   };
 
+  // habilidades
+  const HandleSkills = async (e) => {
+    e.preventDefault();
+
+    // if (skillsSent) {
+    //   console.log("⚠️ Dados pessoais já foram enviados, não será reenviado.");
+    //   return;
+    // }
+
+    if (!skillName) {
+      console.warn("❌ Campos obrigatórios faltando.");
+      return;
+    }
+
+    try {
+      console.log("📤 Enviando dados pessoais para o backend...");
+      const response = await resume.SkillsResumeProvide(
+        skillName,
+        resumeId
+      );
+
+      if (response?.ok || response?.success) {
+        console.log("✅ Dados pessoais enviados com sucesso!");
+        // setSkillsSent(true);
+      } 
+      
+    } catch (err) {
+      console.error("❌ Erro inesperado ao enviar dados pessoais:", err);
+    }
+  };
+
 
   const handleTabChange = (newTab) => {
     
@@ -177,11 +210,14 @@ export function InseringDatasResume() {
     if (tabValue === "education" && newTab !== "education") {
       HandleEducation();
     }
+
     setTabValue(newTab);
   };
 
 
-  // Atualiza os dados pessoais no estado geral
+
+
+  // Funções das outras seções/preview
   const updatePersonalInfo = (campo, valor) => {
     setResumeData((prev) => ({
       ...prev,
@@ -192,7 +228,6 @@ export function InseringDatasResume() {
     }));
   };
 
-  // Funções das outras seções
   const addExperience = () => {
     setResumeData((prev) => ({
       ...prev,
@@ -530,16 +565,21 @@ export function InseringDatasResume() {
 
               {/* Habilidades */}
               {tabValue === "skills" && (
+              <form method="post" onSubmit={HandleSkills}>  
                 <Card className="p-6 shadow-lg space-y-4 animate-fadeIn">
                   <h2 className="text-lg font-semibold">Habilidades</h2>
                   <div className="flex gap-2">
                     <Input
-                      value={newSkill}
-                      onChange={(e) => setNewSkill(e.target.value)}
+                      value={skillName}
+                      onChange={(e) => {
+                        setSkillName(e.target.value)
+                        setNewSkill(e.target.value)
+                      }}
                       onKeyPress={(e) => e.key === "Enter" && addSkill()}
                       placeholder="Digite uma habilidade..."
                     />
-                    <Button onClick={addSkill}>Adicionar</Button>
+                    <Button type="submit" className="bg-[#4285F4] cursor-pointer text-white font-medium px-4 py-2 rounded-md shadow-sm hover:bg-[#357AE8] transition" 
+                    onClick={addSkill}>Adicionar</Button>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {resumeData.skills.map((skill, index) => (
@@ -558,6 +598,7 @@ export function InseringDatasResume() {
                     ))}
                   </div>
                 </Card>
+              </form>
               )}
             </div>
           </div>

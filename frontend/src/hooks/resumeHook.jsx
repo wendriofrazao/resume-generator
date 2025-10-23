@@ -41,17 +41,12 @@ export class ResumeProvide {
       }
 
       // insering skills
-      async SkillsResumeProvide(data, setUser, setError, setLoading) {
+      async SkillsResumeProvide(skillName, resumeId) {
         try {
-          setLoading?.(true);
-          const res = await skills(data);
-          if (res.user) setUser?.(res.user);
+          const res = await skills(skillName, resumeId);
           return res;
         } catch (err) {
-          setError?.(err.message);
           return { ok: false, message: err.message };
-        } finally {
-          setLoading?.(false);
         }
       }
 }
