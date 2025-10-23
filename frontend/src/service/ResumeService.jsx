@@ -106,12 +106,12 @@ export async function experienceWork(jobDegree, company, description, period, re
   }
   return await res.json();
 }
-
-export async function education(degree, institution, destructive, period, resumeId) {
+ 
+export async function education(degree, institution, period, resumeId) {
   const res = await fetch(`${API_URL}/create-education/${resumeId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ degree, institution, destructive, period }),
+    body: JSON.stringify({ degree, institution, period, period }),
     credentials: "include", 
   });
 

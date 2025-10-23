@@ -16,6 +16,7 @@ export function InseringDatasResume() {
   const [tabValue, setTabValue] = useState("personal");
   const [personalSent, setPersonalSent] = useState(false); 
   const [experienceSent, setExperienceSent] = useState(false); 
+  const [educationSent, setEducationSent] = useState(false); 
 
   const resume = new ResumeProvide();
   const { resumeId } = useParams();
@@ -34,6 +35,12 @@ export function InseringDatasResume() {
   const [company, setCompany] = useState("");
   const [description, setDescription] = useState("");
   const [period, setPeriod] = useState("");
+
+  // educação
+  const [degreeEdu, setDegreeEdu] = useState("");
+  const [institutionEdu, setinstitutionEdu] = useState("");
+  const [descriptionEdu, setdescriptionEdu] = useState("");
+  const [periodEdu, setPeriodEdu] = useState("");
 
 
   // atualizar os dados no card apresentativo
@@ -124,6 +131,38 @@ export function InseringDatasResume() {
     }
   };
 
+  // educação
+  const HandleEducation = async () => {
+    if (educationSent) {
+      console.log("⚠️ Dados pessoais já foram enviados, não será reenviado.");
+      return;
+    }
+
+    if (!degreeEdu || !institutionEdu || !periodEdu) {
+      console.warn("❌ Campos obrigatórios faltando.");
+      return;
+    }
+
+    try {
+      console.log("📤 Enviando dados pessoais para o backend...");
+      const response = await resume.EducationResumeProvide(
+        degreeEdu,
+        institutionEdu,
+        periodEdu,
+        resumeId
+      );
+
+      if (response?.ok || response?.success) {
+        console.log("✅ Dados pessoais enviados com sucesso!");
+        setEducationSent(true);
+      } else {
+        console.error("❌ Erro ao enviar dados pessoais:", response);
+      }
+    } catch (err) {
+      console.error("❌ Erro inesperado ao enviar dados pessoais:", err);
+    }
+  };
+
 
   const handleTabChange = (newTab) => {
     
@@ -133,6 +172,10 @@ export function InseringDatasResume() {
 
     if (tabValue === "experience" && newTab !== "experience") {
       HandleExperienceWork();
+    }
+
+    if (tabValue === "education" && newTab !== "education") {
+      HandleEducation();
     }
     setTabValue(newTab);
   };
@@ -434,26 +477,38 @@ export function InseringDatasResume() {
                     {resumeData.education.map((edu) => (
                       <div key={edu.id} className="space-y-3 rounded-lg border p-4">
                         <div>
-                          <Label>Grau / Curso</Label>
+                          <Label htmlFor="degree">Grau / Curso</Label>
                           <Input
-                            value={edu.degree}
-                            onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
+                            id="degree"
+                            value={degreeEdu}
+                            onChange={(e) => {
+                              setDegreeEdu(e.target.value);
+                              updateEducation(edu.id, "degree", e.target.value)
+                            }}
                             placeholder="Bacharelado em Ciência da Computação"
                           />
                         </div>
                         <div>
-                          <Label>Instituição</Label>
+                          <Label htmlFor="institution">Instituição</Label>
                           <Input
-                            value={edu.institution}
-                            onChange={(e) => updateEducation(edu.id, "institution", e.target.value)}
+                            id="institution"
+                            value={institutionEdu}
+                            onChange={(e) => {
+                              setinstitutionEdu(e.target.value);
+                              updateEducation(edu.id, "institution", e.target.value);
+                            }}
                             placeholder="Universidade XYZ"
                           />
                         </div>
                         <div>
-                          <Label>Período</Label>
+                          <Label htmlFor="period">Período</Label>
                           <Input
-                            value={edu.period}
-                            onChange={(e) => updateEducation(edu.id, "period", e.target.value)}
+                            id="period"
+                            value={periodEdu}
+                            onChange={(e) => {
+                              setPeriodEdu(e.target.value);
+                              updateEducation(edu.id, "period", e.target.value)
+                            }}
                             placeholder="2016 - 2020"
                           />
                         </div>

@@ -135,7 +135,7 @@ export async function educationService(data, resumeId) {
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');
 
     const educations = [ 
-      "degree", "institution", "description", "period"
+      "degree", "institution", "period"
     ];
 
     for (const learn of educations) {

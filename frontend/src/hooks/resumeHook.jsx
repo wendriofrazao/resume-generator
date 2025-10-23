@@ -31,18 +31,13 @@ export class ResumeProvide {
       }
 
       // insering education
-      async EducationResumeProvide(data, setUser, setError, setLoading) {
+      async EducationResumeProvide(degree, institution, period, resumeId) {
         try {
-          setLoading?.(true);
-          const res = await education(data);
-          if (res.user) setUser?.(res.user);
+          const res = await education(degree, institution, period, resumeId);
           return res;
         } catch (err) {
-          setError?.(err.message);
           return { ok: false, message: err.message };
-        } finally {
-          setLoading?.(false);
-        }
+        } 
       }
 
       // insering skills
