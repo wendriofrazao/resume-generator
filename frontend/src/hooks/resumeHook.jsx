@@ -20,18 +20,14 @@ export class ResumeProvide {
       }
 
       // insering experience
-      async ExperienceResumeProvide(data, setUser, setError, setLoading) {
+      async ExperienceResumeProvide(jobDegree, company, description, period, resumeId) {
         try {
-          setLoading?.(true);
-          const res = await experienceWork(data);
-          if (res.user) setUser?.(res.user);
+          const res = await experienceWork(jobDegree, company, description, period, resumeId);
           return res;
         } catch (err) {
           setError?.(err.message);
           return { ok: false, message: err.message };
-        } finally {
-          setLoading?.(false);
-        }
+        } 
       }
 
       // insering education
