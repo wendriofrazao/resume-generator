@@ -17,6 +17,7 @@ export function InseringDatasResume() {
   const [personalSent, setPersonalSent] = useState(false); 
   const [experienceSent, setExperienceSent] = useState(false); 
   const [educationSent, setEducationSent] = useState(false); 
+  const [newSkill, setNewSkill] = useState("");
   // const [skillsSent, setSkillsSent] = useState(false); 
 
   const resume = new ResumeProvide();
@@ -31,16 +32,24 @@ export function InseringDatasResume() {
   const [country, setCountry] = useState("");
   const [summary, setSummary] = useState("");
 
+  const [personalDetailId, setPersonalDetailId] = useState(null);
+
   // experiencia
   const [jobDegree, setJobDegree] = useState("");
   const [company, setCompany] = useState("");
   const [description, setDescription] = useState("");
   const [period, setPeriod] = useState("");
 
+  const [experienceId, setExperienceId] = useState(null);
+
+
   // educação
   const [degreeEdu, setDegreeEdu] = useState("");
   const [institutionEdu, setinstitutionEdu] = useState("");
   const [periodEdu, setPeriodEdu] = useState("");
+
+  const [educationId, setEducationId] = useState(null);
+
 
   // habilidade
   const [skillName, setSkillName] = useState("");
@@ -61,7 +70,9 @@ export function InseringDatasResume() {
     skills: [],
   });
 
-  const [newSkill, setNewSkill] = useState("");
+
+
+// handles
 
   // dados pessoais
   const HandlePersonalInfo = async () => {
@@ -87,6 +98,11 @@ export function InseringDatasResume() {
         summary,
         resumeId
       );
+
+      if (response?.data?._id) {
+        setPersonalDetailId(response.data._id);
+        console.log("📦 ID dos dados pessoais salvo:", response.data._id);
+      }
 
       if (response?.ok || response?.success) {
         console.log("✅ Dados pessoais enviados com sucesso!");
@@ -121,6 +137,11 @@ export function InseringDatasResume() {
         period,
         resumeId
       );
+
+      if (response?.data?._id) {
+        setExperienceId(response.data._id);
+        console.log("📦 ID dos dados pessoais salvo:", response.data._id);
+      }
 
       if (response?.ok || response?.success) {
         console.log("✅ Dados pessoais enviados com sucesso!");
@@ -169,11 +190,6 @@ export function InseringDatasResume() {
   const HandleSkills = async (e) => {
     e.preventDefault();
 
-    // if (skillsSent) {
-    //   console.log("⚠️ Dados pessoais já foram enviados, não será reenviado.");
-    //   return;
-    // }
-
     if (!skillName) {
       console.warn("❌ Campos obrigatórios faltando.");
       return;
@@ -188,7 +204,6 @@ export function InseringDatasResume() {
 
       if (response?.ok || response?.success) {
         console.log("✅ Dados pessoais enviados com sucesso!");
-        // setSkillsSent(true);
       } 
       
     } catch (err) {
@@ -215,6 +230,69 @@ export function InseringDatasResume() {
   };
 
 
+  // --------------- remoção -------------------
+
+  const handleRemovePersonal = async () => {
+  if (!personalDetailId) {
+    console.warn("⚠️ Nenhum ID de dados pessoais encontrado!");
+    return;
+  }
+
+  try {
+    await resume.PersonalRemoveProvide(resumeId, personalDetailId);
+
+    setFullname("");
+    setEmail("");
+    setPhone("");
+    setCity("");
+    setState("");
+    setCountry("");
+    setSummary("");
+
+    setResumeData((prev) => ({
+      ...prev,
+      personalInfo: {
+        fullname: "",
+        email: "",
+        phone: "",
+        city: "",
+        state: "",
+        country: "",
+        summary: "",
+      },
+    }));
+
+    console.log("✅ Dados pessoais removidos com sucesso!");
+  } catch (error) {
+    console.error("❌ Erro ao remover dados pessoais:", error);
+  }
+};
+
+// remove a aba de experiencias
+  const handleRemoveExperienceWork = async () => {
+  if (!experienceId) {
+    console.warn("⚠️ Nenhum ID de dados pessoais encontrado!");
+    return;
+  }
+
+  try {
+    await resume.ExperienceRemoveProvide(resumeId, experienceId);
+
+    setJobDegree("");
+    setCompany("");
+    setPeriod("");
+    setDescription("");
+
+    setResumeData((prev) => ({
+      ...prev,
+      experiences: prev.experiences.filter((e) => e.id !== experienceId)
+    }));
+
+    console.log("✅ Dados pessoais removidos com sucesso!");
+  } catch (error) {
+    console.error("❌ Erro ao remover dados pessoais:", error);
+  }
+};
 
 
   // Funções das outras seções/preview
@@ -304,7 +382,7 @@ export function InseringDatasResume() {
             <FileText className="h-8 w-8 text-primary" />
             <h1 className="text-3xl font-bold">Editor de Currículo</h1>
           </div>
-          <Button variant="hero" size="lg">
+          <Button className="cursor-pointer" variant="hero" size="lg">
             <Download className="mr-2 h-5 w-5" />
             Baixar PDF
           </Button>
@@ -429,6 +507,15 @@ export function InseringDatasResume() {
                       />
                     </div>
                   </div>
+                  <div className="flex justify-end">
+                    <Button
+                      onClick={handleRemovePersonal}
+                      type="button"
+                      className="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-md shadow-sm transition"
+                    >
+                      Limpar Dados
+                    </Button>
+                  </div>
                 </Card>
               )}
 
@@ -491,7 +578,10 @@ export function InseringDatasResume() {
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => removeExperience(exp.id)}
+                          onClick={() => {
+                            handleRemoveExperienceWork();
+                            removeExperience(exp.id)
+                          }}
                         >
                           Remover
                         </Button>

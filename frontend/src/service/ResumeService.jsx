@@ -136,3 +136,42 @@ export async function skills(skillName, resumeId) {
   }
   return await res.json();
 }
+
+
+// remoção dos dados das abas 
+
+export async function removePersonalWork(resumeId, personalDetailsId) {
+  const res = await fetch(`${API_URL}/personalDetails/${resumeId}/${personalDetailsId}`, {
+    method: "DELETE",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}
+
+export async function removeExperienceWork(resumeId, experienceId) {
+  const res = await fetch(`${API_URL}/experienceWork/${resumeId}/${experienceId}`, {
+    method: "DELETE",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}

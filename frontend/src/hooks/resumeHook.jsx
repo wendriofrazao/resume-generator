@@ -3,7 +3,9 @@ import {
   personalDetails, 
   experienceWork, 
   education, 
-  skills
+  skills,
+  removePersonalWork,
+  removeExperienceWork
 } from "../service/ResumeService.jsx";
 
 export class ResumeProvide {
@@ -49,4 +51,27 @@ export class ResumeProvide {
           return { ok: false, message: err.message };
         }
       }
-}
+      
+      // remoções hooks
+      
+       async PersonalRemoveProvide(resumeId, personalDetailsId) {
+        try {
+          const res = await removePersonalWork(resumeId, personalDetailsId);
+          return res;
+        } catch (err) {
+          return { ok: false, message: err.message };
+        }
+      }
+      
+
+       async ExperienceRemoveProvide(resumeId, experienceId) {
+        try {
+          const res = await removeExperienceWork(resumeId, experienceId);
+          return res;
+        } catch (err) {
+          return { ok: false, message: err.message };
+        }
+      } 
+      
+      
+    }
