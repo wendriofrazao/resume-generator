@@ -11,6 +11,7 @@ export function Welcome() {
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [showCreateBox, setShowCreateBox] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -33,15 +34,22 @@ export function Welcome() {
  
  const handleCreateResume = async () => {
     if (!newTitle.trim()) return;
+    
+    setIsCreating(true);
     try {
       const data = await createResume(newTitle);
       setNewTitle("");
       setShowCreateBox(false);
-      fetchResumes();
-
-      navigate(`/dashboard/insering-data-resume/${data.data?._id || data.resume?.id}`);
+      
+      setTimeout(() => {
+        fetchResumes();
+        navigate(`/dashboard/insering-data-resume/${data.data?._id || data.resume?.id}`);
+      }, 300);
+      
     } catch (error) {
       console.error("Erro ao criar currículo:", error.message);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -93,34 +101,47 @@ export function Welcome() {
         </div>
 
         {showCreateBox && (
-          <div className="bg-gray-100 border rounded-lg p-5 mb-8 max-w-md mx-auto shadow-sm">
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-lg">Criar Novo Currículo</h3>
-              <button onClick={() => setShowCreateBox(false)}>
-                <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
-              </button>
-            </div>
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="Digite o título do currículo..."
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none mb-4"
-            />
-            <div className="flex justify-end">
-              <button
-                onClick={handleCreateResume}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-              >
-                Criar
-              </button>
+          <div className="animate-scale-in fixed inset-0 bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-auto shadow-xl transform transition-all duration-300">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-semibold text-lg">Criar Novo Currículo</h3>
+                <button 
+                  onClick={() => setShowCreateBox(false)}
+                  className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <input
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder="Digite o título do currículo..."
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none mb-4 transition-all duration-200 focus:border-blue-400"
+                onKeyPress={(e) => e.key === 'Enter' && handleCreateResume()}
+              />
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowCreateBox(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleCreateResume}
+                  disabled={isCreating || !newTitle.trim()}
+                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-4 py-2 rounded-md transition-all duration-200 hover:scale-105"
+                >
+                  {isCreating ? "Criando..." : "Criar"}
+                </button>
+              </div>
             </div>
           </div>
         )}
 
 {loadingResumes ? (
   <p className="text-center text-gray-500">Carregando currículos...</p>
-) : resumes.length === 0 && !showCreateBox ? ( // 👈 só mostra se não tiver currículo e o box não estiver aberto
+) : resumes.length === 0 && !showCreateBox ? ( 
   <div className="flex flex-col items-center justify-center py-16 text-center rounded-md">
     <FileText className="w-16 h-16 text-gray-400 mb-4" />
     <p className="text-lg font-medium mb-4">Nenhum currículo ainda</p>

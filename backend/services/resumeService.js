@@ -249,8 +249,24 @@ export async function skills_Edit_Service(skillId, resumeId, skill) {
 
 // services delete
 export async function deleteResumeService(resumeId) {
-  return await Resume.findByIdAndDelete(resumeId);
-};
+
+  try {
+    await Promise.all([
+      PersonalDetails.deleteMany({ resumeId }),
+      Experience.deleteMany({ resumeId }),
+      Education.deleteMany({ resumeId }),
+      Skill.deleteMany({ resumeId })
+    ]);
+
+    const result = await Resume.findByIdAndDelete(resumeId);
+    
+    return result;
+    
+  } catch (error) {
+    throw error;
+  } 
+}
+
 
 export async function deletePersonalDetailsService(personalDetailsId, resumeId) {
   return await PersonalDetails.findOneAndDelete({_id: personalDetailsId, resumeId})

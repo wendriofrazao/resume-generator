@@ -354,7 +354,7 @@ export const deleteResumeController = async (req, res) => {
   try {
     const { id } = req.params; 
     await deleteResumeService(id);
-    res.status(200).json({ success: true, message: "Currículo excluído com sucesso" });
+    res.status(200).json({ success: true, message: "Currículo e dados relacionados excluídos com sucesso" });
   } catch (error) {
     console.error("Erro ao excluir currículo:", error.message);
     res.status(500).json({ success: false, error: error.message });
