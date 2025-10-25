@@ -7,9 +7,9 @@ export const Footer = () => {
   return (
     <Box component="footer" sx={{ borderTop: 1, borderColor: "divider", bgcolor: "#e7eaed58", pt: 8, pb: 4 }}>
       <Container maxWidth="lvw" >
-        <Grid container spacing={8}>
+        <Grid  container spacing={8}>
           {/* Brand Section */}
-          <Grid xs={12} sx={{ maxWidth: "16%", textAlign: "start", marginLeft: "15%" }} md={3}>
+          <Grid xs={12} sx={{ width: "20%", textAlign: "start", marginLeft: "15%" }} md={0}>
             <Box display="flex" alignItems="center" gap={1}>
               <FileText size={20} color="#1976d2fa" />
               <Typography variant="h6" fontWeight="bold">
@@ -107,8 +107,8 @@ export const Footer = () => {
         </Grid>
 
         {/* Bottom Bar */}
-        <Box mt={6} pt={4} borderTop={1} borderColor="divider" display="flex" flexDirection={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" gap={2}>
-          <Typography variant="body2" color="text.secondary">
+        <Box mt={6} pt={4} borderTop={2} borderColor="divider" display="flex" flexDirection={{ xs: "column", md: "row" }} justifyContent="center" alignItems="center" gap={2}>
+          <Typography  variant="body2" color="text.secondary">
             © 2025 Gerador de Currículos. Todos os direitos reservados.
           </Typography>
         </Box>

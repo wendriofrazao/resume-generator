@@ -54,6 +54,8 @@ export function InseringDatasResume() {
   // habilidade
   const [skillName, setSkillName] = useState("");
 
+  const [skillId, setSkillId] = useState(null);
+
   // atualizar os dados no card apresentativo
   const [resumeData, setResumeData] = useState({
     personalInfo: {
@@ -76,18 +78,18 @@ export function InseringDatasResume() {
 
   // dados pessoais
   const HandlePersonalInfo = async () => {
-    if (personalSent) {
-      console.log("⚠️ Dados pessoais já foram enviados, não será reenviado.");
-      return;
-    }
+    // if (personalSent) {
+    //   console.log(" Dados pessoais já foram enviados, não será reenviado.");
+    //   return;
+    // }
 
     if (!fullname || !email || !phone || !city || !state || !country || !summary) {
-      console.warn("❌ Campos obrigatórios faltando.");
+      console.warn(" Campos obrigatórios faltando.");
       return;
     }
 
     try {
-      console.log("📤 Enviando dados pessoais para o backend...");
+      console.log(" Enviando dados pessoais para o backend...");
       const response = await resume.PersonalResumeProvide(
         fullname,
         email,
@@ -101,35 +103,36 @@ export function InseringDatasResume() {
 
       if (response?.data?._id) {
         setPersonalDetailId(response.data._id);
-        console.log("📦 ID dos dados pessoais salvo:", response.data._id);
+        console.log(" ID dos dados pessoais salvo:", response.data._id);
       }
 
+  
       if (response?.ok || response?.success) {
-        console.log("✅ Dados pessoais enviados com sucesso!");
+        console.log(" Dados pessoais enviados com sucesso!");
         setPersonalSent(true);
       } else {
-        console.error("❌ Erro ao enviar dados pessoais:", response);
+        console.error(" Erro ao enviar dados pessoais:", response);
       }
     } catch (err) {
-      console.error("❌ Erro inesperado ao enviar dados pessoais:", err);
+      console.error(" Erro inesperado ao enviar dados pessoais:", err);
     }
   };
 
 
   // experiencia
   const HandleExperienceWork = async () => {
-    if (experienceSent) {
-      console.log("⚠️ Dados pessoais já foram enviados, não será reenviado.");
-      return;
-    }
+    // if (experienceSent) {
+    //   console.log(" Dados pessoais já foram enviados, não será reenviado.");
+    //   return;
+    // }
 
     if (!jobDegree || !company || !description || !period) {
-      console.warn("❌ Campos obrigatórios faltando.");
+      console.warn(" Campos obrigatórios faltando.");
       return;
     }
 
     try {
-      console.log("📤 Enviando dados pessoais para o backend...");
+      console.log(" Enviando dados pessoais para o backend...");
       const response = await resume.ExperienceResumeProvide(
         jobDegree,
         company,
@@ -140,34 +143,34 @@ export function InseringDatasResume() {
 
       if (response?.data?._id) {
         setExperienceId(response.data._id);
-        console.log("📦 ID dos dados pessoais salvo:", response.data._id);
+        console.log(" ID dos dados pessoais salvo:", response.data._id);
       }
 
       if (response?.ok || response?.success) {
-        console.log("✅ Dados pessoais enviados com sucesso!");
+        console.log(" Dados pessoais enviados com sucesso!");
         setExperienceSent(true);
       } else {
-        console.error("❌ Erro ao enviar dados pessoais:", response);
+        console.error(" Erro ao enviar dados pessoais:", response);
       }
     } catch (err) {
-      console.error("❌ Erro inesperado ao enviar dados pessoais:", err);
+      console.error(" Erro inesperado ao enviar dados pessoais:", err);
     }
   };
 
   // educação
   const HandleEducation = async () => {
-    if (educationSent) {
-      console.log("⚠️ Dados pessoais já foram enviados, não será reenviado.");
-      return;
-    }
+    // if (educationSent) {
+    //   console.log(" Dados pessoais já foram enviados, não será reenviado.");
+    //   return;
+    // }
 
     if (!degreeEdu || !institutionEdu || !periodEdu) {
-      console.warn("❌ Campos obrigatórios faltando.");
+      console.warn(" Campos obrigatórios faltando.");
       return;
     }
 
     try {
-      console.log("📤 Enviando dados pessoais para o backend...");
+      console.log(" Enviando dados pessoais para o backend...");
       const response = await resume.EducationResumeProvide(
         degreeEdu,
         institutionEdu,
@@ -175,39 +178,45 @@ export function InseringDatasResume() {
         resumeId
       );
 
+      if (response?.data?._id) {
+        setEducationId(response.data._id);
+        console.log(" ID dos dados pessoais salvo:", response.data._id);
+      }
+
       if (response?.ok || response?.success) {
-        console.log("✅ Dados pessoais enviados com sucesso!");
+        console.log(" Dados pessoais enviados com sucesso!");
         setEducationSent(true);
       } else {
-        console.error("❌ Erro ao enviar dados pessoais:", response);
+        console.error(" Erro ao enviar dados pessoais:", response);
       }
     } catch (err) {
-      console.error("❌ Erro inesperado ao enviar dados pessoais:", err);
+      console.error(" Erro inesperado ao enviar dados pessoais:", err);
     }
   };
 
   // habilidades
-  const HandleSkills = async (e) => {
-    e.preventDefault();
-
-    if (!skillName) {
-      console.warn("❌ Campos obrigatórios faltando.");
+    const HandleSkills = async () => {
+    if (!skillName.trim()) {
+      console.warn("Campos obrigatórios faltando.");
       return;
     }
 
     try {
-      console.log("📤 Enviando dados pessoais para o backend...");
-      const response = await resume.SkillsResumeProvide(
-        skillName,
-        resumeId
-      );
+      console.log("Enviando skill para o backend...");
+      const response = await resume.SkillsResumeProvide(skillName, resumeId);
 
-      if (response?.ok || response?.success) {
-        console.log("✅ Dados pessoais enviados com sucesso!");
-      } 
-      
+      if (response?.data?._id) {
+        console.log("Skill salva com ID:", response.data._id);
+
+        setResumeData((prev) => ({
+          ...prev,
+          skills: [...prev.skills, { id: response.data._id, skillName }],
+        }));
+      }
+
+      setSkillName(""); 
     } catch (err) {
-      console.error("❌ Erro inesperado ao enviar dados pessoais:", err);
+      console.error("Erro inesperado ao enviar skill:", err);
     }
   };
 
@@ -234,7 +243,7 @@ export function InseringDatasResume() {
 
   const handleRemovePersonal = async () => {
   if (!personalDetailId) {
-    console.warn("⚠️ Nenhum ID de dados pessoais encontrado!");
+    console.warn(" Nenhum ID de dados pessoais encontrado!");
     return;
   }
 
@@ -262,16 +271,16 @@ export function InseringDatasResume() {
       },
     }));
 
-    console.log("✅ Dados pessoais removidos com sucesso!");
+    console.log(" Dados pessoais removidos com sucesso!");
   } catch (error) {
-    console.error("❌ Erro ao remover dados pessoais:", error);
+    console.error(" Erro ao remover dados pessoais:", error);
   }
 };
 
 // remove a aba de experiencias
   const handleRemoveExperienceWork = async () => {
   if (!experienceId) {
-    console.warn("⚠️ Nenhum ID de dados pessoais encontrado!");
+    console.warn(" Nenhum ID de dados pessoais encontrado!");
     return;
   }
 
@@ -288,9 +297,55 @@ export function InseringDatasResume() {
       experiences: prev.experiences.filter((e) => e.id !== experienceId)
     }));
 
-    console.log("✅ Dados pessoais removidos com sucesso!");
+    console.log(" Dados de experiências removidos com sucesso!");
   } catch (error) {
-    console.error("❌ Erro ao remover dados pessoais:", error);
+    console.error(" Erro ao remover dados pessoais:", error);
+  }
+};
+
+// remoção da aba de educação
+  const handleRemoveEducation = async () => {
+  if (!educationId) {
+    console.warn(" Nenhum ID de dados pessoais encontrado!");
+    return;
+  }
+
+  try {
+    await resume.EducationRemoveProvide(resumeId, educationId);
+
+    setDegreeEdu("");
+    setinstitutionEdu("");
+    setPeriodEdu("");
+
+    setResumeData((prev) => ({
+      ...prev,
+      education: prev.education.filter((e) => e.id !== educationId)
+    }));
+
+    console.log(" Dados educacionais removidos com sucesso!");
+  } catch (error) {
+    console.error(" Erro ao remover dados pessoais:", error);
+  }
+};
+
+  // remoção na aba de habilidades
+  const handleRemoveSkills = async (skillId) => {
+  if (!skillId) {
+    console.warn("Nenhum ID de skill encontrado!");
+    return;
+  }
+
+  try {
+    await resume.SkillsRemoveProvide(resumeId, skillId);
+
+    setResumeData((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((skill) => skill.id !== skillId),
+    }));
+
+    console.log("Skill removida com sucesso!");
+  } catch (error) {
+    console.error("Erro ao remover skill:", error);
   }
 };
 
@@ -640,7 +695,10 @@ export function InseringDatasResume() {
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => removeEducation(edu.id)}
+                          onClick={() => {
+                            handleRemoveEducation(skillId);
+                            removeEducation(edu.id);
+                          }}
                         >
                           Remover
                         </Button>
@@ -655,40 +713,50 @@ export function InseringDatasResume() {
 
               {/* Habilidades */}
               {tabValue === "skills" && (
-              <form method="post" onSubmit={HandleSkills}>  
-                <Card className="p-6 shadow-lg space-y-4 animate-fadeIn">
-                  <h2 className="text-lg font-semibold">Habilidades</h2>
-                  <div className="flex gap-2">
-                    <Input
-                      value={skillName}
-                      onChange={(e) => {
-                        setSkillName(e.target.value)
-                        setNewSkill(e.target.value)
-                      }}
-                      onKeyPress={(e) => e.key === "Enter" && addSkill()}
-                      placeholder="Digite uma habilidade..."
-                    />
-                    <Button type="submit" className="bg-[#4285F4] cursor-pointer text-white font-medium px-4 py-2 rounded-md shadow-sm hover:bg-[#357AE8] transition" 
-                    onClick={addSkill}>Adicionar</Button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {resumeData.skills.map((skill, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2"
+               <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    await HandleSkills();
+                  }}
+                >
+                  <Card className="p-6 shadow-lg space-y-4 animate-fadeIn">
+                    <h2 className="text-lg font-semibold">Habilidades</h2>
+
+                    {/* Campo de input e botão */}
+                    <div className="flex gap-2">
+                      <Input
+                        value={skillName}
+                        onChange={(e) => setSkillName(e.target.value)}
+                        placeholder="Digite uma habilidade..."
+                      />
+                      <Button
+                        type="submit"
+                        className="bg-[#4285F4] text-white font-medium px-4 py-2 rounded-md shadow-sm hover:bg-[#357AE8] transition cursor-pointer"
                       >
-                        <span className="text-sm font-medium">{skill}</span>
-                        <button
-                          onClick={() => removeSkill(index)}
-                          className="text-muted-foreground hover:text-destructive"
+                        Adicionar
+                      </Button>
+                    </div>
+
+                    {/* Lista de skills adicionadas */}
+                    <div className="flex flex-wrap gap-2">
+                      {resumeData.skills.map((skill) => (
+                        <div
+                          key={skill.id}
+                          className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2"
                         >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </Card>
-              </form>
+                          <span className="text-sm font-medium">{skill.skillName}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSkills(skill.id)}
+                            className="flex justify-center items-center border border-gray-800/45 bg-red-500/30 w-[20px] h-[20px] rounded-[20%] text-muted-foreground hover:text-destructive cursor-pointer"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </form>
               )}
             </div>
           </div>

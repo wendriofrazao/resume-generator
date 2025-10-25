@@ -1,5 +1,8 @@
 import React from "react";
 import resumeIcon from '../assets/img/curriculoIcon.svg'
+import { Link } from "react-router-dom";
+import { Button } from "../components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export function PageHeader() {
 
@@ -14,6 +17,12 @@ return (
               Meus Currículos
             </span>
           </div>
+          <Link to="/dashboard">
+            <Button variant="outline" className="border-[#2563EB]/30 text-[#2563EB] ">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Voltar ao Início
+            </Button>
+          </Link>
         </div>
         </div>
     </div>

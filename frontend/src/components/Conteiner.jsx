@@ -49,14 +49,14 @@ export const Conteiner = ({ user }) => {
             {/* Botões */}
             <div className="flex flex-wrap gap-4">
               <Link to={user ? "/dashboard" : "/auth/login"}>
-                <button className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-lg font-semibold text-white shadow-md transition hover:bg-blue-700">
+                <button className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-lg font-semibold text-white shadow-md transition hover:bg-blue-700">
                   <FileText className="h-5 w-5" />
                   {user ? "Meus Currículos" : "Criar Meu Currículo"}
                 </button>
               </Link>
 
               <Link to={"/sobre"}>
-                <button className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-lg font-semibold text-gray-700 transition hover:bg-gray-50">
+                <button className="rounded-lg cursor-pointer border border-gray-300 bg-white px-6 py-3 text-lg font-semibold text-gray-700 transition hover:bg-gray-50">
                   Saiba Mais
                 </button>
               </Link>
@@ -68,7 +68,7 @@ export const Conteiner = ({ user }) => {
             <img
               src={heroImage}
               alt="Plataforma de criação de currículos"
-              className=" rounded-2xl shadow-xl w-3xl max-w-6xl"
+              className=" w-full max-w-6xl h-auto rounded-2xl shadow-xl"
             />
           </div>
         </div>
@@ -310,7 +310,7 @@ export const Conteiner = ({ user }) => {
               </p>
 
               <Link to={user ? "/dashboard" : "/auth"}>
-                <button className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-lg font-medium text-gray-800 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5">
+                <button className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-white px-6 py-3 text-lg font-medium text-gray-800 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5">
                   <FileText className="h-5 w-5 text-blue-600" />
                   {user ? "Acessar Dashboard" : "Começar Agora - É Grátis"}
                 </button>

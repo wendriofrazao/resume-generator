@@ -175,3 +175,41 @@ export async function removeExperienceWork(resumeId, experienceId) {
     return null; 
   }
 }
+
+
+export async function removeEducation(resumeId, educationId) {
+  const res = await fetch(`${API_URL}/education/${resumeId}/${educationId}`, {
+    method: "DELETE",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}
+
+
+export async function removeSkills(resumeId, skillId) {
+  const res = await fetch(`${API_URL}/skills/${resumeId}/${skillId}`, {
+    method: "DELETE",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}

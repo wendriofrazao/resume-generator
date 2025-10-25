@@ -1,18 +1,30 @@
 import React from "react";
-
-import { AppBar, Toolbar, Box, Button, Typography, Container } from "@mui/material";
-import { FileText, User } from "lucide-react";
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  Button,
+  Typography,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import { FileText, User, Menu as MenuIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function Header({ onChangeTab }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+
   return (
     <AppBar
-      position=""
+      position="static"
       elevation={0}
       sx={{
         backgroundColor: "white",
         borderBottom: "1px solid #f0f0f0",
-        
       }}
     >
       <Container maxWidth="lg">
@@ -26,7 +38,15 @@ export function Header({ onChangeTab }) {
           }}
         >
           {/* Logo + Nome */}
-          <Box sx={{ display: "flex", marginLeft: "-15%" ,alignItems: "center", gap: 1.5 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              marginLeft: "-15%",
+              flexShrink: 0,
+            }}
+          >
             <Box
               sx={{
                 width: 35,
@@ -51,8 +71,17 @@ export function Header({ onChangeTab }) {
             </Typography>
           </Box>
 
-          {/* Navegação */}
-          <Box sx={{ display: "flex", marginLeft: "-82%",alignItems: "center", gap: 4 }}>
+          {/* Navegação Desktop */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              flexGrow: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "-82%",
+              gap: 4,
+            }}
+          >
             <Typography
               component={Link}
               to="/"
@@ -81,32 +110,62 @@ export function Header({ onChangeTab }) {
             </Typography>
           </Box>
 
-          {/* Botões */}
-          <Box sx={{ display: "flex",  marginRight: "-20%",alignItems: "center", gap: 3 }}>
+          {/* Menu Mobile */}
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton onClick={handleMenuOpen}>
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+              <MenuItem onClick={handleMenuClose} component={Link} to="/">
+                Home
+              </MenuItem>
+              <MenuItem onClick={handleMenuClose} component={Link} to="/sobre">
+                Sobre
+              </MenuItem>
+              <MenuItem onClick={handleMenuClose} component={Link} to="/auth/login">
+                Entrar
+              </MenuItem>
+              <MenuItem onClick={handleMenuClose} component={Link} to="/auth/signup">
+                Cadastrar
+              </MenuItem>
+            </Menu>
+          </Box>
 
-              
-
+          {/* Botões Desktop */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+              gap: 2,
+              flexShrink: 0,
+              marginRight: "-20%"
+            }}
+          >
             <Button
               component={Link}
               to="/auth/login"
               variant="outlined"
               size="small"
-              startIcon={<User size={16} 
-              style={{ verticalAlign: "middle" }}
-              />}
+              startIcon={<User size={16} style={{ verticalAlign: "middle" }} />}
               sx={{
                 textTransform: "none",
                 borderColor: "#e5e7eb",
                 color: "#505050",
                 fontWeight: 600,
-                '&:hover': {
-                  backgroundColor: '#535050ff',
-                  color: '#ffffffff',    
-                  transition: '.6s'  
+                "&:hover": {
+                  backgroundColor: "#535050ff",
+                  color: "#ffffffff",
+                  transition: ".6s",
                 },
-                '&:active': {
-                  transform: 'scale(.5)'
-                }
+                "&:active": {
+                  transform: "scale(.5)",
+                },
               }}
               onClick={() => onChangeTab("login")}
             >
@@ -119,9 +178,7 @@ export function Header({ onChangeTab }) {
               to="/auth/signup"
               variant="contained"
               size="small"
-              startIcon={<FileText size={15} 
-              style={{ verticalAlign: "middle" }} 
-              />}
+              startIcon={<FileText size={15} style={{ verticalAlign: "middle" }} />}
               onClick={() => onChangeTab("signup")}
               sx={{
                 textTransform: "none",
@@ -129,17 +186,15 @@ export function Header({ onChangeTab }) {
                 color: "#ffffffff",
                 fontWeight: 600,
                 boxShadow: "none",
-                display: "flex",
-                alignItems: "center",
-                '&:hover': {
+                "&:hover": {
                   borderColor: "#e5e7eb",
-                  backgroundColor: '#ffffffff',
-                  color: '#585757ff',    
-                  transition: '.6s',
+                  backgroundColor: "#ffffffff",
+                  color: "#585757ff",
+                  transition: ".6s",
                 },
-                '&:active': {
-                  transform: 'scale(.5)'
-                }
+                "&:active": {
+                  transform: "scale(.5)",
+                },
               }}
             >
               Cadastrar

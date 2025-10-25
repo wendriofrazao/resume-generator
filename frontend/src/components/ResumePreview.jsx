@@ -76,10 +76,10 @@ export function ResumePreview({ data }) {
           <div className="flex flex-wrap gap-2">
             {skills.map((skill, i) => (
               <span
-                key={i}
+                key={skill.id || i}
                 className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium"
               >
-                {skill}
+                {typeof skill === "string" ? skill : skill.skillName}
               </span>
             ))}
           </div>

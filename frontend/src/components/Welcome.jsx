@@ -45,6 +45,18 @@ export function Welcome() {
     }
   };
 
+  // const handleEditationResume = async () => {
+
+
+  //   try {
+    
+      
+  //     navigate(`/dashboard/insering-data-resume/${data.data?._id || data.resume?.id}`);
+  //   } catch (error) {
+  //     console.error("Erro ao criar currículo:", error.message);
+  //   }
+  // }
+
   const handleDeleteResume = async (id) => {
     try {
       await deleteResume(id);
@@ -136,6 +148,7 @@ export function Welcome() {
         </div>
         <div className="flex gap-3 mt-4">
           <button
+            // onClick={() => handleDeleteResume(resume._id)}
             className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-3 py-2 rounded-md"
           >
             Editar
