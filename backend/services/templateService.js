@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+import mongoose from 'mongoose';
 import Template from '../models/Template.js';
 
 export async function renderTemplate(templateId, data) {
@@ -39,6 +40,18 @@ export async function getTemplateById(templateId) {
 export async function getTemplateByName(templateName) {
   try {
     return await Template.findOne({ name: templateName, isActive: true });
+  } catch (error) {
+    throw new Error(`Erro ao buscar template: ${error.message}`);
+  }
+}
+
+export async function getTemplateByIdOrName(identifier) {
+  try {
+    if (mongoose.Types.ObjectId.isValid(identifier)) {
+      return await Template.findOne({ _id: identifier, isActive: true });
+    } else {
+      return await Template.findOne({ name: identifier, isActive: true });
+    }
   } catch (error) {
     throw new Error(`Erro ao buscar template: ${error.message}`);
   }

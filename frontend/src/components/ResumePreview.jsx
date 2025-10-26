@@ -1,8 +1,38 @@
 import React from "react";
 import { Card } from "./ui/card";
 
-export function ResumePreview({ data }) {
+export function ResumePreview({ data, templateHTML, isLoading = false }) {
   const { personalInfo, experiences, education, skills } = data;
+
+  if (isLoading) {
+    return (
+      <Card className="p-8 shadow-xl rounded-xl bg-white border border-gray-200 flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Carregando template...</p>
+        </div>
+      </Card>
+    );
+  }
+  
+  if (templateHTML) {
+    return (
+      <div className="w-full">
+        <Card className="p-4 shadow-xl rounded-xl bg-white border border-gray-200">
+          <h3 className="text-lg font-semibold mb-4 text-center">Preview do Template</h3>
+          <div className="border rounded-lg overflow-hidden">
+            <iframe
+              title="resume-preview"
+              srcDoc={templateHTML}
+              className="w-full h-[800px] border-0"
+              sandbox="allow-same-origin"
+              loading="lazy"
+            />
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <Card className="p-10 shadow-xl rounded-xl bg-white border border-gray-200">

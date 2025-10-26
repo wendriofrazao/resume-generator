@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Handlebars from 'handlebars';
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { Card } from "./ui/card";
 import { TabsTrigger } from "./ui/tabs";
-import { FileText, User, Briefcase, GraduationCap, Award, Download } from "lucide-react";
+import { FileText, User, Briefcase, GraduationCap, Award, Download, Eye } from "lucide-react";
 import { ResumePreview } from "./ResumePreview";
 import { useParams } from "react-router-dom";
 import { ResumeProvide } from "../hooks/resumeHook";
@@ -19,6 +20,12 @@ export function InseringDatasResume() {
   const [educationSent, setEducationSent] = useState(false); 
   const [newSkill, setNewSkill] = useState("");
   // const [skillsSent, setSkillsSent] = useState(false); 
+
+  const [selectedTemplateId, setSelectedTemplateId] = useState("");
+  const [availableTemplates, setAvailableTemplates] = useState([]);
+  const [templateHTML, setTemplateHTML] = useState("");
+  const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
+
 
   const resume = new ResumeProvide();
   const { resumeId } = useParams();
@@ -75,6 +82,119 @@ export function InseringDatasResume() {
 
 
 // handles
+
+useEffect(() => {
+  loadAvailableTemplates();
+}, []);
+
+const loadAvailableTemplates = async () => {
+  try {
+    
+    const response = await resume.getAvailableTemplates();
+    
+    
+    if (response.ok) {
+      setAvailableTemplates(response.data);
+      
+    } else {
+    }
+  } catch (error) {
+  }
+};
+
+
+  const loadTemplatePreview = async () => {
+  if (!selectedTemplateId) return;
+  
+  setIsLoadingTemplate(true);
+  try {
+    
+    const templateResponse = await resume.getTemplatePreview(selectedTemplateId);
+    
+    if (!templateResponse.ok) {
+      return;
+    }
+
+    const template = templateResponse.data;
+    
+    const templateData = prepareTemplateData(resumeData);
+
+
+    const compiledTemplate = Handlebars.compile(template.htmlContent);
+    const renderedHtml = compiledTemplate(templateData);
+    
+    const fullHTML = `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <style>${template.cssContent}</style>
+        </head>
+        <body>
+          ${renderedHtml}
+        </body>
+      </html>
+    `;
+
+    setTemplateHTML(fullHTML);
+    
+  } catch (error) {
+  } finally {
+    setIsLoadingTemplate(false);
+  }
+};
+
+const prepareTemplateData = (resumeData) => {
+  return {
+    fullName: resumeData.personalInfo?.fullname || "Seu Nome",
+    cityCountry: `${resumeData.personalInfo?.city || ""}, ${resumeData.personalInfo?.country || ""}`,
+    citizenship: resumeData.personalInfo?.country || "Brasil",
+    phone: resumeData.personalInfo?.phone || "(11) 99999-9999",
+    email: resumeData.personalInfo?.email || "seu@email.com",
+    website: resumeData.personalInfo?.website || "#",
+    github: resumeData.personalInfo?.github || "#",
+    linkedin: resumeData.personalInfo?.linkedin || "#",
+    
+    experiences: resumeData.experiences?.map(exp => ({
+      jobTitle: exp.title || exp.jobDegree || "Cargo",
+      company: exp.company || "Empresa",
+      location: exp.location || "Localização",
+      startMonth: exp.period?.split(' - ')[0] || "Data Início",
+      endMonth: exp.period?.split(' - ')[1] || "Data Fim",
+      responsibilities: exp.description ? [{ text: exp.description }] : []
+    })) || [],
+    
+    education: resumeData.education?.map(edu => ({
+      degree: edu.degree || "Curso",
+      university: edu.institution || "Instituição",
+      location: edu.location || "Localização",
+      startMonth: edu.period?.split(' - ')[0] || "Data Início",
+      endMonth: edu.period?.split(' - ')[1] || "Data Fim"
+    })) || [],
+    
+    skills: resumeData.skills?.map(skill => ({
+      name: typeof skill === 'string' ? skill : skill.skillName,
+      level: "Avançado"
+    })) || [],
+    
+    // Projetos (se necessário)
+    projects: []
+  };
+};
+
+
+useEffect(() => {
+  if (selectedTemplateId) {
+    const timeoutId = setTimeout(() => {
+      loadTemplatePreview();
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
+  } else {
+    setTemplateHTML("");
+  }
+}, [selectedTemplateId, resumeData]); 
 
   // dados pessoais
   const HandlePersonalInfo = async () => {
@@ -429,7 +549,7 @@ export function InseringDatasResume() {
     }));
   };
 
-  return (
+   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 flex items-center justify-between">
@@ -447,6 +567,38 @@ export function InseringDatasResume() {
           {/* Insering Form */}
           <div className="space-y-6">
             <div className="w-full max-w-3xl mx-auto space-y-6">
+              {/* Seletor de Template */}
+              <Card className="p-4 shadow-lg">
+  <div className="flex items-center justify-between">
+    <div className="flex items-center gap-2">
+      <Eye className="h-4 w-4 text-primary" />
+      <Label htmlFor="template-select" className="font-semibold">
+        Escolher Template:
+      </Label>
+    </div>
+    <select
+      id="template-select"
+      className="border rounded-md p-2 text-sm bg-white flex-1 max-w-[200px]"
+      value={selectedTemplateId}
+      onChange={(e) => {
+        setSelectedTemplateId(e.target.value);
+      }}
+    >
+      <option value="">Preview Padrão</option>
+      {availableTemplates.map(template => (
+        <option key={template._id} value={template._id}>
+          {template.name}
+        </option>
+      ))}
+    </select>
+  </div>
+  {isLoadingTemplate && (
+    <p className="text-sm text-muted-foreground mt-2">
+      ⚡ Atualizando preview...
+    </p>
+  )}
+</Card>
+
               {/* Cabeçalho das abas */}
               <div className="flex w-full justify-between bg-muted p-1 rounded-lg shadow-sm">
                 <TabsTrigger value="personal" valueActive={tabValue} setValue={handleTabChange}>
@@ -763,7 +915,11 @@ export function InseringDatasResume() {
 
           {/* Preview */}
           <div className="lg:sticky lg:top-8 lg:h-fit">
-            <ResumePreview data={resumeData} />
+            <ResumePreview 
+              data={resumeData} 
+              templateHTML={templateHTML}
+              isLoading={isLoadingTemplate}
+            />
           </div>
         </div>
       </div>

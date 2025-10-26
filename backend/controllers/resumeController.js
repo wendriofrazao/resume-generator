@@ -74,7 +74,7 @@ export async function generateResume(req, res) {
   const resumeData = await getCompleteResume(resumeId);
 
   const templateData = {
-      fullName: resumeData.personalDetails?.fullName || '',
+      fullName: resumeData.personalDetails?.fullname || '',
       cityCountry: `${resumeData.personalDetails?.city || ''}, ${resumeData.personalDetails?.country || ''}`,
       citizenship: resumeData.personalDetails?.country || '',
       phone: resumeData.personalDetails?.phoneNumber || '',
@@ -108,25 +108,37 @@ export async function generateResume(req, res) {
 }
 
 export async function previewTemplate(req, res) {
-    try {
-      const { templateId } = req.params;
-      const { data } = req.body; 
-      
-      const result = await renderTemplate(templateId, data);
-      
-      res.json({
-        ok: true,
-        html: result.html,
-        css: result.css
-      });
-      
-    } catch (error) {
-      res.status(500).json({
-        ok: false,
-        message: error.message
-      });
-    }
+  try {
+    let { templateId } = req.params;
+    templateId = templateId.trim();
+
+    const { data } = req.body;
+    const result = await renderTemplate(templateId, data);
+
+
+    const fullHTML = `
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <style>${result.css}</style>
+        </head>
+        <body>
+          ${result.html}
+        </body>
+      </html>
+    `;
+
+    res.setHeader("Content-Type", "text/html");
+    res.send(fullHTML);
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: error.message,
+    });
   }
+}
+
 
 
 

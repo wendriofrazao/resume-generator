@@ -89,7 +89,7 @@ app.use(setSession);
 app.use('/auth', router);
 app.use("/otp", otpRouter);
 app.use("/", resumeRouter);
-app.use("/", templateRouter);
+app.use("/api/templates", templateRouter);
 
 app.get('/', (req, res) => {
     res.send("teste");
