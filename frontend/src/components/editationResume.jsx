@@ -13,7 +13,7 @@ import { ResumePreview } from "./ResumePreview";
 import { useParams } from "react-router-dom";
 import { ResumeProvide } from "../hooks/resumeHook";
 
-export function InseringDatasResume() {
+export function EditationDatasResume() {
   const [tabValue, setTabValue] = useState("personal");
   // const [personalSent, setPersonalSent] = useState(false); 
   // const [experienceSent, setExperienceSent] = useState(false); 
@@ -555,7 +555,7 @@ useEffect(() => {
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <FileText className="h-8 w-8 text-primary" />
-            <h1 className="text-3xl font-bold">Crie seu Currículo</h1>
+            <h1 className="text-3xl font-bold">Editor de Currículo</h1>
           </div>
           <Button className="cursor-pointer" variant="hero" size="lg">
             <Download className="mr-2 h-5 w-5" />

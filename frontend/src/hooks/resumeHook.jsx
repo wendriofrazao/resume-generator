@@ -6,7 +6,8 @@ import {
   removePersonalWork,
   removeExperienceWork,
   removeEducation,
-  removeSkills
+  removeSkills,
+  editResume
 } from "../service/ResumeService.jsx";
 
 
@@ -130,4 +131,16 @@ export class ResumeProvide {
       return { ok: false, message: err.message };
     }
   }
+
+  // edição do resume
+  async EditationResume(resumeId) {
+    try {
+      const res = await editResume(resumeId);
+      return res;
+    } catch(err) {
+      console.error("Erro ao editar um resume:", err);
+      return { ok: false, message: err.message };
+    }
+  }
+
 }

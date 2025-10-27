@@ -14,6 +14,8 @@ import { PrivatePolityc } from "../pages/Private.jsx";
 import { TermService } from "../pages/TermUse.jsx";
 import { ComoEscreverUmCv } from '../pages/ComoEscreverUmCv.jsx'
 
+import { EditationResumes } from '../pages/EditDataResume.jsx'
+
 
 const AppRoutes = () => {
   return (
@@ -40,6 +42,12 @@ const AppRoutes = () => {
       {<Route path='/dashboard/insering-data-resume/:resumeId' element={
         <ProtectedRoute>
           <InseringData/>
+       </ProtectedRoute>
+      } />}
+
+      {<Route path='/dashboard/editation-data-resume/:resumeId' element={
+        <ProtectedRoute>
+          <EditationResumes/>
        </ProtectedRoute>
       } />}
 

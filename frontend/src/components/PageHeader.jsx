@@ -18,7 +18,7 @@ return (
             </span>
           </div>
           <Link to="/dashboard">
-            <Button variant="outline" className="border-[#2563EB]/30 text-[#2563EB] ">
+            <Button variant="outline" className=" cursor-pointer border-[#2563EB]/30 text-[#2563EB] ">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Ir a Dashboard
             </Button>

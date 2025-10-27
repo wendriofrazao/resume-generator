@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/userAuth.jsx";
-import { getResumes, createResume, deleteResume } from "../service/ResumeService.jsx";
+import { getResumes, createResume, deleteResume, editResume } from "../service/ResumeService.jsx";
 import { useNavigate } from "react-router-dom";
 import { Plus, FileText, Edit, Trash2, LogOut, X } from "lucide-react";
 
@@ -41,6 +41,7 @@ export function Welcome() {
       setNewTitle("");
       setShowCreateBox(false);
       
+
       setTimeout(() => {
         fetchResumes();
         navigate(`/dashboard/insering-data-resume/${data.data?._id || data.resume?.id}`);
@@ -53,17 +54,16 @@ export function Welcome() {
     }
   };
 
-  // const handleEditationResume = async () => {
-
-
-  //   try {
+  const handleEditationResume = async (id) => {
+    try {
     
-      
-  //     navigate(`/dashboard/insering-data-resume/${data.data?._id || data.resume?.id}`);
-  //   } catch (error) {
-  //     console.error("Erro ao criar currículo:", error.message);
-  //   }
-  // }
+      console.log("Direcionado a pagina de edição");
+      console.log("ID de edição armazenado:", id);
+      navigate(`/dashboard/editation-data-resume/${id}`);
+    } catch (error) {
+      console.error("Erro ao criar currículo:", error.message);
+    }
+  }
 
   const handleDeleteResume = async (id) => {
     try {
@@ -94,7 +94,7 @@ export function Welcome() {
           </div>
           <button
             onClick={() => setShowCreateBox(true)}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg shadow-sm"
+            className="flex items-center cursor-pointer gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg shadow-sm"
           >
             <Plus className="w-4 h-4" /> Novo Currículo
           </button>
@@ -107,7 +107,7 @@ export function Welcome() {
                 <h3 className="font-semibold text-lg">Criar Novo Currículo</h3>
                 <button 
                   onClick={() => setShowCreateBox(false)}
-                  className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                  className="text-gray-500 cursor-pointer hover:text-gray-700 transition-colors duration-200"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -123,14 +123,14 @@ export function Welcome() {
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setShowCreateBox(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                  className="px-4 py-2 cursor-pointer text-gray-600 hover:text-gray-800 transition-colors duration-200"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleCreateResume}
                   disabled={isCreating || !newTitle.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-4 py-2 rounded-md transition-all duration-200 hover:scale-105"
+                  className="bg-blue-600 cursor-pointer hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-4 py-2 rounded-md transition-all duration-200 hover:scale-105"
                 >
                   {isCreating ? "Criando..." : "Criar"}
                 </button>
@@ -147,7 +147,7 @@ export function Welcome() {
     <p className="text-lg font-medium mb-4">Nenhum currículo ainda</p>
     <button
       onClick={() => setShowCreateBox(true)}
-      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+      className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
     >
       <Plus className="w-4 h-4" />
       Criar Primeiro Currículo
@@ -169,14 +169,14 @@ export function Welcome() {
         </div>
         <div className="flex gap-3 mt-4">
           <button
-            // onClick={() => handleDeleteResume(resume._id)}
-            className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-3 py-2 rounded-md"
+            onClick={() => handleEditationResume(resume._id)}
+            className="flex-1 cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-3 py-2 rounded-md"
           >
             Editar
           </button>
           <button
             onClick={() => handleDeleteResume(resume._id)}
-            className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md"
+            className="bg-red-500 cursor-pointer hover:bg-red-600 text-white px-3 py-2 rounded-md"
           >
             Excluir
           </button>

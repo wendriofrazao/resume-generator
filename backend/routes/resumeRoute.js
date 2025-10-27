@@ -44,7 +44,7 @@ resumeRouter.post("/create-education/:resumeId", checkAuth, saveEducationControl
 // resumeRouter.post("/create-projects", createResume);
 
 // updated routes resumes
-resumeRouter.put("/updated-resume", updateResumeController);
+resumeRouter.put("/updated-resume/:resumeId", updateResumeController);
 resumeRouter.put("/updated-personalDetails/:resumeId/:personalDetailsId", updatePersonalDetailsController);
 resumeRouter.put("/updated-experienceWork/:resumeId/:experienceId", updateExperienceController);
 resumeRouter.put("/updated-skills/:resumeId/:educationId", updateSkillController);

@@ -213,3 +213,99 @@ export async function removeSkills(resumeId, skillId) {
     return null; 
   }
 }
+
+
+// edição das abas
+export async function editResume(resumeId) {
+  const res = await fetch(`${API_URL}/updated-resume/${resumeId}`, {
+    method: "PUT",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}
+
+
+export async function editExperience(resumeId, experienceId) {
+  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${experienceId}`, {
+    method: "PUT",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}
+
+
+export async function editEducation(resumeId, educationId) {
+  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${educationId}`, {
+    method: "PUT",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}
+
+
+export async function editSkills(resumeId, skillId) {
+  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${skillId}`, {
+    method: "PUT",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}
+
+
+export async function editPersonal(resumeId, personalDetailsId) {
+  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${personalDetailsId}`, {
+    method: "PUT",
+    credentials: "include", 
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Erro ${res.status}: ${text}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    return null; 
+  }
+}
