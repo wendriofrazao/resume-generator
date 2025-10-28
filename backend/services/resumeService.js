@@ -290,12 +290,30 @@ export async function deleteSkillService(skillId, resumeId) {
     return result;
   }
   
-  export async function findPersonalDetailsById(resumeId){
-    const result = await PersonalDetails.findOne({ resumeId });
+  export async function findPersonalDetailsById(resumeId, personalDetailsId){
+    try {
+    const result = await PersonalDetails.findOne({ 
+      resumeId, 
+      _id: personalDetailsId 
+    });
+
     return result;
+  } catch (error) {
+    console.error("Erro ao buscar detalhes pessoais por ID:", error);
+    throw error;
+  }
   }
   
-  export async function findExperienceWorkById(resumeId){
-    const result = await Experience.findOne({ resumeId });
+  export async function findExperienceWorkById(resumeId, experienceId){
+     try {
+    const result = await Experience.findOne({ 
+      resumeId, 
+      _id: experienceId 
+    });
+
     return result;
+  } catch (error) {
+    console.error("Erro ao buscar detalhes pessoais por ID:", error);
+    throw error;
+  }
   }

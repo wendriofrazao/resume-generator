@@ -240,7 +240,7 @@ useEffect(() => {
 
 
   // experiencia
-  const HandleExperienceWork = async () => {
+  const HandleExperienceWorkEdit = async () => {
     // if (experienceSent) {
     //   console.log(" Dados pessoais já foram enviados, não será reenviado.");
     //   return;
@@ -253,7 +253,7 @@ useEffect(() => {
 
     try {
       console.log(" Enviando dados pessoais para o backend...");
-      const response = await resume.ExperienceResumeProvide(
+      const response = await resume.EditationPersonal(
         jobDegree,
         company,
         description,

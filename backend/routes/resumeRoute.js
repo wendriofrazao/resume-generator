@@ -35,6 +35,11 @@ const resumeRouter = express.Router();
 
 resumeRouter.get("/get-all-resumes", checkAuth, getResumesByUser)
 
+resumeRouter.get("/get-personal", checkAuth, getResumesByUser)
+resumeRouter.get("/get-experience", checkAuth, getResumesByUser)
+resumeRouter.get("/get-education", checkAuth, getResumesByUser)
+resumeRouter.get("/get-skill", checkAuth, getResumesByUser)
+
 // create routes resumes
 resumeRouter.post("/create-resume", checkAuth, createResume);
 resumeRouter.post("/create-personalDetails/:resumeId", checkAuth, savePersonalDetails);

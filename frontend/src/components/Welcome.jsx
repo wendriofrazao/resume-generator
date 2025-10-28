@@ -56,8 +56,6 @@ export function Welcome() {
 
   const handleEditationResume = async (id) => {
     try {
-    
-      console.log("Direcionado a pagina de edição");
       console.log("ID de edição armazenado:", id);
       navigate(`/dashboard/editation-data-resume/${id}`);
     } catch (error) {

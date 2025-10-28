@@ -7,7 +7,11 @@ import {
   removeExperienceWork,
   removeEducation,
   removeSkills,
-  editResume
+  editResume,
+  editEducation,
+  editPersonal,
+  editSkills,
+  editExperience
 } from "../service/ResumeService.jsx";
 
 
@@ -136,6 +140,50 @@ export class ResumeProvide {
   async EditationResume(resumeId) {
     try {
       const res = await editResume(resumeId);
+      return res;
+    } catch(err) {
+      console.error("Erro ao editar um resume:", err);
+      return { ok: false, message: err.message };
+    }
+  }
+
+
+  async EditationPersonal(resumeId) {
+    try {
+      const res = await editPersonal(resumeId);
+      return res;
+    } catch(err) {
+      console.error("Erro ao editar um resume:", err);
+      return { ok: false, message: err.message };
+    }
+  }
+
+
+  async EditationExperience(resumeId) {
+    try {
+      const res = await editExperience(resumeId);
+      return res;
+    } catch(err) {
+      console.error("Erro ao editar um resume:", err);
+      return { ok: false, message: err.message };
+    }
+  }
+
+
+  async EditationEducation(resumeId) {
+    try {
+      const res = await editEducation(resumeId);
+      return res;
+    } catch(err) {
+      console.error("Erro ao editar um resume:", err);
+      return { ok: false, message: err.message };
+    }
+  }
+
+
+  async EditationSkills(resumeId) {
+    try {
+      const res = await editSkills(resumeId);
       return res;
     } catch(err) {
       console.error("Erro ao editar um resume:", err);
