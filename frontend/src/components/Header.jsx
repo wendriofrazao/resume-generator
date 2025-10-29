@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { FileText, User, Menu as MenuIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import Logo from "../assets/icon/Prancheta4.png"
 
 export function Header({ onChangeTab }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -49,10 +50,13 @@ export function Header({ onChangeTab }) {
           >
             <Box
               sx={{
-                width: 35,
-                height: 35,
+                width: 55,
+                height: 55,
                 borderRadius: "50%",
-                background: "linear-gradient(to right, #6366F1, #8B5CF6)",
+                backgroundImage: `url(${Logo})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                // border: "2px solid #6366F1",
               }}
             />
             <Typography

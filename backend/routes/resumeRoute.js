@@ -29,11 +29,13 @@ import {
   deleteEducationController,
 //   deleteProjectsController
 } from "../controllers/resumeController.js";
-
+import { getResumeCompleteController } from "../controllers/resumeController.js";
 
 const resumeRouter = express.Router();
 
 resumeRouter.get("/get-all-resumes", checkAuth, getResumesByUser)
+
+resumeRouter.get("/get-resume-complete/:resumeId", checkAuth, getResumeCompleteController);
 
 resumeRouter.get("/get-personal", checkAuth, getResumesByUser)
 resumeRouter.get("/get-experience", checkAuth, getResumesByUser)

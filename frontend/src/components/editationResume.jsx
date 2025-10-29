@@ -183,6 +183,61 @@ const prepareTemplateData = (resumeData) => {
   };
 };
 
+useEffect(() => {
+  async function fetchResumeData() {
+    try {
+      const res = await resume.getResumeComplete(resumeId);
+      if (res.success && res.data) {
+        const { personalDetails, experiences, education, skills } = res.data;
+
+        setResumeData({
+          personalInfo: {
+            fullname: personalDetails?.fullname || "",
+            email: personalDetails?.email || "",
+            phone: personalDetails?.phone || "",
+            city: personalDetails?.location?.city || "",
+            state: personalDetails?.location?.state || "",
+            country: personalDetails?.location?.country || "",
+            summary: personalDetails?.summary || "",
+          },
+          experiences: experiences.map(exp => ({
+            id: exp._id,
+            title: exp.jobDegree,
+            company: exp.company,
+            period: exp.period,
+            description: exp.description,
+          })),
+          education: education.map(edu => ({
+            id: edu._id,
+            degree: edu.degree,
+            institution: edu.institution,
+            period: edu.period,
+          })),
+          skills: skills.map(skill => ({
+            id: skill._id,
+            skillName: skill.skillName,
+          })),
+        });
+
+        if (personalDetails) {
+          setFullname(personalDetails.fullname || "");
+          setEmail(personalDetails.email || "");
+          setPhone(personalDetails.phone || "");
+          setCity(personalDetails.location?.city || "");
+          setState(personalDetails.location?.state || "");
+          setCountry(personalDetails.location?.country || "");
+          setSummary(personalDetails.summary || "");
+          setPersonalDetailId(personalDetails._id);
+        }
+
+      }
+    } catch (error) {
+      console.error("Erro ao carregar dados do currículo:", error);
+    }
+  }
+
+  fetchResumeData();
+}, [resumeId]);
 
 useEffect(() => {
   if (selectedTemplateId) {

@@ -19,6 +19,28 @@ export async function getResumes() {
     throw error;
   }
 }
+
+
+export async function getPersonal() {
+  try {
+    const response = await fetch("http://localhost:5000/get-all-resumes", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    return data;
+    
+  } catch (error) {
+    console.error("Erro ao encontrar resume:", error.message);
+    throw error;
+  }
+}
+
+
 // create resume
 export async function createResume(title) {
   try {
@@ -307,5 +329,26 @@ export async function editPersonal(resumeId, personalDetailsId) {
     return await res.json();
   } catch {
     return null; 
+  }
+}
+
+export async function getCompleteResume(resumeId) {
+  try {
+    const response = await fetch(`http://localhost:5000/get-resume-complete/${resumeId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(`Erro ${response.status}: ${err}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erro ao buscar currículo completo:", error.message);
+    throw error;
   }
 }

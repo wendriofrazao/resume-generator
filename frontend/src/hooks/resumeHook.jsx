@@ -11,7 +11,8 @@ import {
   editEducation,
   editPersonal,
   editSkills,
-  editExperience
+  editExperience,
+  getCompleteResume
 } from "../service/ResumeService.jsx";
 
 
@@ -191,4 +192,14 @@ export class ResumeProvide {
     }
   }
 
+
+  async getResumeComplete(resumeId) {
+  try {
+    const res = await getCompleteResume(resumeId);
+    return res;
+  } catch (err) {
+    console.error("Erro ao buscar currículo completo:", err);
+    return { ok: false, message: err.message };
+  }
+}
 }

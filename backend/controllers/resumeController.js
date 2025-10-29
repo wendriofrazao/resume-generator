@@ -27,6 +27,32 @@ import {
   // deleteProjectsService
 } from "../services/resumeService.js";
 
+
+export async function getResumeCompleteController(req, res) {
+  try {
+    const { resumeId } = req.params;
+    const resumeData = await getCompleteResume(resumeId);
+
+    if (!resumeData) {
+      return res.status(404).json({ success: false, message: "Currículo não encontrado." });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: resumeData,
+      message: "Currículo carregado com sucesso para edição.",
+    });
+  } catch (error) {
+    console.error("Erro ao buscar currículo completo:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+
+
 export async function createResume(req, res) {
   try {
 
