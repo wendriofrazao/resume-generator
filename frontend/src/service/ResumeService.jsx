@@ -257,80 +257,61 @@ export async function editResume(resumeId) {
 }
 
 
-export async function editExperience(resumeId, experienceId) {
-  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${experienceId}`, {
+export async function editPersonal(resumeId, personalDetailsId, data) {
+  const res = await fetch(`${API_URL}/updated-personalDetails/${resumeId}/${personalDetailsId}`, {
     method: "PUT",
-    credentials: "include", 
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(data),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Erro ${res.status}: ${text}`);
-  }
-
-  try {
-    return await res.json();
-  } catch {
-    return null; 
-  }
+  if (!res.ok) throw new Error(`Erro ${res.status}: ${await res.text()}`);
+  return await res.json();
 }
 
 
-export async function editEducation(resumeId, educationId) {
-  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${educationId}`, {
+export async function editExperience(resumeId, experienceId, data) {
+  const res = await fetch(`${API_URL}/updated-experienceWork/${resumeId}/${experienceId}`, {
     method: "PUT",
-    credentials: "include", 
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(data),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Erro ${res.status}: ${text}`);
+  const result = await res.json();
+  
+  if (!res.ok || !result.success) {
+    throw new Error(result.error || `Erro ${res.status}: falha ao atualizar`);
   }
 
-  try {
-    return await res.json();
-  } catch {
-    return null; 
-  }
+  return result;
 }
 
 
-export async function editSkills(resumeId, skillId) {
-  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${skillId}`, {
+export async function editEducation(resumeId, educationId, data) {
+  const res = await fetch(`${API_URL}/updated-education/${resumeId}/${educationId}`, {
     method: "PUT",
-    credentials: "include", 
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(data),
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Erro ${res.status}: ${text}`);
-  }
-
-  try {
-    return await res.json();
-  } catch {
-    return null; 
-  }
+  if (!res.ok) throw new Error(`Erro ${res.status}: ${await res.text()}`);
+  return await res.json();
 }
 
 
-export async function editPersonal(resumeId, personalDetailsId) {
-  const res = await fetch(`${API_URL}/updated-resume/${resumeId}/${personalDetailsId}`, {
+export async function editSkills(resumeId, skillId, data) {
+  const res = await fetch(`${API_URL}/updated-skills/${resumeId}/${skillId}`, {
     method: "PUT",
-    credentials: "include", 
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(data),
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Erro ${res.status}: ${text}`);
-  }
-
-  try {
-    return await res.json();
-  } catch {
-    return null; 
-  }
+  if (!res.ok) throw new Error(`Erro ${res.status}: ${await res.text()}`);
+  return await res.json();
 }
+
+
 
 export async function getCompleteResume(resumeId) {
   try {

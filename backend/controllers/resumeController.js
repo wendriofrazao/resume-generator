@@ -1,4 +1,4 @@
-import { findResumeById, findPersonalDetailsById, getCompleteResume }from '../services/resumeService.js';
+import { findResumeById, getCompleteResume }from '../services/resumeService.js';
 import { renderTemplate } from '../services/templateService.js';
 
 // imports create
@@ -312,6 +312,34 @@ export async function updatePersonalDetailsController(req, res) {
   }
 }
 
+export async function updateExperienceController(req, res) {
+  try {
+    const { resumeId, experienceId } = req.params;
+    const experienceData = req.body;
+
+    const result = await experienceWork_Edit_Service(experienceId, resumeId, experienceData);
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'Experiência não encontrada ou não atualizada.',
+      });
+    }
+
+    res.json({
+      success: true,
+      data: result,
+      message: 'Experiência profissional atualizada com sucesso!',
+    });
+  } catch (error) {
+    console.error("Erro ao atualizar experiência:", error.message);
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+}
+
 export async function updateEducationController(req, res) {
   try {
     const { resumeId, educationId } = req.params;
@@ -343,26 +371,6 @@ export async function updateSkillController(req, res) {
       success: true,
       data: result,
       message: 'Skills atualizadas com sucesso!'
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
-  }
-}
-
-export async function updateExperienceController(req, res) {
-  try {
-    const { resumeId, expirienceId } = req.params;
-    const expirienceData = req.body;
-    
-    const result = await experienceWork_Edit_Service(resumeId, expirienceId, expirienceData);
-    
-    res.json({
-      success: true,
-      data: result,
-      message: 'Experiências de trabalho atualizadas com sucesso!'
     });
   } catch (error) {
     res.status(400).json({

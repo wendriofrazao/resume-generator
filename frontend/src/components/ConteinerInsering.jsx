@@ -222,7 +222,6 @@ useEffect(() => {
       );
 
       if (response?.data?._id) {
-        setPersonalDetailId(response.data._id);
         console.log(" ID dos dados pessoais salvo:", response.data._id);
       }
 
@@ -262,7 +261,6 @@ useEffect(() => {
       );
 
       if (response?.data?._id) {
-        setExperienceId(response.data._id);
         console.log(" ID dos dados pessoais salvo:", response.data._id);
       }
 
@@ -305,7 +303,6 @@ useEffect(() => {
 
       if (response?.ok || response?.success) {
         console.log(" Dados pessoais enviados com sucesso!");
-        setEducationSent(true);
       } else {
         console.error(" Erro ao enviar dados pessoais:", response);
       }

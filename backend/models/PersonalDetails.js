@@ -8,7 +8,7 @@ const personalDetailsSchema = new mongoose.Schema({
   },
   email: { type: String, required: true, lowercase: true, trim: true },
   fullname: { type: String, required: true, trim: true },
-  phoneNumber: { type: String },
+  phone: { type: String },
   location: {
     city: { type: String },
     state: { type: String },

@@ -192,10 +192,7 @@ export async function resume_Edit_Service(resumeId, resumeData) {
 }
 
 export async function personaDatail_Edit_Service(personalDetailsId, resumeId, personal) {
-  const existingDetails = await PersonalDetails.findOne({ 
-    _id: personalDetailsId, 
-    resumeId: resumeId 
-  });
+  const existingDetails = await findPersonalById(resumeId, personalDetailsId)
   
   if (!existingDetails) {
     throw new Error('Detalhes pessoais não encontrados para este currículo');
@@ -208,44 +205,47 @@ export async function personaDatail_Edit_Service(personalDetailsId, resumeId, pe
   );
 }
 
-export async function experienceWork_Edit_Service(experienceId, resumeId, experience) {
-  const existingDetails = await Experience.findOne({ 
-    _id: experienceId, 
-    resumeId: resumeId 
-  });
-  
-  if (!existingDetails) {
-    throw new Error('Detalhes de trabalho não encontrados para este currículo');
+export async function experienceWork_Edit_Service(experienceId, resumeId, experienceData) {
+// Verifica se a experiência existe vinculada ao currículo
+  const existingExperience = await Experience.findOne({ _id: experienceId, resumeId });
+
+  if (!existingExperience) {
+    throw new Error("Experiência não encontrada para este currículo");
   }
 
-  return await Experience.findOneAndUpdate({_id:experienceId , resumeId}, experience,{ new: true, upsert: true });
+  // Atualiza os dados da experiência
+  const updatedExperience = await Experience.findOneAndUpdate(
+    { _id: experienceId, resumeId },
+    experienceData,
+    { new: true, runValidators: true }
+  );
+
+  return updatedExperience;
 }
 
 export async function education_Edit_Service(educationId, resumeId, education) {
-   const existingDetails = await Experience.findOne({ 
-    _id: educationId, 
-    resumeId: resumeId 
-  });
+  const existingDetails = await Education.findOne({ _id: educationId, resumeId });
   
-  if (!existingDetails) {
-    throw new Error('Detalhes de trabalho não encontrados para este currículo');
-  }
+  if (!existingDetails) throw new Error('Educação não encontrada para este currículo');
 
-  return await Education.findOneAndUpdate({_id:educationId , resumeId}, education, {new: true, upsert: true})
+  return await Education.findOneAndUpdate(
+    { _id: educationId, resumeId },
+    education,
+    { new: true, runValidators: true }
+  );
 }
 
 export async function skills_Edit_Service(skillId, resumeId, skill) {
-   const existingDetails = await Experience.findOne({ 
-    _id: skillId, 
-    resumeId: resumeId 
-  });
+  const existingDetails = await Skill.findOne({ _id: skillId, resumeId });
   
-  if (!existingDetails) {
-    throw new Error('Detalhes de trabalho não encontrados para este currículo');
-  }
- return await Skill.findOneAndUpdate({_id:skillId , resumeId}, skill, { new: true, upsert: true });
-} 
+  if (!existingDetails) throw new Error('Skill não encontrada para este currículo');
 
+  return await Skill.findOneAndUpdate(
+    { _id: skillId, resumeId },
+    skill,
+    { new: true, runValidators: true }
+  );
+}
 
 // services delete
 export async function deleteResumeService(resumeId) {
@@ -289,31 +289,41 @@ export async function deleteSkillService(skillId, resumeId) {
     const result = await Resume.findById(resumeId).populate('templateId').populate('userId');
     return result;
   }
-  
-  export async function findPersonalDetailsById(resumeId, personalDetailsId){
-    try {
-    const result = await PersonalDetails.findOne({ 
-      resumeId, 
-      _id: personalDetailsId 
+ 
+ export async function findPersonalById(resumeId, personalDetailsId) {
+  try {
+    const result = await PersonalDetails.findOne({
+      resumeId,
+      _id: personalDetailsId
     });
+
+    if (!result) {
+      throw new Error("Detalhes pessoais não encontrados.");
+    }
 
     return result;
   } catch (error) {
-    console.error("Erro ao buscar detalhes pessoais por ID:", error);
+    console.error("Erro ao buscar detalhes pessoais:", error.message);
     throw error;
   }
-  }
-  
-  export async function findExperienceWorkById(resumeId, experienceId){
-     try {
-    const result = await Experience.findOne({ 
-      resumeId, 
-      _id: experienceId 
+}
+
+ export async function findExperienceById(resumeId, experienceId) {
+  try {
+    const result = await Experience.findOne({
+      resumeId,
+      _id: experienceId
     });
+
+    if (!result) {
+      throw new Error("Detalhes pessoais não encontrados.");
+    }
 
     return result;
   } catch (error) {
-    console.error("Erro ao buscar detalhes pessoais por ID:", error);
+    console.error("Erro ao buscar detalhes pessoais:", error.message);
     throw error;
   }
-  }
+}
+ 
+  

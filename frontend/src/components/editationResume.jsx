@@ -190,6 +190,12 @@ useEffect(() => {
       if (res.success && res.data) {
         const { personalDetails, experiences, education, skills } = res.data;
 
+        // Salva IDs para edição posterior
+        if (experiences?.length > 0) setExperienceId(experiences[0]._id);
+        if (education?.length > 0) setEducationId(education[0]._id);
+        if (skills?.length > 0) setSkillId(skills[0]._id);
+
+        // Atualiza estados
         setResumeData({
           personalInfo: {
             fullname: personalDetails?.fullname || "",
@@ -202,7 +208,7 @@ useEffect(() => {
           },
           experiences: experiences.map(exp => ({
             id: exp._id,
-            title: exp.jobDegree,
+            jobDegree: exp.jobDegree,
             company: exp.company,
             period: exp.period,
             description: exp.description,
@@ -219,6 +225,7 @@ useEffect(() => {
           })),
         });
 
+        // Pessoal
         if (personalDetails) {
           setFullname(personalDetails.fullname || "");
           setEmail(personalDetails.email || "");
@@ -230,6 +237,22 @@ useEffect(() => {
           setPersonalDetailId(personalDetails._id);
         }
 
+        // Experiência (primeira)
+        if (experiences?.length > 0) {
+          const exp = experiences[0];
+          setJobDegree(exp.jobDegree || "");
+          setCompany(exp.company || "");
+          setDescription(exp.description || "");
+          setPeriod(exp.period || "");
+        }
+
+        // Educação (primeira)
+        if (education?.length > 0) {
+          const edu = education[0];
+          setDegreeEdu(edu.degree || "");
+          setinstitutionEdu(edu.institution || "");
+          setPeriodEdu(edu.period || "");
+        }
       }
     } catch (error) {
       console.error("Erro ao carregar dados do currículo:", error);
@@ -238,6 +261,7 @@ useEffect(() => {
 
   fetchResumeData();
 }, [resumeId]);
+
 
 useEffect(() => {
   if (selectedTemplateId) {
@@ -252,120 +276,88 @@ useEffect(() => {
 }, [selectedTemplateId, resumeData]); 
 
   // dados pessoais
-  const HandlePersonalInfo = async () => {
-    // if (personalSent) {
-    //   console.log(" Dados pessoais já foram enviados, não será reenviado.");
-    //   return;
-    // }
-
-    if (!fullname || !email || !phone || !city || !state || !country || !summary) {
-      console.warn(" Campos obrigatórios faltando.");
-      return;
-    }
+  const HandlePersonalInfoEdit = async () => {
+ if (!personalDetailId) return console.warn("Sem ID de dados pessoais.");
 
     try {
-      console.log(" Enviando dados pessoais para o backend...");
-      const response = await resume.PersonalResumeProvide(
+      console.log("Dados sendo atualizados pessoais para o backend...");
+      const response = await resume.EditationPersonal(
+        resumeId,
+        personalDetailId,
         fullname,
         email,
         phone,
         city,
         state,
         country,
-        summary,
-        resumeId
+        summary
       );
 
       if (response?.data?._id) {
-        setPersonalDetailId(response.data._id);
         console.log(" ID dos dados pessoais salvo:", response.data._id);
       }
 
   
       if (response?.ok || response?.success) {
-        console.log(" Dados pessoais enviados com sucesso!");
-        setPersonalSent(true);
+        console.log(" Dados pessoais atualizados com sucesso!");
       } else {
-        console.error(" Erro ao enviar dados pessoais:", response);
+        console.error(" Erro ao atualizar dados pessoais:", response);
       }
     } catch (err) {
-      console.error(" Erro inesperado ao enviar dados pessoais:", err);
+      console.error(" Erro inesperado ao atualizar dados pessoais:", err);
     }
   };
 
 
   // experiencia
   const HandleExperienceWorkEdit = async () => {
-    // if (experienceSent) {
-    //   console.log(" Dados pessoais já foram enviados, não será reenviado.");
-    //   return;
-    // }
+  if (!experienceId) return console.warn("Sem ID dos dados de experiência.");
 
-    if (!jobDegree || !company || !description || !period) {
-      console.warn(" Campos obrigatórios faltando.");
-      return;
+  try {
+    console.log(" Enviando dados de experiência para o backend...");
+    const response = await resume.EditationExperience(
+      resumeId,
+      experienceId,
+      jobDegree,
+      company,
+      description,
+      period
+    );
+
+    console.log("Resposta do backend:", response);
+
+    if (response?.success && response?.data?._id) {
+      console.log(" Dados de experiências atualizados com sucesso!");
+    } else {
+      console.error(" Falha ao atualizar dados de experiência:", response?.error || response);
     }
-
-    try {
-      console.log(" Enviando dados pessoais para o backend...");
-      const response = await resume.EditationPersonal(
-        jobDegree,
-        company,
-        description,
-        period,
-        resumeId
-      );
-
-      if (response?.data?._id) {
-        setExperienceId(response.data._id);
-        console.log(" ID dos dados pessoais salvo:", response.data._id);
-      }
-
-      if (response?.ok || response?.success) {
-        console.log(" Dados pessoais enviados com sucesso!");
-        setExperienceSent(true);
-      } else {
-        console.error(" Erro ao enviar dados pessoais:", response);
-      }
-    } catch (err) {
-      console.error(" Erro inesperado ao enviar dados pessoais:", err);
-    }
+  } catch (err) {
+    console.error(" Erro inesperado ao atualizar dados de experiência:", err);
+    alert("Erro inesperado ao atualizar experiência.");
+  }
   };
 
   // educação
-  const HandleEducation = async () => {
-    // if (educationSent) {
-    //   console.log(" Dados pessoais já foram enviados, não será reenviado.");
-    //   return;
-    // }
-
-    if (!degreeEdu || !institutionEdu || !periodEdu) {
-      console.warn(" Campos obrigatórios faltando.");
-      return;
-    }
+  const HandleEducationEdit = async () => {
+   if (!educationId) return console.warn("Sem ID de dados de educação.");
 
     try {
-      console.log(" Enviando dados pessoais para o backend...");
-      const response = await resume.EducationResumeProvide(
+      console.log("Enviando dados de educação para o backend...");
+      const response = await resume.EditationEducation(
+        resumeId,
+        educationId,
         degreeEdu,
         institutionEdu,
-        periodEdu,
-        resumeId
+        periodEdu
       );
 
-      if (response?.data?._id) {
-        setEducationId(response.data._id);
-        console.log(" ID dos dados pessoais salvo:", response.data._id);
-      }
-
       if (response?.ok || response?.success) {
-        console.log(" Dados pessoais enviados com sucesso!");
-        setEducationSent(true);
+        console.log("Dados de educação atualizados com sucesso!");
       } else {
-        console.error(" Erro ao enviar dados pessoais:", response);
+        console.error("Erro ao atualizar dados de educação:", response);
       }
     } catch (err) {
-      console.error(" Erro inesperado ao enviar dados pessoais:", err);
+      console.error("Erro inesperado ao atualizar dados de educação:", err);
     }
   };
 
@@ -399,15 +391,15 @@ useEffect(() => {
   const handleTabChange = (newTab) => {
     
     if (tabValue === "personal" && newTab !== "personal") {
-      HandlePersonalInfo(); 
+      HandlePersonalInfoEdit();
     }
 
     if (tabValue === "experience" && newTab !== "experience") {
-      HandleExperienceWork();
+      HandleExperienceWorkEdit();
     }
 
     if (tabValue === "education" && newTab !== "education") {
-      HandleEducation();
+    HandleEducationEdit();
     }
 
     setTabValue(newTab);
@@ -792,10 +784,9 @@ useEffect(() => {
                           <Label htmlFor="jobDegree">Cargo</Label>
                           <Input
                             id="jobDegree"
-                            value={jobDegree}
+                            value={exp.jobDegree}
                             onChange={(e) => {
-                              setJobDegree(e.target.value)
-                              updateExperience(exp.id ,"title", e.target.value)
+                              updateExperience(exp.id ,"jobDegree", e.target.value)
                             }}
                             placeholder="Desenvolvedor Full Stack"
                           />
@@ -804,9 +795,8 @@ useEffect(() => {
                           <Label htmlFor="company">Empresa</Label>
                           <Input
                             id="company"
-                            value={company}
+                            value={exp.company}
                             onChange={(e) => {
-                              setCompany(e.target.value);
                               updateExperience(exp.id, "company", e.target.value);
                             }}
                             placeholder="Empresa XYZ"
@@ -816,9 +806,8 @@ useEffect(() => {
                           <Label htmlFor="period">Período</Label>
                           <Input
                             id="period"
-                            value={period}
+                            value={exp.period}
                             onChange={(e) => {
-                              setPeriod(e.target.value)
                               updateExperience(exp.id, "period", e.target.value)
                             }}
                             placeholder="Jan 2020 - Dez 2023"
@@ -828,9 +817,8 @@ useEffect(() => {
                           <Label htmlFor="description">Descrição</Label>
                           <Textarea
                             id="description"
-                            value={description}
+                            value={exp.description}
                             onChange={(e) => {
-                              setDescription(e.target.value);
                               updateExperience(exp.id, "description", e.target.value);
                             }}
                             placeholder="Descreva suas responsabilidades..."
@@ -867,9 +855,8 @@ useEffect(() => {
                           <Label htmlFor="degree">Grau / Curso</Label>
                           <Input
                             id="degree"
-                            value={degreeEdu}
+                            value={edu.degree}
                             onChange={(e) => {
-                              setDegreeEdu(e.target.value);
                               updateEducation(edu.id, "degree", e.target.value)
                             }}
                             placeholder="Bacharelado em Ciência da Computação"
@@ -879,9 +866,8 @@ useEffect(() => {
                           <Label htmlFor="institution">Instituição</Label>
                           <Input
                             id="institution"
-                            value={institutionEdu}
+                            value={edu.institution}
                             onChange={(e) => {
-                              setinstitutionEdu(e.target.value);
                               updateEducation(edu.id, "institution", e.target.value);
                             }}
                             placeholder="Universidade XYZ"
@@ -891,7 +877,7 @@ useEffect(() => {
                           <Label htmlFor="period">Período</Label>
                           <Input
                             id="period"
-                            value={periodEdu}
+                            value={edu.period}
                             onChange={(e) => {
                               setPeriodEdu(e.target.value);
                               updateEducation(edu.id, "period", e.target.value)
@@ -903,7 +889,7 @@ useEffect(() => {
                           variant="destructive"
                           size="sm"
                           onClick={() => {
-                            handleRemoveEducation(skillId);
+                            handleRemoveEducation(educationId);
                             removeEducation(edu.id);
                           }}
                         >

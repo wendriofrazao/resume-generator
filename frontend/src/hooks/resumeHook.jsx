@@ -149,48 +149,38 @@ export class ResumeProvide {
   }
 
 
-  async EditationPersonal(resumeId) {
-    try {
-      const res = await editPersonal(resumeId);
-      return res;
-    } catch(err) {
-      console.error("Erro ao editar um resume:", err);
-      return { ok: false, message: err.message };
-    }
+  async EditationPersonal(resumeId, personalDetailsId, fullname, email, phone, city, state, country, summary) {
+    const data = {
+      resumeId,
+      personalDetailsId,
+      fullname,
+      email,
+      phone,
+      summary,
+      location: { city, state, country }
+    };
+    const res = await editPersonal(resumeId, personalDetailsId, data);
+    return res;
   }
 
 
-  async EditationExperience(resumeId) {
-    try {
-      const res = await editExperience(resumeId);
-      return res;
-    } catch(err) {
-      console.error("Erro ao editar um resume:", err);
-      return { ok: false, message: err.message };
-    }
+  async EditationExperience(resumeId, experienceId, jobDegree, company, description, period) {
+    const data = { resumeId, experienceId, jobDegree, company, description, period };
+    const res = await editExperience(resumeId, experienceId, data);
+  return res;
   }
 
+async EditationEducation(resumeId, educationId, degree, institution, period) {
+  const data = { degree, institution, period };
+  const res = await editEducation(resumeId, educationId, data);
+  return res;
+}
 
-  async EditationEducation(resumeId) {
-    try {
-      const res = await editEducation(resumeId);
-      return res;
-    } catch(err) {
-      console.error("Erro ao editar um resume:", err);
-      return { ok: false, message: err.message };
-    }
-  }
-
-
-  async EditationSkills(resumeId) {
-    try {
-      const res = await editSkills(resumeId);
-      return res;
-    } catch(err) {
-      console.error("Erro ao editar um resume:", err);
-      return { ok: false, message: err.message };
-    }
-  }
+async EditationSkills(resumeId, skillId, skillName) {
+  const data = { skillName };
+  const res = await editSkills(resumeId, skillId, data);
+  return res;
+}
 
 
   async getResumeComplete(resumeId) {

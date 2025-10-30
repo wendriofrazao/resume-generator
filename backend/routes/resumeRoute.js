@@ -51,11 +51,11 @@ resumeRouter.post("/create-education/:resumeId", checkAuth, saveEducationControl
 // resumeRouter.post("/create-projects", createResume);
 
 // updated routes resumes
-resumeRouter.put("/updated-resume/:resumeId", updateResumeController);
-resumeRouter.put("/updated-personalDetails/:resumeId/:personalDetailsId", updatePersonalDetailsController);
-resumeRouter.put("/updated-experienceWork/:resumeId/:experienceId", updateExperienceController);
-resumeRouter.put("/updated-skills/:resumeId/:educationId", updateSkillController);
-resumeRouter.put("/updated-education/:resumeId/:skillId", updateEducationController);
+resumeRouter.put("/updated-resume/:resumeId", checkAuth, updateResumeController);
+resumeRouter.put("/updated-personalDetails/:resumeId/:personalDetailsId", checkAuth, updatePersonalDetailsController);
+resumeRouter.put("/updated-experienceWork/:resumeId/:experienceId", checkAuth, updateExperienceController);
+resumeRouter.put("/updated-skills/:resumeId/:educationId", checkAuth, updateSkillController);
+resumeRouter.put("/updated-education/:resumeId/:skillId", checkAuth, updateEducationController);
 // resumeRouter.put("/updated-projects", createResume);
 
 // Delete routes resumes
