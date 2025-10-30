@@ -228,7 +228,7 @@ useEffect(() => {
   
       if (response?.ok || response?.success) {
         console.log(" Dados pessoais enviados com sucesso!");
-        setPersonalSent(true);
+        // setPersonalSent(true);
       } else {
         console.error(" Erro ao enviar dados pessoais:", response);
       }
@@ -266,7 +266,7 @@ useEffect(() => {
 
       if (response?.ok || response?.success) {
         console.log(" Dados pessoais enviados com sucesso!");
-        setExperienceSent(true);
+        // setExperienceSent(true);
       } else {
         console.error(" Erro ao enviar dados pessoais:", response);
       }
