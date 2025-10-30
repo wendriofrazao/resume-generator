@@ -345,7 +345,7 @@ export async function updateEducationController(req, res) {
     const { resumeId, educationId } = req.params;
     const educationData = req.body;
     
-    const result = await education_Edit_Service(resumeId, educationId, educationData);
+    const result = await education_Edit_Service(educationId, resumeId, educationData);
     
     res.json({
       success: true,

@@ -295,8 +295,14 @@ export async function editEducation(resumeId, educationId, data) {
     credentials: "include",
     body: JSON.stringify(data),
   });
-  if (!res.ok) throw new Error(`Erro ${res.status}: ${await res.text()}`);
-  return await res.json();
+
+  const result = await res.json();
+
+  if (!res.ok || !result.success) {
+    throw new Error(result.error || `Erro ${res.status}: falha ao atualizar`);
+  }
+
+  return result;
 }
 
 

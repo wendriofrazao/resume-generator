@@ -310,81 +310,75 @@ useEffect(() => {
 
 
   // experiencia
-  const HandleExperienceWorkEdit = async () => {
-  if (!experienceId) return console.warn("Sem ID dos dados de experiência.");
-
+  const HandleExperienceWorkEdit = async (id) => {
   try {
-    console.log(" Enviando dados de experiência para o backend...");
+    const currentExp = resumeData.experiences.find(e => e.id === id);
     const response = await resume.EditationExperience(
       resumeId,
-      experienceId,
-      jobDegree,
-      company,
-      description,
-      period
+      id,
+      currentExp.jobDegree,
+      currentExp.company,
+      currentExp.description,
+      currentExp.period
     );
 
-    console.log("Resposta do backend:", response);
-
-    if (response?.success && response?.data?._id) {
-      console.log(" Dados de experiências atualizados com sucesso!");
+    if (response?.success) {
+      console.log(" Experiência atualizada com sucesso!");
+      setResumeData(prev => ({
+        ...prev,
+        experiences: prev.experiences.map(e =>
+          e.id === id ? { ...e, ...response.data } : e
+        ),
+      }));
     } else {
-      console.error(" Falha ao atualizar dados de experiência:", response?.error || response);
+      console.error(" Falha ao atualizar experiência:", response);
     }
   } catch (err) {
-    console.error(" Erro inesperado ao atualizar dados de experiência:", err);
-    alert("Erro inesperado ao atualizar experiência.");
+    console.error("Erro inesperado ao atualizar experiência:", err);
   }
   };
 
   // educação
-  const HandleEducationEdit = async () => {
-   if (!educationId) return console.warn("Sem ID de dados de educação.");
+  const HandleEducationEdit = async (id) => {
+  try {
+    const currentEdu = resumeData.education.find(e => e.id === id);
+    const response = await resume.EditationEducation(
+      resumeId,
+      id,
+      currentEdu.degree,
+      currentEdu.institution,
+      currentEdu.period
+    );
 
-    try {
-      console.log("Enviando dados de educação para o backend...");
-      const response = await resume.EditationEducation(
-        resumeId,
-        educationId,
-        degreeEdu,
-        institutionEdu,
-        periodEdu
-      );
-
-      if (response?.ok || response?.success) {
-        console.log("Dados de educação atualizados com sucesso!");
-      } else {
-        console.error("Erro ao atualizar dados de educação:", response);
-      }
-    } catch (err) {
-      console.error("Erro inesperado ao atualizar dados de educação:", err);
+    if (response?.success) {
+      console.log(" Educação atualizada com sucesso!");
+    } else {
+      console.error(" Falha ao atualizar educação:", response);
     }
-  };
+  } catch (err) {
+    console.error("Erro inesperado ao atualizar educação:", err);
+  }
+};
 
   // habilidades
-    const HandleSkills = async () => {
+    const HandleSkills = async (id, skillName) => {
     if (!skillName.trim()) {
       console.warn("Campos obrigatórios faltando.");
       return;
     }
+  if (!id) return console.warn("Sem ID da skill.");
 
-    try {
-      console.log("Enviando skill para o backend...");
-      const response = await resume.SkillsResumeProvide(skillName, resumeId);
+  try {
+    const response = await resume.EditationSkills(resumeId, id, skillName);
 
-      if (response?.data?._id) {
-        console.log("Skill salva com ID:", response.data._id);
-
-        setResumeData((prev) => ({
-          ...prev,
-          skills: [...prev.skills, { id: response.data._id, skillName }],
-        }));
-      }
-
-      setSkillName(""); 
-    } catch (err) {
-      console.error("Erro inesperado ao enviar skill:", err);
+    if (response?.success) {
+      console.log("✅ Skill atualizada com sucesso!");
+    } else {
+      console.error("❌ Erro ao atualizar skill:", response);
     }
+  } catch (err) {
+    console.error("Erro inesperado ao atualizar skill:", err);
+  }
   };
 
 
@@ -395,11 +389,11 @@ useEffect(() => {
     }
 
     if (tabValue === "experience" && newTab !== "experience") {
-      HandleExperienceWorkEdit();
+      // HandleExperienceWorkEdit();
     }
 
     if (tabValue === "education" && newTab !== "education") {
-    HandleEducationEdit();
+    // HandleEducationEdit();
     }
 
     setTabValue(newTab);
@@ -763,9 +757,16 @@ useEffect(() => {
                   </div>
                   <div className="flex justify-end">
                     <Button
+                      onClick={HandlePersonalInfoEdit}
+                      type="button"
+                      className=" cursor-pointer mr-[2%] bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-md shadow-sm"
+                    >
+                      Salvar Dados
+                    </Button>
+                    <Button
                       onClick={handleRemovePersonal}
                       type="button"
-                      className="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-md shadow-sm transition"
+                      className=" cursor-pointer bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-md shadow-sm transition"
                     >
                       Limpar Dados
                     </Button>
@@ -825,6 +826,7 @@ useEffect(() => {
                             rows={3}
                           />
                         </div>
+                        
                         <Button
                           variant="destructive"
                           size="sm"
@@ -834,6 +836,15 @@ useEffect(() => {
                           }}
                         >
                           Remover
+                        </Button>
+
+                        <Button
+                          className=" cursor-pointer ml-[65%] bg-blue-500 hover:bg-gray-500 text-white font-medium px-4 py-2 rounded-md shadow-sm"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => HandleExperienceWorkEdit(exp.id)}
+                        >
+                          Salvar Experiência
                         </Button>
                       </div>
                     ))}
@@ -895,6 +906,14 @@ useEffect(() => {
                         >
                           Remover
                         </Button>
+                        <Button
+                          className=" cursor-pointer ml-[66.9%] bg-blue-500 hover:bg-gray-500 text-white font-medium px-4 py-2 rounded-md shadow-sm"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => HandleEducationEdit(edu.id)}
+                        >
+                          Salvar Educação
+                        </Button>
                       </div>
                     ))}
                     <Button onClick={addEducation} variant="outline" className="w-full">
@@ -929,7 +948,15 @@ useEffect(() => {
                         Adicionar
                       </Button>
                     </div>
-
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        resumeData.skills.forEach(skill => HandleSkillEdit(skill.id, skill.skillName));
+                      }}
+                      className=" cursor-pointer bg-blue-500 hover:bg-gray-500 text-white font-medium px-4 py-2 rounded-md shadow-sm"
+                    >
+                      Salvar Habilidades
+                    </Button>
                     {/* Lista de skills adicionadas */}
                     <div className="flex flex-wrap gap-2">
                       {resumeData.skills.map((skill) => (
