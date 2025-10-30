@@ -361,24 +361,30 @@ useEffect(() => {
 };
 
   // habilidades
-    const HandleSkills = async (id, skillName) => {
-    if (!skillName.trim()) {
+    const HandleSkills = async () => {
+     if (!skillName) {
       console.warn("Campos obrigatórios faltando.");
       return;
     }
-  if (!id) return console.warn("Sem ID da skill.");
+  if (!skillId) return console.warn("Sem ID da skill.");
 
-  try {
-    const response = await resume.EditationSkills(resumeId, id, skillName);
+   try {
+      console.log("Enviando skill para o backend...");
+      const response = await resume.SkillsResumeProvide(skillName, resumeId);
 
-    if (response?.success) {
-      console.log("✅ Skill atualizada com sucesso!");
-    } else {
-      console.error("❌ Erro ao atualizar skill:", response);
+      if (response?.data?._id) {
+        console.log("Skill salva com ID:", response.data._id);
+
+        setResumeData((prev) => ({
+          ...prev,
+          skills: [...prev.skills, { id: response.data._id, skillName }],
+        }));
+      }
+
+      setSkillName(""); 
+    } catch (err) {
+      console.error("Erro inesperado ao enviar skill:", err);
     }
-  } catch (err) {
-    console.error("Erro inesperado ao atualizar skill:", err);
-  }
   };
 
 
@@ -948,15 +954,6 @@ useEffect(() => {
                         Adicionar
                       </Button>
                     </div>
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        resumeData.skills.forEach(skill => HandleSkillEdit(skill.id, skill.skillName));
-                      }}
-                      className=" cursor-pointer bg-blue-500 hover:bg-gray-500 text-white font-medium px-4 py-2 rounded-md shadow-sm"
-                    >
-                      Salvar Habilidades
-                    </Button>
                     {/* Lista de skills adicionadas */}
                     <div className="flex flex-wrap gap-2">
                       {resumeData.skills.map((skill) => (
