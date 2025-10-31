@@ -34,21 +34,20 @@ Com ele, qualquer pessoa pode montar um portfólio elegante e responsivo em pouc
 ## 📂 Estrutura do projeto  
 Backend:
 ```bash
-├── 📁 configs/
+├── 📁 configs
 │   ├── 📄 db.js
-│   ├── 📄 mailtrap.js
 │   └── 📄 template.js
-├── 📁 controllers/
+├── 📁 controllers
 │   ├── 📄 authController.js
 │   ├── 📄 otpController.js
 │   ├── 📄 resumeController.js
 │   └── 📄 templateController.js
-├── 📁 middlewares/
+├── 📁 middlewares
 │   ├── 📄 authMiddleware.js
 │   ├── 📄 authValidateMiddleware.js
 │   ├── 📄 flashMessage.js
 │   └── 📄 setSession.js
-├── 📁 models/
+├── 📁 models
 │   ├── 📄 Education.js
 │   ├── 📄 PersonalDetails.js
 │   ├── 📄 Resume.js
@@ -56,49 +55,47 @@ Backend:
 │   ├── 📄 Template.js
 │   ├── 📄 User.js
 │   └── 📄 WorkExperience.js
-├── 📁 public/
-│   ├── 📁 assets/
-│   └── 📁 css/
+├── 📁 public
+│   ├── 📁 assets
+│   └── 📁 css
 │       ├── 🎨 404.css
 │       ├── 🎨 500.css
 │       ├── 🎨 personal.css
 │       ├── 🎨 style.css
 │       └── 🎨 workTemplate.css
-├── 📁 routes/
+├── 📁 routes
 │   ├── 📄 authRoutes.js
 │   ├── 📄 otpRoutes.js
 │   ├── 📄 resumeRoute.js
 │   └── 📄 templateRoute.js
-├── 📁 services/
+├── 📁 services
 │   ├── 📄 otpService.js
 │   ├── 📄 resumeService.js
 │   ├── 📄 templateService.js
 │   └── 📄 userServices.js
-├── 📁 sessions/
-│   └── 📄 session.js
-├── 📁 uploads/
+├── 📁 uploads
 │   └── 🖼️ 1756775896662-788198395.jpg
-├── 📁 utils/
-│   └── 📁 helpers/
+├── 📁 utils
+│   └── 📁 helpers
 │       ├── 📄 generateOtp.js
 │       └── 📄 upload.js
-├── 📁 validators/
+├── 📁 validators
 │   └── 📄 authValidator.js
-├── 📁 views/
-│   ├── 📁 errors/
+├── 📁 views
+│   ├── 📁 errors
 │   │   ├── 📄 404.handlebars
 │   │   └── 📄 500.handlebars
-│   ├── 📁 layouts/
+│   ├── 📁 layouts
 │   │   ├── 📄 erros.handlebars
 │   │   ├── 📄 main.handlebars
 │   │   └── 📄 templates.handlebars
-│   ├── 📁 template/
+│   ├── 📁 template
 │   │   ├── 📄 internship.handlebars
 │   │   └── 📄 work.handlebars
-│   └── 📁 works/
+│   └── 📁 works
 │       └── 📄 personalCreate.handlebars
-├── 📄 package-lock.json
-├── 📄 package.json
+├── ⚙️ package-lock.json
+├── ⚙️ package.json
 └── 📄 server.js
 ```
 Frontend:
