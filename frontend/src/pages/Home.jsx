@@ -11,7 +11,6 @@ export function Home() {
   return (
     <div>
       {user ? <LoggedHeader /> : <Header/>}
-      
       <Conteiner />
       <Footer />
     </div>
