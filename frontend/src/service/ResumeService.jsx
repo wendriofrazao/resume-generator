@@ -339,3 +339,16 @@ export async function getCompleteResume(resumeId) {
     throw error;
   }
 }
+
+
+export async function updateResumeTitle(resumeId, title) {
+  const res = await fetch(`http://localhost:5000/updated-resume/${resumeId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ title }),
+  });
+
+  if (!res.ok) throw new Error(`Erro ${res.status}: ${await res.text()}`);
+  return await res.json();
+}

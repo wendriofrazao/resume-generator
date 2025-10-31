@@ -181,14 +181,13 @@ export async function skillService(data, resumeId) {
 // services editatios
 
 export async function resume_Edit_Service(resumeId, resumeData) {
-  const existingDetails = await Resume.findOne({ 
-    _id: resumeId
-  });
+  const existingDetails = await Resume.findById(resumeId);
   
   if (!existingDetails) {
     throw new Error('Currículo não foi encontrado');
   }
-   return await Resume.findOneAndUpdate({resumeId}, resumeData,{ new: true, upsert: true });
+
+  return await Resume.findByIdAndUpdate(resumeId, resumeData, { new: true, runValidators: true });
 }
 
 export async function personaDatail_Edit_Service(personalDetailsId, resumeId, personal) {
