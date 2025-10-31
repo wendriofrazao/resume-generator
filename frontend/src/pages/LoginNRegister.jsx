@@ -2,6 +2,8 @@ import { useState } from "react";
 import { FileText } from "lucide-react";
 import { Login } from "../components/Login";
 import { Register } from "../components/Register";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const LoginNRegister = () => {
   const [tabValue, setTabValue] = useState("login");
@@ -9,6 +11,10 @@ export const LoginNRegister = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-background to-secondary/20 p-4">
       <div className="w-full max-w-md">
+        <Link to="/" className="inline-flex hover:bg-black-500 items-center gap-2 text-sm text-muted-foreground transition-colors mb-4">
+          <ArrowLeft className="h-4 w-4" />
+          Voltar para Home
+        </Link>
         {/* Cabeçalho */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
