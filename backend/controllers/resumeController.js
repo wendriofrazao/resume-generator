@@ -1,5 +1,6 @@
 import { findResumeById, getCompleteResume }from '../services/resumeService.js';
 import { renderTemplate } from '../services/templateService.js';
+import puppeteer from 'puppeteer';
 
 // imports create
 import { createResumeService, getAllResumesByUserService} from '../services/resumeService.js'
@@ -48,6 +49,122 @@ export async function getResumeCompleteController(req, res) {
     res.status(500).json({
       success: false,
       message: error.message,
+    });
+  }
+}
+
+export async function generateResumePDF(req, res) {
+  try {
+    const { resumeId } = req.params;
+
+    // Buscar dados completos do currículo usando sua função existente
+    const resumeData = await getCompleteResume(resumeId);
+
+    if (!resumeData) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Currículo não encontrado' 
+      });
+    }
+
+    // Preparar dados para o template (similar ao generateResume)
+    const templateData = {
+      fullName: resumeData.personalDetails?.fullname || '',
+      cityCountry: `${resumeData.personalDetails?.location?.city || ''}, ${resumeData.personalDetails?.location?.country || ''}`,
+      citizenship: resumeData.personalDetails?.location?.country || '',
+      phone: resumeData.personalDetails?.phone || '',
+      email: resumeData.personalDetails?.email || '',
+      website: resumeData.personalDetails?.website || '#',
+      github: resumeData.personalDetails?.github || '#',
+      linkedin: resumeData.personalDetails?.linkedin || '#',
+      
+      experiences: resumeData.experiences?.map(exp => ({
+        jobTitle: exp.jobDegree || '',
+        company: exp.company || '',
+        startMonth: exp.period?.split(' - ')[0] || '',
+        endMonth: exp.period?.split(' - ')[1] || '',
+        location: '',
+        responsibilities: exp.description ? [{ text: exp.description }] : []
+      })) || [],
+      
+      education: resumeData.education?.map(edu => ({
+        degree: edu.degree || '',
+        university: edu.institution || '',
+        startMonth: edu.period?.split(' - ')[0] || '',
+        endMonth: edu.period?.split(' - ')[1] || ''
+      })) || [],
+      
+      skills: resumeData.skills?.map(skill => ({
+        name: skill.skillName || '',
+        level: ''
+      })) || [],
+      
+      projects: []
+    };
+
+    // Renderizar template usando sua função existente
+    const result = await renderTemplate(
+      resumeData.resume.templateId, 
+      templateData
+    );
+
+    // Montar HTML completo
+    const fullHTML = `
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <style>${result.css}</style>
+        </head>
+        <body>
+          ${result.html}
+        </body>
+      </html>
+    `;
+
+    // Gerar PDF com Puppeteer
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    
+    const page = await browser.newPage();
+    await page.setContent(fullHTML, { 
+      waitUntil: 'networkidle0',
+      timeout: 30000 
+    });
+    
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: {
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+        left: '10mm'
+      },
+      preferCSSPageSize: true
+    });
+    
+    await browser.close();
+
+    // Definir nome do arquivo
+    const fileName = resumeData.personalDetails?.fullname 
+      ? `curriculo_${resumeData.personalDetails.fullname.replace(/\s+/g, '_')}.pdf`
+      : `curriculo_${resumeId}.pdf`;
+
+    // Enviar PDF como download
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.send(pdfBuffer);
+
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Erro ao gerar PDF',
+      error: error.message 
     });
   }
 }

@@ -20,6 +20,46 @@ export async function getResumes() {
   }
 }
 
+export const downloadResumePDF = async (resumeId) => {
+  try {
+    
+    const response = await fetch(`http://localhost:5000/download-pdf/${resumeId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include"
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao baixar PDF');
+    }
+
+    // Pegar o nome do arquivo do header
+    const contentDisposition = response.headers.get('Content-Disposition');
+    const fileNameMatch = contentDisposition?.match(/filename="(.+)"/);
+    const fileName = fileNameMatch ? fileNameMatch[1] : 'curriculo.pdf';
+
+    // Converter resposta em blob
+    const blob = await response.blob();
+
+    // Criar link temporário e fazer download
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    return { success: true, fileName };
+  } catch (error) {
+    console.error('Erro ao baixar PDF:', error);
+    return { success: false, error: error.message };
+  }
+};
+
 
 export async function getPersonal() {
   try {

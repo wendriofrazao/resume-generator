@@ -5,6 +5,7 @@ import {getResumesByUser, updateResumeTemplateController} from '../controllers/r
 // create imports
 import {
     createResume, 
+    generateResumePDF,
     saveExperienceWorkController, 
     savePersonalDetails, 
     saveEducationController,
@@ -36,6 +37,7 @@ const resumeRouter = express.Router();
 resumeRouter.get("/get-all-resumes", checkAuth, getResumesByUser)
 
 resumeRouter.get("/get-resume-complete/:resumeId", checkAuth, getResumeCompleteController);
+resumeRouter.get("/download-pdf/:resumeId", checkAuth, generateResumePDF);
 
 resumeRouter.get("/get-personal", checkAuth, getResumesByUser)
 resumeRouter.get("/get-experience", checkAuth, getResumesByUser)

@@ -12,7 +12,8 @@ import {
   editPersonal,
   editSkills,
   editExperience,
-  getCompleteResume
+  getCompleteResume,
+  downloadResumePDF
 } from "../service/ResumeService.jsx";
 
 
@@ -64,6 +65,17 @@ async PersonalResumeProvide(personalData) {
       return { ok: false, message: err.message };
     }
   }
+
+   async downloadPDF(resumeId) {
+    try {
+      const response = await downloadResumePDF(resumeId);
+      return response;
+    } catch (error) {
+      console.error('Erro ao baixar PDF:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
   
   // remoções hooks
   

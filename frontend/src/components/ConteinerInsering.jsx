@@ -20,6 +20,7 @@ export function InseringDatasResume() {
   const [availableTemplates, setAvailableTemplates] = useState([]);
   const [templateHTML, setTemplateHTML] = useState("");
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const resume = new ResumeProvide();
   const { resumeId } = useParams();
@@ -171,6 +172,30 @@ export function InseringDatasResume() {
       }
     }
   };
+
+// ============ HANDLER DE DOWNLOAD ============
+  const handleDownloadPDF = async () => {
+  if (!resumeId) {
+    alert('ID do currículo não encontrado.');
+    return;
+  }
+
+  setIsDownloading(true);
+  try {
+    const result = await resume.downloadPDF(resumeId);
+    
+    if (result.success) {
+      console.log('✅ PDF baixado com sucesso:', result.fileName);
+    } else {
+      alert('Erro ao baixar PDF. Tente novamente.');
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao baixar PDF.');
+  } finally {
+    setIsDownloading(false);
+  }
+};
 
   // ============ HANDLERS DE ATUALIZAÇÃO ============
   const updatePersonalInfo = (campo, valor) => {
@@ -466,10 +491,16 @@ export function InseringDatasResume() {
             <FileText className="h-8 w-8 text-primary" />
             <h1 className="text-3xl font-bold">Crie seu Currículo</h1>
           </div>
-          <Button className="cursor-pointer" variant="hero" size="lg">
-            <Download className="mr-2 h-5 w-5" />
-            Baixar PDF
-          </Button>
+          <Button 
+          className="cursor-pointer" 
+          variant="hero" 
+          size="lg"
+          onClick={handleDownloadPDF}
+          disabled={isDownloading}
+        >
+          <Download className="mr-2 h-5 w-5" />
+          {isDownloading ? 'Gerando PDF...' : 'Baixar PDF'}
+        </Button>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
