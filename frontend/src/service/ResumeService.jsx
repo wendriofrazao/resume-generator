@@ -87,9 +87,27 @@ export async function deleteResume(id) {
 
 
 // create a personal detail
-export async function personalDetails(fullname, email, phone, city, state, country, summary, resumeId) {
+export async function personalDetails(personalData) {
   try {
-    const response = await fetch(`http://localhost:5000/create-personalDetails/${resumeId}`, {
+    const {
+      fullname,
+      email,
+      phone,
+      city,
+      state,
+      country,
+      summary,
+      website = "",
+      github = "",
+      linkedin = "",
+      resumeId
+    } = personalData;
+
+    if (!resumeId) {
+      throw new Error("resumeId é obrigatório no service");
+    }
+
+    const response = await fetch(`${API_URL}/create-personalDetails/${resumeId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -98,7 +116,10 @@ export async function personalDetails(fullname, email, phone, city, state, count
         email,
         phone,
         summary,
-        location: { city, state, country } 
+        website,
+        github,
+        linkedin,
+        location: { city, state, country }, 
       }),
     });
 
@@ -118,7 +139,7 @@ export async function experienceWork(jobDegree, company, description, period, re
   const res = await fetch(`${API_URL}/create-experienceWork/${resumeId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ jobDegree, company, description, period }),
+    body: JSON.stringify({ jobDegree, company, description, period, resumeId }),
     credentials: "include", 
   });
 
@@ -133,7 +154,7 @@ export async function education(degree, institution, period, resumeId) {
   const res = await fetch(`${API_URL}/create-education/${resumeId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ degree, institution, period, period }),
+    body: JSON.stringify({ degree, institution, period, resumeId}),
     credentials: "include", 
   });
 
@@ -256,6 +277,28 @@ export async function editResume(resumeId) {
   }
 }
 
+export async function updateResumeTemplate(resumeId, templateId) {
+  try {
+    const response = await fetch(`http://localhost:5000/update-resume-template/${resumeId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ templateId }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Erro ${response.status}: ${errText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Erro ao atualizar template do resume:", error.message);
+    throw error;
+  }
+}
 
 export async function editPersonal(resumeId, personalDetailsId, data) {
   const res = await fetch(`${API_URL}/updated-personalDetails/${resumeId}/${personalDetailsId}`, {

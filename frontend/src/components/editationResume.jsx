@@ -12,60 +12,21 @@ import { FileText, User, Briefcase, GraduationCap, Award, Download, Eye } from "
 import { ResumePreview } from "./ResumePreview";
 import { useParams } from "react-router-dom";
 import { ResumeProvide } from "../hooks/resumeHook";
+import { updateResumeTemplate } from "../service/ResumeService.jsx";
 
 export function EditationDatasResume() {
   const [tabValue, setTabValue] = useState("personal");
-  // const [personalSent, setPersonalSent] = useState(false); 
-  // const [experienceSent, setExperienceSent] = useState(false); 
-  // const [educationSent, setEducationSent] = useState(false); 
-  const [newSkill, setNewSkill] = useState("");
-  // const [skillsSent, setSkillsSent] = useState(false); 
-
   const [selectedTemplateId, setSelectedTemplateId] = useState("");
   const [availableTemplates, setAvailableTemplates] = useState([]);
   const [templateHTML, setTemplateHTML] = useState("");
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
 
-
   const resume = new ResumeProvide();
   const { resumeId } = useParams();
 
-  // personal
-  const [fullname, setFullname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [summary, setSummary] = useState("");
-
-  const [personalDetailId, setPersonalDetailId] = useState(null);
-
-  // experiencia
-  const [jobDegree, setJobDegree] = useState("");
-  const [company, setCompany] = useState("");
-  const [description, setDescription] = useState("");
-  const [period, setPeriod] = useState("");
-
-  const [experienceId, setExperienceId] = useState(null);
-
-
-  // educação
-  const [degreeEdu, setDegreeEdu] = useState("");
-  const [institutionEdu, setinstitutionEdu] = useState("");
-  const [periodEdu, setPeriodEdu] = useState("");
-
-  const [educationId, setEducationId] = useState(null);
-
-
-  // habilidade
-  const [skillName, setSkillName] = useState("");
-
-  const [skillId, setSkillId] = useState(null);
-
-  // atualizar os dados no card apresentativo
   const [resumeData, setResumeData] = useState({
     personalInfo: {
+      id: null,
       fullname: "",
       email: "",
       phone: "",
@@ -73,451 +34,187 @@ export function EditationDatasResume() {
       state: "",
       country: "",
       summary: "",
+      website: "",
+      github: "",
+      linkedin: ""
     },
     experiences: [],
     education: [],
     skills: [],
   });
 
+  // ============ CARREGAR DADOS DO CURRÍCULO ============
+  useEffect(() => {
+    loadAvailableTemplates();
+    loadResumeData();
+  }, [resumeId]);
 
-
-// handles
-
-useEffect(() => {
-  loadAvailableTemplates();
-}, []);
-
-const loadAvailableTemplates = async () => {
-  try {
-    
-    const response = await resume.getAvailableTemplates();
-    
-    
-    if (response.ok) {
-      setAvailableTemplates(response.data);
-      
-    } else {
-    }
-  } catch (error) {
-  }
-};
-
-
-  const loadTemplatePreview = async () => {
-  if (!selectedTemplateId) return;
-  
-  setIsLoadingTemplate(true);
-  try {
-    
-    const templateResponse = await resume.getTemplatePreview(selectedTemplateId);
-    
-    if (!templateResponse.ok) {
-      return;
-    }
-
-    const template = templateResponse.data;
-    
-    const templateData = prepareTemplateData(resumeData);
-
-
-    const compiledTemplate = Handlebars.compile(template.htmlContent);
-    const renderedHtml = compiledTemplate(templateData);
-    
-    const fullHTML = `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <style>${template.cssContent}</style>
-        </head>
-        <body>
-          ${renderedHtml}
-        </body>
-      </html>
-    `;
-
-    setTemplateHTML(fullHTML);
-    
-  } catch (error) {
-  } finally {
-    setIsLoadingTemplate(false);
-  }
-};
-
-const prepareTemplateData = (resumeData) => {
-  return {
-    fullName: resumeData.personalInfo?.fullname || "Seu Nome",
-    cityCountry: `${resumeData.personalInfo?.city || ""}, ${resumeData.personalInfo?.country || ""}`,
-    citizenship: resumeData.personalInfo?.country || "Brasil",
-    phone: resumeData.personalInfo?.phone || "(11) 99999-9999",
-    email: resumeData.personalInfo?.email || "seu@email.com",
-    website: resumeData.personalInfo?.website || "#",
-    github: resumeData.personalInfo?.github || "#",
-    linkedin: resumeData.personalInfo?.linkedin || "#",
-    
-    experiences: resumeData.experiences?.map(exp => ({
-      jobTitle: exp.title || exp.jobDegree || "Cargo",
-      company: exp.company || "Empresa",
-      location: exp.location || "Localização",
-      startMonth: exp.period?.split(' - ')[0] || "Data Início",
-      endMonth: exp.period?.split(' - ')[1] || "Data Fim",
-      responsibilities: exp.description ? [{ text: exp.description }] : []
-    })) || [],
-    
-    education: resumeData.education?.map(edu => ({
-      degree: edu.degree || "Curso",
-      university: edu.institution || "Instituição",
-      location: edu.location || "Localização",
-      startMonth: edu.period?.split(' - ')[0] || "Data Início",
-      endMonth: edu.period?.split(' - ')[1] || "Data Fim"
-    })) || [],
-    
-    skills: resumeData.skills?.map(skill => ({
-      name: typeof skill === 'string' ? skill : skill.skillName,
-      level: "Avançado"
-    })) || [],
-    
-    // Projetos (se necessário)
-    projects: []
-  };
-};
-
-useEffect(() => {
-  async function fetchResumeData() {
+  const loadAvailableTemplates = async () => {
     try {
-      const res = await resume.getResumeComplete(resumeId);
-      if (res.success && res.data) {
-        const { personalDetails, experiences, education, skills } = res.data;
-
-        // Salva IDs para edição posterior
-        if (experiences?.length > 0) setExperienceId(experiences[0]._id);
-        if (education?.length > 0) setEducationId(education[0]._id);
-        if (skills?.length > 0) setSkillId(skills[0]._id);
-
-        // Atualiza estados
-        setResumeData({
-          personalInfo: {
-            fullname: personalDetails?.fullname || "",
-            email: personalDetails?.email || "",
-            phone: personalDetails?.phone || "",
-            city: personalDetails?.location?.city || "",
-            state: personalDetails?.location?.state || "",
-            country: personalDetails?.location?.country || "",
-            summary: personalDetails?.summary || "",
-          },
-          experiences: experiences.map(exp => ({
-            id: exp._id,
-            jobDegree: exp.jobDegree,
-            company: exp.company,
-            period: exp.period,
-            description: exp.description,
-          })),
-          education: education.map(edu => ({
-            id: edu._id,
-            degree: edu.degree,
-            institution: edu.institution,
-            period: edu.period,
-          })),
-          skills: skills.map(skill => ({
-            id: skill._id,
-            skillName: skill.skillName,
-          })),
-        });
-
-        // Pessoal
-        if (personalDetails) {
-          setFullname(personalDetails.fullname || "");
-          setEmail(personalDetails.email || "");
-          setPhone(personalDetails.phone || "");
-          setCity(personalDetails.location?.city || "");
-          setState(personalDetails.location?.state || "");
-          setCountry(personalDetails.location?.country || "");
-          setSummary(personalDetails.summary || "");
-          setPersonalDetailId(personalDetails._id);
-        }
-
-        // Experiência (primeira)
-        if (experiences?.length > 0) {
-          const exp = experiences[0];
-          setJobDegree(exp.jobDegree || "");
-          setCompany(exp.company || "");
-          setDescription(exp.description || "");
-          setPeriod(exp.period || "");
-        }
-
-        // Educação (primeira)
-        if (education?.length > 0) {
-          const edu = education[0];
-          setDegreeEdu(edu.degree || "");
-          setinstitutionEdu(edu.institution || "");
-          setPeriodEdu(edu.period || "");
-        }
+      const response = await resume.getAvailableTemplates();
+      if (response.ok) {
+        setAvailableTemplates(response.data);
       }
     } catch (error) {
-      console.error("Erro ao carregar dados do currículo:", error);
+      console.error("Erro ao carregar templates:", error);
     }
+  };
+
+ const loadResumeData = async () => {
+  try {
+    const res = await resume.getResumeComplete(resumeId);
+    if (res.success && res.data) {
+      const { personalDetails, experiences, education, skills, resume: resumeInfo } = res.data;
+
+      if (resumeInfo?.templateId) {
+        const templateId = typeof resumeInfo.templateId === 'object' 
+          ? resumeInfo.templateId._id 
+          : resumeInfo.templateId;
+        
+        setSelectedTemplateId(templateId);
+        console.log("✅ Template salvo carregado:", templateId);
+      }
+
+      setResumeData({
+        personalInfo: {
+          id: personalDetails?._id || null,
+          fullname: personalDetails?.fullname || "",
+          email: personalDetails?.email || "",
+          phone: personalDetails?.phone || "",
+          city: personalDetails?.location?.city || "",
+          state: personalDetails?.location?.state || "",
+          country: personalDetails?.location?.country || "",
+          summary: personalDetails?.summary || "",
+          website: personalDetails?.website || "",
+          github: personalDetails?.github || "",
+          linkedin: personalDetails?.linkedin || "",
+        },
+        experiences: experiences?.map(exp => ({
+          id: exp._id,
+          backendId: exp._id,
+          jobDegree: exp.jobDegree || "",
+          company: exp.company || "",
+          period: exp.period || "",
+          description: exp.description || "",
+          saved: true
+        })) || [],
+        education: education?.map(edu => ({
+          id: edu._id,
+          backendId: edu._id,
+          degree: edu.degree || "",
+          institution: edu.institution || "",
+          period: edu.period || "",
+          saved: true
+        })) || [],
+        skills: skills?.map(skill => ({
+          id: skill._id,
+          backendId: skill._id,
+          skillName: skill.skillName || ""
+        })) || [],
+      });
+
+      console.log("✅ Dados carregados com sucesso");
+    }
+  } catch (error) {
+    console.error("❌ Erro ao carregar dados do currículo:", error);
   }
+};
 
-  fetchResumeData();
-}, [resumeId]);
-
-
-useEffect(() => {
-  if (selectedTemplateId) {
-    const timeoutId = setTimeout(() => {
-      loadTemplatePreview();
-    }, 300);
+  // ============ TEMPLATE PREVIEW ============
+  const loadTemplatePreview = async () => {
+    if (!selectedTemplateId) return;
     
-    return () => clearTimeout(timeoutId);
-  } else {
-    setTemplateHTML("");
-  }
-}, [selectedTemplateId, resumeData]); 
-
-  // dados pessoais
-  const HandlePersonalInfoEdit = async () => {
- if (!personalDetailId) return console.warn("Sem ID de dados pessoais.");
-
+    setIsLoadingTemplate(true);
     try {
-      console.log("Dados sendo atualizados pessoais para o backend...");
-      const response = await resume.EditationPersonal(
-        resumeId,
-        personalDetailId,
-        fullname,
-        email,
-        phone,
-        city,
-        state,
-        country,
-        summary
-      );
+      const templateResponse = await resume.getTemplatePreview(selectedTemplateId);
+      if (!templateResponse.ok) return;
 
-      if (response?.data?._id) {
-        console.log(" ID dos dados pessoais salvo:", response.data._id);
-      }
+      const template = templateResponse.data;
+      const templateData = prepareTemplateData(resumeData);
+      const compiledTemplate = Handlebars.compile(template.htmlContent);
+      const renderedHtml = compiledTemplate(templateData);
+      
+      const fullHTML = `
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <style>${template.cssContent}</style>
+          </head>
+          <body>
+            ${renderedHtml}
+          </body>
+        </html>
+      `;
 
-  
-      if (response?.ok || response?.success) {
-        console.log(" Dados pessoais atualizados com sucesso!");
-      } else {
-        console.error(" Erro ao atualizar dados pessoais:", response);
-      }
-    } catch (err) {
-      console.error(" Erro inesperado ao atualizar dados pessoais:", err);
+      setTemplateHTML(fullHTML);
+    } catch (error) {
+      console.error("Erro ao carregar preview:", error);
+    } finally {
+      setIsLoadingTemplate(false);
     }
   };
 
+  const prepareTemplateData = (resumeData) => {
+    return {
+      fullName: resumeData.personalInfo?.fullname || "Seu Nome",
+      cityCountry: `${resumeData.personalInfo?.city || ""}, ${resumeData.personalInfo?.country || ""}`,
+      phone: resumeData.personalInfo?.phone || "(11) 99999-9999",
+      email: resumeData.personalInfo?.email || "seu@email.com",
+      website: resumeData.personalInfo?.website || "#",
+      github: resumeData.personalInfo?.github || "#",
+      linkedin: resumeData.personalInfo?.linkedin || "#",
+      
+      experiences: resumeData.experiences?.map(exp => ({
+        jobTitle: exp.jobDegree || "Cargo",
+        company: exp.company || "Empresa",
+        startMonth: exp.period?.split(' - ')[0] || "Data Início",
+        endMonth: exp.period?.split(' - ')[1] || "Data Fim",
+        responsibilities: exp.description ? [{ text: exp.description }] : []
+      })) || [],
+      
+      education: resumeData.education?.map(edu => ({
+        degree: edu.degree || "Curso",
+        university: edu.institution || "Instituição",
+        startMonth: edu.period?.split(' - ')[0] || "Data Início",
+        endMonth: edu.period?.split(' - ')[1] || "Data Fim"
+      })) || [],
+      
+      skills: resumeData.skills?.map(skill => ({
+        name: skill.skillName || skill
+      })) || [],
+      
+      projects: []
+    };
+  };
 
-  // experiencia
-  const HandleExperienceWorkEdit = async (id) => {
-  try {
-    const currentExp = resumeData.experiences.find(e => e.id === id);
-    const response = await resume.EditationExperience(
-      resumeId,
-      id,
-      currentExp.jobDegree,
-      currentExp.company,
-      currentExp.description,
-      currentExp.period
-    );
-
-    if (response?.success) {
-      console.log(" Experiência atualizada com sucesso!");
-      setResumeData(prev => ({
-        ...prev,
-        experiences: prev.experiences.map(e =>
-          e.id === id ? { ...e, ...response.data } : e
-        ),
-      }));
+  useEffect(() => {
+    if (selectedTemplateId) {
+      const timeoutId = setTimeout(() => {
+        loadTemplatePreview();
+      }, 300);
+      return () => clearTimeout(timeoutId);
     } else {
-      console.error(" Falha ao atualizar experiência:", response);
+      setTemplateHTML("");
     }
-  } catch (err) {
-    console.error("Erro inesperado ao atualizar experiência:", err);
-  }
-  };
+  }, [selectedTemplateId, resumeData]);
 
-  // educação
-  const HandleEducationEdit = async (id) => {
-  try {
-    const currentEdu = resumeData.education.find(e => e.id === id);
-    const response = await resume.EditationEducation(
-      resumeId,
-      id,
-      currentEdu.degree,
-      currentEdu.institution,
-      currentEdu.period
-    );
-
-    if (response?.success) {
-      console.log(" Educação atualizada com sucesso!");
-    } else {
-      console.error(" Falha ao atualizar educação:", response);
-    }
-  } catch (err) {
-    console.error("Erro inesperado ao atualizar educação:", err);
-  }
-};
-
-  // habilidades
-    const HandleSkills = async () => {
-     if (!skillName) {
-      console.warn("Campos obrigatórios faltando.");
-      return;
-    }
-  if (!skillId) return console.warn("Sem ID da skill.");
-
-   try {
-      console.log("Enviando skill para o backend...");
-      const response = await resume.SkillsResumeProvide(skillName, resumeId);
-
-      if (response?.data?._id) {
-        console.log("Skill salva com ID:", response.data._id);
-
-        setResumeData((prev) => ({
-          ...prev,
-          skills: [...prev.skills, { id: response.data._id, skillName }],
-        }));
-      }
-
-      setSkillName(""); 
-    } catch (err) {
-      console.error("Erro inesperado ao enviar skill:", err);
-    }
-  };
-
-
-  const handleTabChange = (newTab) => {
+  // ============ HANDLER DE MUDANÇA DE TEMPLATE ============
+  const handleTemplateChange = async (newTemplateId) => {
+    setSelectedTemplateId(newTemplateId);
     
-    if (tabValue === "personal" && newTab !== "personal") {
-      HandlePersonalInfoEdit();
+    if (newTemplateId && resumeId) {
+      try {
+        await updateResumeTemplate(resumeId, newTemplateId);
+        console.log("✅ Template atualizado no currículo");
+      } catch (error) {
+        console.error("❌ Erro ao salvar template:", error);
+      }
     }
-
-    if (tabValue === "experience" && newTab !== "experience") {
-      // HandleExperienceWorkEdit();
-    }
-
-    if (tabValue === "education" && newTab !== "education") {
-    // HandleEducationEdit();
-    }
-
-    setTabValue(newTab);
   };
 
-
-  // --------------- remoção -------------------
-
-  const handleRemovePersonal = async () => {
-  if (!personalDetailId) {
-    console.warn(" Nenhum ID de dados pessoais encontrado!");
-    return;
-  }
-
-  try {
-    await resume.PersonalRemoveProvide(resumeId, personalDetailId);
-
-    setFullname("");
-    setEmail("");
-    setPhone("");
-    setCity("");
-    setState("");
-    setCountry("");
-    setSummary("");
-
-    setResumeData((prev) => ({
-      ...prev,
-      personalInfo: {
-        fullname: "",
-        email: "",
-        phone: "",
-        city: "",
-        state: "",
-        country: "",
-        summary: "",
-      },
-    }));
-
-    console.log(" Dados pessoais removidos com sucesso!");
-  } catch (error) {
-    console.error(" Erro ao remover dados pessoais:", error);
-  }
-};
-
-// remove a aba de experiencias
-  const handleRemoveExperienceWork = async () => {
-  if (!experienceId) {
-    console.warn(" Nenhum ID de dados pessoais encontrado!");
-    return;
-  }
-
-  try {
-    await resume.ExperienceRemoveProvide(resumeId, experienceId);
-
-    setJobDegree("");
-    setCompany("");
-    setPeriod("");
-    setDescription("");
-
-    setResumeData((prev) => ({
-      ...prev,
-      experiences: prev.experiences.filter((e) => e.id !== experienceId)
-    }));
-
-    console.log(" Dados de experiências removidos com sucesso!");
-  } catch (error) {
-    console.error(" Erro ao remover dados pessoais:", error);
-  }
-};
-
-// remoção da aba de educação
-  const handleRemoveEducation = async () => {
-  if (!educationId) {
-    console.warn(" Nenhum ID de dados pessoais encontrado!");
-    return;
-  }
-
-  try {
-    await resume.EducationRemoveProvide(resumeId, educationId);
-
-    setDegreeEdu("");
-    setinstitutionEdu("");
-    setPeriodEdu("");
-
-    setResumeData((prev) => ({
-      ...prev,
-      education: prev.education.filter((e) => e.id !== educationId)
-    }));
-
-    console.log(" Dados educacionais removidos com sucesso!");
-  } catch (error) {
-    console.error(" Erro ao remover dados pessoais:", error);
-  }
-};
-
-  // remoção na aba de habilidades
-  const handleRemoveSkills = async (skillId) => {
-  if (!skillId) {
-    console.warn("Nenhum ID de skill encontrado!");
-    return;
-  }
-
-  try {
-    await resume.SkillsRemoveProvide(resumeId, skillId);
-
-    setResumeData((prev) => ({
-      ...prev,
-      skills: prev.skills.filter((skill) => skill.id !== skillId),
-    }));
-
-    console.log("Skill removida com sucesso!");
-  } catch (error) {
-    console.error("Erro ao remover skill:", error);
-  }
-};
-
-
-  // Funções das outras seções/preview
+  // ============ ATUALIZAR INFORMAÇÕES PESSOAIS ============
   const updatePersonalInfo = (campo, valor) => {
     setResumeData((prev) => ({
       ...prev,
@@ -528,12 +225,52 @@ useEffect(() => {
     }));
   };
 
+  const HandlePersonalInfoEdit = async () => {
+    if (!resumeData.personalInfo.id) {
+      console.warn("⚠ Sem ID de dados pessoais.");
+      return;
+    }
+
+    try {
+      console.log("📤 Atualizando dados pessoais...");
+      
+      const response = await resume.EditationPersonal(
+        resumeId,
+        resumeData.personalInfo.id,
+        resumeData.personalInfo.fullname,
+        resumeData.personalInfo.email,
+        resumeData.personalInfo.phone,
+        resumeData.personalInfo.city,
+        resumeData.personalInfo.state,
+        resumeData.personalInfo.country,
+        resumeData.personalInfo.summary,
+        resumeData.personalInfo.website,
+        resumeData.personalInfo.github,
+        resumeData.personalInfo.linkedin
+      );
+
+      if (response?.success) {
+        console.log("✅ Dados pessoais atualizados com sucesso!");
+      }
+    } catch (err) {
+      console.error("❌ Erro ao atualizar dados pessoais:", err);
+    }
+  };
+
+  // ============ EXPERIÊNCIAS ============
   const addExperience = () => {
     setResumeData((prev) => ({
       ...prev,
       experiences: [
         ...prev.experiences,
-        { id: Date.now(), title: "", company: "", period: "", description: "" },
+        { 
+          id: `temp_${Date.now()}`,
+          jobDegree: "", 
+          company: "", 
+          period: "", 
+          description: "",
+          saved: false
+        },
       ],
     }));
   };
@@ -547,19 +284,94 @@ useEffect(() => {
     }));
   };
 
-  const removeExperience = (id) => {
+  const HandleExperienceSave = async (expId) => {
+    const experience = resumeData.experiences.find(e => e.id === expId);
+    
+    if (!experience) {
+      console.error("❌ Experiência não encontrada");
+      return;
+    }
+
+    if (!experience.backendId) {
+      try {
+        console.log("📤 Criando nova experiência...");
+        const response = await resume.ExperienceResumeProvide(
+          experience.jobDegree,
+          experience.company,
+          experience.description,
+          experience.period,
+          resumeId
+        );
+
+        if (response?.data?._id) {
+          console.log("✅ Experiência criada com ID:", response.data._id);
+          setResumeData(prev => ({
+            ...prev,
+            experiences: prev.experiences.map(exp =>
+              exp.id === expId ? { 
+                ...exp, 
+                id: response.data._id,
+                backendId: response.data._id, 
+                saved: true 
+              } : exp
+            )
+          }));
+        }
+      } catch (err) {
+        console.error("❌ Erro ao criar experiência:", err);
+      }
+    } else {
+      try {
+        console.log("📤 Atualizando experiência existente...");
+        const response = await resume.EditationExperience(
+          resumeId,
+          experience.backendId,
+          experience.jobDegree,
+          experience.company,
+          experience.description,
+          experience.period
+        );
+
+        if (response?.success) {
+          console.log("✅ Experiência atualizada com sucesso!");
+        }
+      } catch (err) {
+        console.error("❌ Erro ao atualizar experiência:", err);
+      }
+    }
+  };
+
+  const handleRemoveExperience = async (expId) => {
+    const experience = resumeData.experiences.find(e => e.id === expId);
+    
+    if (experience?.backendId) {
+      try {
+        await resume.ExperienceRemoveProvide(resumeId, experience.backendId);
+        console.log("✅ Experiência removida do backend");
+      } catch (error) {
+        console.error("❌ Erro ao remover experiência:", error);
+      }
+    }
+
     setResumeData((prev) => ({
       ...prev,
-      experiences: prev.experiences.filter((exp) => exp.id !== id),
+      experiences: prev.experiences.filter((exp) => exp.id !== expId),
     }));
   };
 
+  // ============ EDUCAÇÃO ============
   const addEducation = () => {
     setResumeData((prev) => ({
       ...prev,
       education: [
         ...prev.education,
-        { id: Date.now(), degree: "", institution: "", period: "" },
+        { 
+          id: `temp_${Date.now()}`,
+          degree: "", 
+          institution: "", 
+          period: "",
+          saved: false
+        },
       ],
     }));
   };
@@ -573,30 +385,162 @@ useEffect(() => {
     }));
   };
 
-  const removeEducation = (id) => {
+  const HandleEducationSave = async (eduId) => {
+    const education = resumeData.education.find(e => e.id === eduId);
+    
+    if (!education) {
+      console.error("❌ Educação não encontrada");
+      return;
+    }
+
+    if (!education.backendId) {
+      try {
+        console.log("📤 Criando nova educação...");
+        const response = await resume.EducationResumeProvide(
+          education.degree,
+          education.institution,
+          education.period,
+          resumeId
+        );
+
+        if (response?.data?._id) {
+          console.log("✅ Educação criada com ID:", response.data._id);
+          setResumeData(prev => ({
+            ...prev,
+            education: prev.education.map(edu =>
+              edu.id === eduId ? { 
+                ...edu, 
+                id: response.data._id,
+                backendId: response.data._id, 
+                saved: true 
+              } : edu
+            )
+          }));
+        }
+      } catch (err) {
+        console.error("❌ Erro ao criar educação:", err);
+      }
+    } else {
+      try {
+        console.log("📤 Atualizando educação existente...");
+        const response = await resume.EditationEducation(
+          resumeId,
+          education.backendId,
+          education.degree,
+          education.institution,
+          education.period
+        );
+
+        if (response?.success) {
+          console.log("✅ Educação atualizada com sucesso!");
+        }
+      } catch (err) {
+        console.error("❌ Erro ao atualizar educação:", err);
+      }
+    }
+  };
+
+  const handleRemoveEducation = async (eduId) => {
+    const education = resumeData.education.find(e => e.id === eduId);
+    
+    if (education?.backendId) {
+      try {
+        await resume.EducationRemoveProvide(resumeId, education.backendId);
+        console.log("✅ Educação removida do backend");
+      } catch (error) {
+        console.error("❌ Erro ao remover educação:", error);
+      }
+    }
+
     setResumeData((prev) => ({
       ...prev,
-      education: prev.education.filter((edu) => edu.id !== id),
+      education: prev.education.filter((edu) => edu.id !== eduId),
     }));
   };
 
-  const addSkill = () => {
-    if (!newSkill.trim()) return;
-    setResumeData((prev) => ({
-      ...prev,
-      skills: [...prev.skills, newSkill.trim()],
-    }));
-    setNewSkill("");
+  // ============ SKILLS ============
+  const HandleSkills = async (skillName) => {
+    if (!skillName.trim()) {
+      console.warn("⚠ Skill vazia");
+      return;
+    }
+
+    try {
+      console.log("📤 Criando skill:", skillName);
+      const response = await resume.SkillsResumeProvide(skillName, resumeId);
+
+      if (response?.data?._id) {
+        console.log("✅ Skill criada com ID:", response.data._id);
+        setResumeData((prev) => ({
+          ...prev,
+          skills: [...prev.skills, { 
+            id: response.data._id,
+            backendId: response.data._id, 
+            skillName 
+          }],
+        }));
+      }
+    } catch (err) {
+      console.error("❌ Erro ao criar skill:", err);
+    }
   };
 
-  const removeSkill = (index) => {
+  const handleRemoveSkills = async (skillId) => {
+    const skill = resumeData.skills.find(s => s.id === skillId);
+    
+    if (skill?.backendId) {
+      try {
+        await resume.SkillsRemoveProvide(resumeId, skill.backendId);
+        console.log("✅ Skill removida do backend");
+      } catch (error) {
+        console.error("❌ Erro ao remover skill:", error);
+      }
+    }
+
     setResumeData((prev) => ({
       ...prev,
-      skills: prev.skills.filter((_, i) => i !== index),
+      skills: prev.skills.filter((s) => s.id !== skillId),
     }));
   };
 
-   return (
+  // ============ LIMPAR DADOS PESSOAIS ============
+  const handleRemovePersonal = async () => {
+    if (!resumeData.personalInfo.id) {
+      console.warn("⚠ Nenhum ID de dados pessoais encontrado!");
+      return;
+    }
+
+    try {
+      await resume.PersonalRemoveProvide(resumeId, resumeData.personalInfo.id);
+      
+      setResumeData((prev) => ({
+        ...prev,
+        personalInfo: {
+          id: null,
+          fullname: "",
+          email: "",
+          phone: "",
+          city: "",
+          state: "",
+          country: "",
+          summary: "",
+          website: "",
+          github: "",
+          linkedin: ""
+        },
+      }));
+
+      console.log("✅ Dados pessoais removidos com sucesso!");
+    } catch (error) {
+      console.error("❌ Erro ao remover dados pessoais:", error);
+    }
+  };
+
+  const handleTabChange = (newTab) => {
+    setTabValue(newTab);
+  };
+
+  return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 flex items-center justify-between">
@@ -611,168 +555,177 @@ useEffect(() => {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          {/* Insering Form */}
           <div className="space-y-6">
             <div className="w-full max-w-3xl mx-auto space-y-6">
               {/* Seletor de Template */}
               <Card className="p-4 shadow-lg">
-  <div className="flex items-center justify-between">
-    <div className="flex items-center gap-2">
-      <Eye className="h-4 w-4 text-primary" />
-      <Label htmlFor="template-select" className="font-semibold">
-        Escolher Template:
-      </Label>
-    </div>
-    <select
-      id="template-select"
-      className="border rounded-md p-2 text-sm bg-white flex-1 max-w-[200px]"
-      value={selectedTemplateId}
-      onChange={(e) => {
-        setSelectedTemplateId(e.target.value);
-      }}
-    >
-      <option value="">Preview Padrão</option>
-      {availableTemplates.map(template => (
-        <option key={template._id} value={template._id}>
-          {template.name}
-        </option>
-      ))}
-    </select>
-  </div>
-  {isLoadingTemplate && (
-    <p className="text-sm text-muted-foreground mt-2">
-      ⚡ Atualizando preview...
-    </p>
-  )}
-</Card>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Eye className="h-4 w-4 text-primary" />
+                    <Label htmlFor="template-select" className="font-semibold">
+                      Escolher Template:
+                    </Label>
+                  </div>
+                  <select
+                    id="template-select"
+                    className="border rounded-md p-2 text-sm bg-white flex-1 max-w-[200px]"
+                    value={selectedTemplateId}
+                    onChange={(e) => handleTemplateChange(e.target.value)}
+                  >
+                    <option value="">Preview Padrão</option>
+                    {availableTemplates.map(template => (
+                      <option key={template._id} value={template._id}>
+                        {template.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {isLoadingTemplate && (
+                  <p className="text-sm text-muted-foreground mt-2">
+                    ⚡ Atualizando preview...
+                  </p>
+                )}
+              </Card>
 
-              {/* Cabeçalho das abas */}
+              {/* Abas */}
               <div className="flex w-full justify-between bg-muted p-1 rounded-lg shadow-sm">
                 <TabsTrigger value="personal" valueActive={tabValue} setValue={handleTabChange}>
                   <User className="h-4 w-4" />
                   Pessoal
                 </TabsTrigger>
-
                 <TabsTrigger value="experience" valueActive={tabValue} setValue={handleTabChange}>
                   <Briefcase className="h-4 w-4" />
                   Experiência
                 </TabsTrigger>
-
                 <TabsTrigger value="education" valueActive={tabValue} setValue={handleTabChange}>
                   <GraduationCap className="h-4 w-4" />
                   Educação
                 </TabsTrigger>
-
                 <TabsTrigger value="skills" valueActive={tabValue} setValue={handleTabChange}>
                   <Award className="h-4 w-4" />
                   Habilidades
                 </TabsTrigger>
               </div>
 
-              {/* Conteúdo das abas */}
+              {/* PESSOAL */}
               {tabValue === "personal" && (
-                <Card className="p-6 shadow-lg space-y-4 animate-fadeIn">
+                <Card className="p-6 shadow-lg space-y-4">
                   <h2 className="text-lg font-semibold">Informações Pessoais</h2>
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="fullname">Nome Completo</Label>
                       <Input
                         id="fullname"
-                        value={fullname}
-                        onChange={(e) => {
-                          setFullname(e.target.value);
-                          updatePersonalInfo("fullname", e.target.value);
-                        }}
+                        value={resumeData.personalInfo.fullname}
+                        onChange={(e) => updatePersonalInfo("fullname", e.target.value)}
                         placeholder="João Silva"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          updatePersonalInfo("email", e.target.value);
-                        }}
-                        placeholder="joao@email.com"
-                      />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={resumeData.personalInfo.email}
+                          onChange={(e) => updatePersonalInfo("email", e.target.value)}
+                          placeholder="joao@email.com"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="phone">Telefone</Label>
+                        <Input
+                          id="phone"
+                          value={resumeData.personalInfo.phone}
+                          onChange={(e) => updatePersonalInfo("phone", e.target.value)}
+                          placeholder="(11) 99999-9999"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="phone">Telefone</Label>
-                      <Input
-                        id="phone"
-                        value={phone}
-                        onChange={(e) => {
-                          setPhone(e.target.value);
-                          updatePersonalInfo("phone", e.target.value);
-                        }}
-                        placeholder="(11) 99999-9999"
-                      />
+
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <Label htmlFor="city">Cidade</Label>
+                        <Input
+                          id="city"
+                          value={resumeData.personalInfo.city}
+                          onChange={(e) => updatePersonalInfo("city", e.target.value)}
+                          placeholder="São Paulo"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="state">Estado</Label>
+                        <Input
+                          id="state"
+                          value={resumeData.personalInfo.state}
+                          onChange={(e) => updatePersonalInfo("state", e.target.value)}
+                          placeholder="SP"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="country">País</Label>
+                        <Input
+                          id="country"
+                          value={resumeData.personalInfo.country}
+                          onChange={(e) => updatePersonalInfo("country", e.target.value)}
+                          placeholder="Brasil"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="city">Cidade</Label>
-                      <Input
-                        id="city"
-                        value={city}
-                        onChange={(e) => {
-                          setCity(e.target.value);
-                          updatePersonalInfo("city", e.target.value);
-                        }}
-                        placeholder="São Paulo"
-                      />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="website">Website</Label>
+                        <Input
+                          id="website"
+                          value={resumeData.personalInfo.website}
+                          onChange={(e) => updatePersonalInfo("website", e.target.value)}
+                          placeholder="https://meusite.com"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="github">GitHub</Label>
+                        <Input
+                          id="github"
+                          value={resumeData.personalInfo.github}
+                          onChange={(e) => updatePersonalInfo("github", e.target.value)}
+                          placeholder="https://github.com/seuusuario"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="linkedin">LinkedIn</Label>
+                        <Input
+                          id="linkedin"
+                          value={resumeData.personalInfo.linkedin}
+                          onChange={(e) => updatePersonalInfo("linkedin", e.target.value)}
+                          placeholder="https://linkedin.com/in/seuperfil"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="state">Estado</Label>
-                      <Input
-                        id="state"
-                        value={state}
-                        onChange={(e) => {
-                          setState(e.target.value);
-                          updatePersonalInfo("state", e.target.value);
-                        }}
-                        placeholder="SP"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="country">País</Label>
-                      <Input
-                        id="country"
-                        value={country}
-                        onChange={(e) => {
-                          setCountry(e.target.value);
-                          updatePersonalInfo("country", e.target.value);
-                        }}
-                        placeholder="Brasil"
-                      />
-                    </div>
+
                     <div>
                       <Label htmlFor="summary">Resumo Profissional</Label>
                       <Textarea
                         id="summary"
-                        value={summary}
-                        onChange={(e) => {
-                          setSummary(e.target.value);
-                          updatePersonalInfo("summary", e.target.value);
-                        }}
+                        value={resumeData.personalInfo.summary}
+                        onChange={(e) => updatePersonalInfo("summary", e.target.value)}
                         placeholder="Descreva brevemente sua experiência e objetivos..."
                         rows={4}
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end">
+
+                  <div className="flex justify-end gap-3">
                     <Button
                       onClick={HandlePersonalInfoEdit}
-                      type="button"
-                      className=" cursor-pointer mr-[2%] bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-md shadow-sm"
+                      className="bg-blue-500 hover:bg-blue-600"
                     >
-                      Salvar Dados
+                      Salvar Alterações
                     </Button>
                     <Button
                       onClick={handleRemovePersonal}
-                      type="button"
-                      className=" cursor-pointer bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-md shadow-sm transition"
+                      className="bg-red-500 hover:bg-red-600"
                     >
                       Limpar Dados
                     </Button>
@@ -780,78 +733,62 @@ useEffect(() => {
                 </Card>
               )}
 
-              {/* Experiência */}
+              {/* EXPERIÊNCIA */}
               {tabValue === "experience" && (
-                <Card className="p-6 shadow-lg space-y-4 animate-fadeIn">
+                <Card className="p-6 shadow-lg space-y-4">
                   <h2 className="text-lg font-semibold">Experiência Profissional</h2>
                   <div className="space-y-4">
                     {resumeData.experiences.map((exp) => (
                       <div key={exp.id} className="space-y-3 rounded-lg border p-4">
                         <div>
-                          <Label htmlFor="jobDegree">Cargo</Label>
+                          <Label>Cargo</Label>
                           <Input
-                            id="jobDegree"
                             value={exp.jobDegree}
-                            onChange={(e) => {
-                              updateExperience(exp.id ,"jobDegree", e.target.value)
-                            }}
+                            onChange={(e) => updateExperience(exp.id, "jobDegree", e.target.value)}
                             placeholder="Desenvolvedor Full Stack"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="company">Empresa</Label>
+                          <Label>Empresa</Label>
                           <Input
-                            id="company"
                             value={exp.company}
-                            onChange={(e) => {
-                              updateExperience(exp.id, "company", e.target.value);
-                            }}
+                            onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
                             placeholder="Empresa XYZ"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="period">Período</Label>
+                          <Label>Período</Label>
                           <Input
-                            id="period"
                             value={exp.period}
-                            onChange={(e) => {
-                              updateExperience(exp.id, "period", e.target.value)
-                            }}
+                            onChange={(e) => updateExperience(exp.id, "period", e.target.value)}
                             placeholder="Jan 2020 - Dez 2023"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="description">Descrição</Label>
+                          <Label>Descrição</Label>
                           <Textarea
-                            id="description"
                             value={exp.description}
-                            onChange={(e) => {
-                              updateExperience(exp.id, "description", e.target.value);
-                            }}
+                            onChange={(e) => updateExperience(exp.id, "description", e.target.value)}
                             placeholder="Descreva suas responsabilidades..."
                             rows={3}
                           />
                         </div>
-                        
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => {
-                            handleRemoveExperienceWork();
-                            removeExperience(exp.id)
-                          }}
-                        >
-                          Remover
-                        </Button>
-
-                        <Button
-                          className=" cursor-pointer ml-[65%] bg-blue-500 hover:bg-gray-500 text-white font-medium px-4 py-2 rounded-md shadow-sm"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => HandleExperienceWorkEdit(exp.id)}
-                        >
-                          Salvar Experiência
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => HandleExperienceSave(exp.id)}
+                            className="bg-blue-500 hover:bg-blue-600"
+                            size="sm"
+                          >
+                            {exp.saved ? "Atualizar" : "Salvar"}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleRemoveExperience(exp.id)}
+                          >
+                            Remover
+                          </Button>
+                        </div>
                       </div>
                     ))}
                     <Button onClick={addExperience} variant="outline" className="w-full">
@@ -861,65 +798,53 @@ useEffect(() => {
                 </Card>
               )}
 
-              {/* Educação */}
+              {/* EDUCAÇÃO */}
               {tabValue === "education" && (
-                <Card className="p-6 shadow-lg space-y-4 animate-fadeIn">
+                <Card className="p-6 shadow-lg space-y-4">
                   <h2 className="text-lg font-semibold">Educação</h2>
                   <div className="space-y-4">
                     {resumeData.education.map((edu) => (
                       <div key={edu.id} className="space-y-3 rounded-lg border p-4">
                         <div>
-                          <Label htmlFor="degree">Grau / Curso</Label>
+                          <Label>Grau / Curso</Label>
                           <Input
-                            id="degree"
                             value={edu.degree}
-                            onChange={(e) => {
-                              updateEducation(edu.id, "degree", e.target.value)
-                            }}
+                            onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
                             placeholder="Bacharelado em Ciência da Computação"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="institution">Instituição</Label>
+                          <Label>Instituição</Label>
                           <Input
-                            id="institution"
                             value={edu.institution}
-                            onChange={(e) => {
-                              updateEducation(edu.id, "institution", e.target.value);
-                            }}
+                            onChange={(e) => updateEducation(edu.id, "institution", e.target.value)}
                             placeholder="Universidade XYZ"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="period">Período</Label>
+                          <Label>Período</Label>
                           <Input
-                            id="period"
                             value={edu.period}
-                            onChange={(e) => {
-                              setPeriodEdu(e.target.value);
-                              updateEducation(edu.id, "period", e.target.value)
-                            }}
+                            onChange={(e) => updateEducation(edu.id, "period", e.target.value)}
                             placeholder="2016 - 2020"
                           />
                         </div>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => {
-                            handleRemoveEducation(educationId);
-                            removeEducation(edu.id);
-                          }}
-                        >
-                          Remover
-                        </Button>
-                        <Button
-                          className=" cursor-pointer ml-[66.9%] bg-blue-500 hover:bg-gray-500 text-white font-medium px-4 py-2 rounded-md shadow-sm"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => HandleEducationEdit(edu.id)}
-                        >
-                          Salvar Educação
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => HandleEducationSave(edu.id)}
+                            className="bg-blue-500 hover:bg-blue-600"
+                            size="sm"
+                          >
+                            {edu.saved ? "Atualizar" : "Salvar"}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleRemoveEducation(edu.id)}
+                          >
+                            Remover
+                          </Button>
+                        </div>
                       </div>
                     ))}
                     <Button onClick={addEducation} variant="outline" className="w-full">
@@ -929,51 +854,50 @@ useEffect(() => {
                 </Card>
               )}
 
-              {/* Habilidades */}
+              {/* SKILLS */}
               {tabValue === "skills" && (
-               <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    await HandleSkills();
-                  }}
-                >
-                  <Card className="p-6 shadow-lg space-y-4 animate-fadeIn">
-                    <h2 className="text-lg font-semibold">Habilidades</h2>
-
-                    {/* Campo de input e botão */}
+                <Card className="p-6 shadow-lg space-y-4">
+                  <h2 className="text-lg font-semibold">Habilidades</h2>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const input = e.target.elements.skillInput;
+                      HandleSkills(input.value);
+                      input.value = "";
+                    }}
+                  >
                     <div className="flex gap-2">
                       <Input
-                        value={skillName}
-                        onChange={(e) => setSkillName(e.target.value)}
+                        name="skillInput"
                         placeholder="Digite uma habilidade..."
                       />
                       <Button
                         type="submit"
-                        className="bg-[#4285F4] text-white font-medium px-4 py-2 rounded-md shadow-sm hover:bg-[#357AE8] transition cursor-pointer"
+                        className="bg-[#4285F4] hover:bg-[#357AE8]"
                       >
                         Adicionar
                       </Button>
                     </div>
-                    {/* Lista de skills adicionadas */}
-                    <div className="flex flex-wrap gap-2">
-                      {resumeData.skills.map((skill) => (
-                        <div
-                          key={skill.id}
-                          className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2"
+                  </form>
+
+                  <div className="flex flex-wrap gap-2">
+                    {resumeData.skills.map((skill) => (
+                      <div
+                        key={skill.id}
+                        className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2"
+                      >
+                        <span className="text-sm font-medium">{skill.skillName}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSkills(skill.id)}
+                          className="flex justify-center items-center border border-gray-800/45 bg-red-500/30 w-[20px] h-[20px] rounded-[20%] hover:bg-red-500/50 cursor-pointer"
                         >
-                          <span className="text-sm font-medium">{skill.skillName}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSkills(skill.id)}
-                            className="flex justify-center items-center border border-gray-800/45 bg-red-500/30 w-[20px] h-[20px] rounded-[20%] text-muted-foreground hover:text-destructive cursor-pointer"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                </form>
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
               )}
             </div>
           </div>

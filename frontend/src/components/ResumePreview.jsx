@@ -15,24 +15,53 @@ export function ResumePreview({ data, templateHTML, isLoading = false }) {
     );
   }
   
-  if (templateHTML) {
-    return (
-      <div className="w-full">
-        <Card className="p-4 shadow-xl rounded-xl bg-white border border-gray-200">
-          <h3 className="text-lg font-semibold mb-4 text-center">Preview do Template</h3>
-          <div className="border rounded-lg overflow-hidden">
+ if (templateHTML) {
+  const safeTemplateHTML = templateHTML.replace(
+    /<\/head>/i,
+    `<style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .cv, .container {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+      }
+    </style></head>`
+  );
+
+  return (
+    <div className="w-full overflow-x-hidden">
+      <Card className="p-4 shadow-xl rounded-xl bg-white border border-gray-200 overflow-hidden">
+        <h3 className="text-lg font-semibold mb-4 text-center">
+          Preview do Template
+        </h3>
+
+        <div className="rounded-lg overflow-hidden w-full">
+          <div className="relative w-full h-[800px] overflow-hidden">
             <iframe
               title="resume-preview"
-              srcDoc={templateHTML}
-              className="w-full h-[800px] border-0"
+              srcDoc={safeTemplateHTML}
+              className="absolute top-0 left-0 w-full h-full border-0"
               sandbox="allow-same-origin"
               loading="lazy"
+              style={{
+                overflow: "hidden",
+                width: "100%",
+                maxWidth: "100%",
+              }}
             />
           </div>
-        </Card>
-      </div>
-    );
-  }
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+
 
   return (
     <Card className="p-10 shadow-xl rounded-xl bg-white border border-gray-200">
@@ -69,7 +98,7 @@ export function ResumePreview({ data, templateHTML, isLoading = false }) {
           <div className="space-y-4">
             {experiences.map((exp) => (
               <div key={exp.id}>
-                <h4 className="font-medium text-gray-800">{exp.title || "Cargo"}</h4>
+                <h4 className="font-medium text-gray-800">{exp.jobDegree || "Cargo"}</h4>
                 <p className="text-sm text-gray-600 italic">
                   {exp.company || "Empresa"} — {exp.period || "Período"}
                 </p>

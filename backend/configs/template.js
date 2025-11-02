@@ -39,7 +39,7 @@ const cvTemplate = {
               <h3>{{this.company}}</h3>
               <span>{{this.startMonth}} – {{this.endMonth}}</span>
             </div>
-            <p class="role">{{this.jobTitle}} — {{this.location}}</p>
+            <p class="role">{{this.jobTitle}}</p>
             <ul>
               {{#each this.responsibilities}}
                 <li>{{this.text}}</li>
@@ -81,7 +81,7 @@ const cvTemplate = {
               <h3>{{this.university}}</h3>
               <span>{{this.startMonth}} – {{this.endMonth}}</span>
             </div>
-            <p class="degree">{{this.degree}} — {{this.location}}</p>
+            <p class="degree">{{this.degree}}</p>
           </div>
         {{/each}}
       </section>

@@ -14,7 +14,8 @@ import {
   personaDatail_Edit_Service, 
   skills_Edit_Service, 
   education_Edit_Service, 
-  experienceWork_Edit_Service  
+  experienceWork_Edit_Service,
+  updateResumeTemplateService
 } from '../services/resumeService.js';
 
 // imports deletes
@@ -173,24 +174,28 @@ export async function previewTemplate(req, res) {
 
  export async function savePersonalDetails(req, res) {
   try {
-
-    console.log("Params:", req.params);
-    console.log("Body:", req.body);
-
     const { resumeId } = req.params;
     const personalData = req.body;
-    
+
+    if (!resumeId || resumeId === "undefined") {
+      return res.status(400).json({
+        success: false,
+        error: "resumeId é obrigatório e não pode ser undefined"
+      });
+    }
+
     const result = await personalService(personalData, resumeId);
-    
+
+
     res.json({
       success: true,
       data: result,
-      message: 'Dados pessoais salvos com sucesso!'
+      message: "Dados pessoais salvos com sucesso!",
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 }
@@ -283,6 +288,27 @@ export async function updateResumeController(req, res) {
       success: true,
       data: result,
       message: 'currículo atualizado com sucesso!'
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+}
+
+
+export async function updateResumeTemplateController(req, res) {
+  try {
+    const { resumeId } = req.params;
+    const { templateId } = req.body;
+
+    const result = await updateResumeTemplateService(resumeId, templateId);
+
+    res.json({
+      success: true,
+      data: result,
+      message: 'Template atualizado com sucesso!'
     });
   } catch (error) {
     res.status(400).json({

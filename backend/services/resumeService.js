@@ -69,33 +69,40 @@ export async function getAllResumesByUserService(userId) {
 // insering collections in resume
 
 export async function personalService(data, resumeId) {
-    try {
-
+  try {
     const isVerifyResume = await findResumeById(resumeId);
-
-    if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');      
-
-        const requiredFields = ["fullname", "email", "phone", "summary"];
-
-  for (const field of requiredFields) {
-    if (!data[field]) throw new Error(`O campo "${field}" é obrigatório.`);
-  }
-
-  const { country, state, city } = data.location;
-
-    if (!city || !state || !country)  throw new Error('Os campos de localidade precisam ser preenchidos')
-
-  const newPersonal = await PersonalDetails.create({
-      resumeId,
-      ...data
-  });
-  return newPersonal;
-
-    } catch (error) {
-        throw error;
+    if (!isVerifyResume || isVerifyResume == '') {
+      throw new Error('Id não correspondido ao currículo');
     }
-        
+
+    const newPersonal = await PersonalDetails.create({
+      resumeId,
+      fullname: data.fullname,
+      email: data.email,
+      phone: data.phone,
+      summary: data.summary,
+      website: data.website || "",
+      github: data.github || "",
+      linkedin: data.linkedin || "",
+      location: {
+        city: data.location?.city || "",
+        state: data.location?.state || "",
+        country: data.location?.country || "",
+      },
+    });
+
+    return newPersonal;
+  } catch (error) {
+    console.error("Erro em personalService:", error);
+    throw error;
+  }
 }
+
+
+
+
+
+
 
 export async function experienceWorkService(data, resumeId) {
 
@@ -189,6 +196,24 @@ export async function resume_Edit_Service(resumeId, resumeData) {
 
   return await Resume.findByIdAndUpdate(resumeId, resumeData, { new: true, runValidators: true });
 }
+
+export async function updateResumeTemplateService(resumeId, templateId) {
+  try {
+    const resume = await Resume.findById(resumeId);
+    
+    if (!resume) {
+      throw new Error('Currículo não encontrado');
+    }
+
+    resume.templateId = templateId;
+    await resume.save();
+
+    return resume;
+  } catch (error) {
+    throw new Error(`Erro ao atualizar template: ${error.message}`);
+  }
+}
+
 
 export async function personaDatail_Edit_Service(personalDetailsId, resumeId, personal) {
   const existingDetails = await findPersonalById(resumeId, personalDetailsId)

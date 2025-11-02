@@ -25,15 +25,15 @@ import {
 export class ResumeProvide {
       
   // insering personal
-  async PersonalResumeProvide(fullname, email, phone, city, state, country, summary, resumeId) {
-    try {
-      const res = await personalDetails(fullname, email, phone, city, state, country, summary, resumeId);
-      console.log("Resposta da API:", res);
-      return res;
-    } catch (err) {
-      return { ok: false, message: err.message };
-    }
+async PersonalResumeProvide(personalData) {
+  try {
+    const res = await personalDetails(personalData);
+    console.log("Resposta da API:", res);
+    return res;
+  } catch (err) {
+    return { ok: false, message: err.message };
   }
+}
 
   // insering experience
   async ExperienceResumeProvide(jobDegree, company, description, period, resumeId) {
@@ -149,19 +149,22 @@ export class ResumeProvide {
   }
 
 
-  async EditationPersonal(resumeId, personalDetailsId, fullname, email, phone, city, state, country, summary) {
+  async EditationPersonal(resumeId, personalDetailsId, fullname, email, phone, city, state, country, summary, website, github, linkedin) {
     const data = {
-      resumeId,
-      personalDetailsId,
       fullname,
       email,
       phone,
       summary,
-      location: { city, state, country }
+      website,
+      github,
+      linkedin,
+      location: { city, state, country },
     };
+
     const res = await editPersonal(resumeId, personalDetailsId, data);
     return res;
   }
+
 
 
   async EditationExperience(resumeId, experienceId, jobDegree, company, description, period) {

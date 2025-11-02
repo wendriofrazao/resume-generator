@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkAuth} from '../middlewares/authMiddleware.js'
 
-import {getResumesByUser} from '../controllers/resumeController.js'
+import {getResumesByUser, updateResumeTemplateController} from '../controllers/resumeController.js'
 // create imports
 import {
     createResume, 
@@ -52,6 +52,7 @@ resumeRouter.post("/create-education/:resumeId", checkAuth, saveEducationControl
 
 // updated routes resumes
 resumeRouter.put("/updated-resume/:resumeId", checkAuth, updateResumeController);
+resumeRouter.put('/update-resume-template/:resumeId', checkAuth, updateResumeTemplateController);
 resumeRouter.put("/updated-personalDetails/:resumeId/:personalDetailsId", checkAuth, updatePersonalDetailsController);
 resumeRouter.put("/updated-experienceWork/:resumeId/:experienceId", checkAuth, updateExperienceController);
 resumeRouter.put("/updated-skills/:resumeId/:skillId", checkAuth, updateSkillController);

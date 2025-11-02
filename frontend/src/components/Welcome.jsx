@@ -39,12 +39,12 @@ export function Welcome() {
   const handleSaveTitle = async () => {
   if (!editTitle.trim() || !selectedResume) return;
   try {
-    await updateResumeTitle(selectedResume._id, editTitle); // ✅ _id correto
-    setEditModal(false);
+    await updateResumeTitle(selectedResume._id, editTitle);
+    setEditModal(false)
     setSelectedResume(null);
     fetchResumes();
   } catch (err) {
-    console.error("Erro ao atualizar título:", err.message); // ✅ sem erro de sintaxe
+    console.error("Erro ao atualizar título:", err.message); 
   }
 };
 

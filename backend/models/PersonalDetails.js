@@ -6,8 +6,8 @@ const personalDetailsSchema = new mongoose.Schema({
     ref: "Resume",
     required: true
   },
-  email: { type: String, required: true, lowercase: true, trim: true },
-  fullname: { type: String, required: true, trim: true },
+  email: { type: String, lowercase: true, trim: true },
+  fullname: { type: String, trim: true },
   phone: { type: String },
   location: {
     city: { type: String },
@@ -15,6 +15,10 @@ const personalDetailsSchema = new mongoose.Schema({
     country: { type: String }
   },
   summary: { type: String },
+
+  website: { type: String, trim: true, default: "" },
+  github:  { type: String, trim: true, default: "" },
+  linkedin: { type: String, trim: true, default: "" },
 }, { timestamps: true });
 
 export default mongoose.model("PersonalDetails", personalDetailsSchema);
