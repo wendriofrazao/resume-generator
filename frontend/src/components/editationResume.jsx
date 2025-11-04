@@ -255,16 +255,15 @@ export function EditationDatasResume() {
 
   const HandlePersonalInfoEdit = async () => {
    try {
-    console.log(" Editando dados pessoais:", resumeData.personalInfo);
-    console.log(" resumeId:", resumeId);
+    console.log("Editando dados pessoais:", resumeData.personalInfo);
+    console.log("resumeId:", resumeId);
 
-    // Verifica se o resumeId é válido
     if (!resumeId) {
-      console.error(" Nenhum resumeId encontrado na URL!");
+      console.error("Nenhum resumeId encontrado na URL!");
       return;
     }
 
-    // Se ainda não existe um registro pessoal, cria
+    // Se essa bomba ainda não tiver um registro pessoal ele cria na base do ódio
     if (!resumeData.personalInfo.id) {
       console.log("📤 Criando novo bloco de informações pessoais...");
 
@@ -293,14 +292,14 @@ export function EditationDatasResume() {
             id: response.data._id
           }
         }));
-        console.log("✅ Novo personalInfo salvo com ID:", response.data._id);
+        console.log("Novo personalInfo salvo com ID:", response.data._id);
       } else {
-        console.error("❌ Nenhum ID retornado ao criar dados pessoais");
+        console.error("Nenhum ID retornado ao criar dados pessoais");
       }
       return;
     }
 
-    // Se já existe, atualiza
+
     console.log("📤 Atualizando dados pessoais existentes...");
     const response = await resume.EditationPersonal(
       resumeId,
@@ -320,12 +319,12 @@ export function EditationDatasResume() {
     console.log("📬 Resposta ao atualizar:", response);
 
     if (response?.success) {
-      console.log("✅ Dados pessoais atualizados com sucesso!");
+      console.log("Dados pessoais atualizados com sucesso!");
     } else {
       console.warn("⚠ Backend não confirmou sucesso na atualização.");
     }
   } catch (err) {
-    console.error("❌ Erro ao salvar dados pessoais:", err);
+    console.error("Erro ao salvar dados pessoais:", err);
   }
   };
 
