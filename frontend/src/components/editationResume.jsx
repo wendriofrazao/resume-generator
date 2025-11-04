@@ -250,36 +250,83 @@ export function EditationDatasResume() {
     }));
   };
 
+
+  // ============ SALVAR DADOS PESSOAIS ============
+
   const HandlePersonalInfoEdit = async () => {
-    if (!resumeData.personalInfo.id) {
-      console.warn("⚠ Sem ID de dados pessoais.");
+   try {
+    console.log(" Editando dados pessoais:", resumeData.personalInfo);
+    console.log(" resumeId:", resumeId);
+
+    // Verifica se o resumeId é válido
+    if (!resumeId) {
+      console.error(" Nenhum resumeId encontrado na URL!");
       return;
     }
 
-    try {
-      console.log("📤 Atualizando dados pessoais...");
-      
-      const response = await resume.EditationPersonal(
-        resumeId,
-        resumeData.personalInfo.id,
-        resumeData.personalInfo.fullname,
-        resumeData.personalInfo.email,
-        resumeData.personalInfo.phone,
-        resumeData.personalInfo.city,
-        resumeData.personalInfo.state,
-        resumeData.personalInfo.country,
-        resumeData.personalInfo.summary,
-        resumeData.personalInfo.website,
-        resumeData.personalInfo.github,
-        resumeData.personalInfo.linkedin
-      );
+    // Se ainda não existe um registro pessoal, cria
+    if (!resumeData.personalInfo.id) {
+      console.log("📤 Criando novo bloco de informações pessoais...");
 
-      if (response?.success) {
-        console.log("✅ Dados pessoais atualizados com sucesso!");
+      const personalData = {
+        fullname: resumeData.personalInfo.fullname,
+        email: resumeData.personalInfo.email,
+        phone: resumeData.personalInfo.phone,
+        city: resumeData.personalInfo.city,
+        state: resumeData.personalInfo.state,
+        country: resumeData.personalInfo.country,
+        summary: resumeData.personalInfo.summary,
+        website: resumeData.personalInfo.website,
+        github: resumeData.personalInfo.github,
+        linkedin: resumeData.personalInfo.linkedin,
+        resumeId
+      };
+
+      const response = await resume.PersonalResumeProvide(personalData);
+      console.log("📬 Resposta ao criar:", response);
+
+      if (response?.data?._id) {
+        setResumeData(prev => ({
+          ...prev,
+          personalInfo: {
+            ...prev.personalInfo,
+            id: response.data._id
+          }
+        }));
+        console.log("✅ Novo personalInfo salvo com ID:", response.data._id);
+      } else {
+        console.error("❌ Nenhum ID retornado ao criar dados pessoais");
       }
-    } catch (err) {
-      console.error("❌ Erro ao atualizar dados pessoais:", err);
+      return;
     }
+
+    // Se já existe, atualiza
+    console.log("📤 Atualizando dados pessoais existentes...");
+    const response = await resume.EditationPersonal(
+      resumeId,
+      resumeData.personalInfo.id,
+      resumeData.personalInfo.fullname,
+      resumeData.personalInfo.email,
+      resumeData.personalInfo.phone,
+      resumeData.personalInfo.city,
+      resumeData.personalInfo.state,
+      resumeData.personalInfo.country,
+      resumeData.personalInfo.summary,
+      resumeData.personalInfo.website,
+      resumeData.personalInfo.github,
+      resumeData.personalInfo.linkedin
+    );
+
+    console.log("📬 Resposta ao atualizar:", response);
+
+    if (response?.success) {
+      console.log("✅ Dados pessoais atualizados com sucesso!");
+    } else {
+      console.warn("⚠ Backend não confirmou sucesso na atualização.");
+    }
+  } catch (err) {
+    console.error("❌ Erro ao salvar dados pessoais:", err);
+  }
   };
 
   // ============ EXPERIÊNCIAS ============

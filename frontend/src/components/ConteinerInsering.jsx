@@ -51,6 +51,8 @@ export function InseringDatasResume() {
     loadSavedTemplate();
   }, [resumeId]);
 
+
+
   const loadAvailableTemplates = async () => {
     try {
       const response = await resume.getAvailableTemplates();
@@ -209,7 +211,7 @@ export function InseringDatasResume() {
   };
 
   // ============ SALVAR DADOS PESSOAIS ============
-  const HandlePersonalInfo = async () => {
+ const HandlePersonalInfo = async () => {
     if (!resumeId) {
       console.error("resumeId não encontrado");
       return;

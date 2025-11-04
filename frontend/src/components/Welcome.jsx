@@ -4,6 +4,7 @@ import { getResumes, createResume, deleteResume } from "../service/ResumeService
 import { useNavigate } from "react-router-dom";
 import { Plus, FileText, Edit, Trash2, X } from "lucide-react";
 import { updateResumeTitle } from '../service/ResumeService.jsx'
+import { InseringDatasResume } from "./ConteinerInsering.jsx";
 
 export function Welcome() {
   const navigate = useNavigate();
