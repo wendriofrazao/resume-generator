@@ -9,7 +9,7 @@ export const Footer = () => {
       <Container maxWidth="lvw" >
         <Grid  container spacing={8}>
           {/* Brand Section */}
-          <Grid xs={12} sx={{ width: "20%", textAlign: "start", marginLeft: "15%" }} md={0}>
+          <Grid sx={{ width: "20%", textAlign: "start", marginLeft: "15%" }} >
             <Box display="flex" alignItems="center" gap={1}>
               <FileText size={20} color="#1976d2fa" />
               <Typography variant="h6" fontWeight="bold">
@@ -37,7 +37,7 @@ export const Footer = () => {
           </Grid>
 
           {/* Quick Links */}
-          <Grid xs={12} md={3}>
+          <Grid>
             <Typography variant="h6" fontWeight="bold" mb={2}>
               Links Rápidos
             </Typography>
@@ -58,7 +58,7 @@ export const Footer = () => {
           </Grid>
 
           {/* Resources */}
-          <Grid item sx={{ marginLeft: "10%" }} >
+          <Grid sx={{ marginLeft: "10%" }} >
             <Typography variant="h6" fontWeight="bold" mb={2}>
               Recursos
             </Typography>
@@ -79,7 +79,7 @@ export const Footer = () => {
           </Grid>
 
           {/* Contact */}
-          <Grid item xs={12} md={3}>
+          <Grid>
             <Typography variant="h6" fontWeight="bold" mb={2}>
               Contato
             </Typography>
