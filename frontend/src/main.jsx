@@ -6,6 +6,7 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './hooks/userAuth.jsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ToastProvider } from './components/ui/use-toast.jsx'
 
 import icon from "./assets/icon/Prancheta4.png";
 
@@ -27,7 +28,9 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
     <GoogleOAuthProvider clientId={clientId}>
       <AuthProvider>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
     </BrowserRouter>

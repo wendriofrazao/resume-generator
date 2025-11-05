@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/userAuth.jsx";
-import { getResumes, createResume, deleteResume } from "../service/ResumeService.jsx";
+import { getResumes, createResume, deleteResume, updateResumeTitle } from "../service/ResumeService.jsx";
 import { useNavigate } from "react-router-dom";
 import { Plus, FileText, Edit, Trash2, X } from "lucide-react";
-import { updateResumeTitle } from '../service/ResumeService.jsx'
-import { InseringDatasResume } from "./ConteinerInsering.jsx";
+import { useToast } from "../components/ui/use-toast.jsx";
 
 export function Welcome() {
   const navigate = useNavigate();
@@ -15,11 +14,15 @@ export function Welcome() {
   const [newTitle, setNewTitle] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [hoveredId, setHoveredId] = useState(null);
-
   const [editModal, setEditModal] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [selectedResume, setSelectedResume] = useState(null);
 
+  const { addToast } = useToast(); 
+
+  // ==========================
+  // Carrega currículos do usuário
+  // ==========================
   useEffect(() => {
     if (user) fetchResumes();
   }, [user]);
@@ -31,26 +34,32 @@ export function Welcome() {
       setResumes(data || []);
     } catch (error) {
       console.error("Erro ao carregar currículos:", error.message);
+      addToast("Erro ao carregar currículos.", "error");
     } finally {
       setLoadingResumes(false);
     }
   };
 
-
+  // ==========================
+  // Atualizar título
+  // ==========================
   const handleSaveTitle = async () => {
-  if (!editTitle.trim() || !selectedResume) return;
-  try {
-    await updateResumeTitle(selectedResume._id, editTitle);
-    setEditModal(false)
-    setSelectedResume(null);
-    fetchResumes();
-  } catch (err) {
-    console.error("Erro ao atualizar título:", err.message); 
-  }
-};
+    if (!editTitle.trim() || !selectedResume) return;
+    try {
+      await updateResumeTitle(selectedResume._id, editTitle);
+      addToast("Título atualizado com sucesso!", "success");
+      setEditModal(false);
+      setSelectedResume(null);
+      fetchResumes();
+    } catch (err) {
+      console.error("Erro ao atualizar título:", err.message);
+      addToast("Erro ao atualizar título.", "error");
+    }
+  };
 
-
-
+  // ==========================
+  // Criar novo currículo
+  // ==========================
   const handleCreateResume = async () => {
     if (!newTitle.trim()) return;
     setIsCreating(true);
@@ -58,30 +67,44 @@ export function Welcome() {
       const data = await createResume(newTitle);
       setNewTitle("");
       setShowCreateBox(false);
+
       setTimeout(() => {
         fetchResumes();
         navigate(`/dashboard/insering-data-resume/${data.data?._id || data.resume?.id}`);
+        addToast("Currículo criado com sucesso!", "success");
       }, 300);
     } catch (error) {
       console.error("Erro ao criar currículo:", error.message);
+      addToast("Erro ao criar currículo.", "error");
     } finally {
       setIsCreating(false);
     }
   };
 
+  // ==========================
+  // Editar currículo
+  // ==========================
   const handleEditationResume = (id) => {
     navigate(`/dashboard/editation-data-resume/${id}`);
   };
 
+  // ==========================
+  // Deletar currículo
+  // ==========================
   const handleDeleteResume = async (id) => {
     try {
       await deleteResume(id);
+      addToast("Currículo removido com sucesso.", "warning");
       fetchResumes();
     } catch (error) {
       console.error("Erro ao excluir currículo:", error.message);
+      addToast("Erro ao excluir currículo.", "error");
     }
   };
 
+  // ==========================
+  // Renderização
+  // ==========================
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -213,43 +236,42 @@ export function Welcome() {
           </div>
         )}
 
-{editModal && (
-  <div className="animate-scale-in fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Editar título</h2>
-        <button onClick={() => setEditModal(false)}>
-          <X className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-700" />
-        </button>
-      </div>
+        {/* Modal de edição de título */}
+        {editModal && (
+          <div className="animate-scale-in fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold">Editar título</h2>
+                <button onClick={() => setEditModal(false)}>
+                  <X className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-700" />
+                </button>
+              </div>
 
-      <input
-        type="text"
-        value={editTitle}
-        onChange={(e) => setEditTitle(e.target.value)}
-        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none mb-4"
-        placeholder="Novo título..."
-      />
+              <input
+                type="text"
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none mb-4"
+                placeholder="Novo título..."
+              />
 
-      <div className="flex justify-end gap-3">
-        <button
-          onClick={() => setEditModal(false)}
-          className="px-4 py-2 cursor-pointer text-gray-600 hover:text-gray-800 transition"
-        >
-          Cancelar
-        </button>
-        <button
-          onClick={handleSaveTitle}
-          className="px-4 py-2 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-md transition"
-        >
-          Salvar
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setEditModal(false)}
+                  className="px-4 py-2 cursor-pointer text-gray-600 hover:text-gray-800 transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSaveTitle}
+                  className="px-4 py-2 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white rounded-md transition"
+                >
+                  Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

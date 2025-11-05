@@ -13,6 +13,8 @@ import { ResumePreview } from "./ResumePreview";
 import { useParams } from "react-router-dom";
 import { ResumeProvide } from "../hooks/resumeHook";
 import { updateResumeTemplate } from "../service/ResumeService.jsx";
+import { useToast } from "./ui/use-toast.jsx";
+
 
 export function InseringDatasResume() {
   const [tabValue, setTabValue] = useState("personal");
@@ -24,6 +26,8 @@ export function InseringDatasResume() {
 
   const resume = new ResumeProvide();
   const { resumeId } = useParams();
+  const { addToast } = useToast();
+  
 
   // Estado unificado para todos os dados
   const [resumeData, setResumeData] = useState({
@@ -214,6 +218,7 @@ export function InseringDatasResume() {
  const HandlePersonalInfo = async () => {
     if (!resumeId) {
       console.error("resumeId não encontrado");
+      addToast("Erro: ID do currículo não encontrado.", "error");
       return;
     }
 
@@ -244,9 +249,13 @@ export function InseringDatasResume() {
             id: response.data._id
           }
         }));
+        addToast("Informações pessoais salvas com sucesso!", "success");
+      } else {
+        addToast("Erro ao salvar informações pessoais.", "error");
       }
     } catch (err) {
       console.error("❌ Erro ao enviar dados pessoais:", err);
+      addToast("Erro inesperado ao salvar dados pessoais.", "error");
     }
   };
 
@@ -304,8 +313,10 @@ export function InseringDatasResume() {
           )
         }));
       }
+      addToast("Experiência salva com sucesso!", "success");
     } catch (err) {
       console.error("❌ Erro ao enviar experiência:", err);
+      addToast("Erro ao salvar experiência.", "error");
     }
   };
 
@@ -316,8 +327,10 @@ export function InseringDatasResume() {
       try {
         await resume.ExperienceRemoveProvide(resumeId, experience.backendId);
         console.log("✅ Experiência removida do backend");
+        addToast("Experiência removida!", "warning");
       } catch (error) {
         console.error("❌ Erro ao remover experiência do backend:", error);
+        addToast("Erro ao remover experiência.", "error");
       }
     }
 
@@ -379,8 +392,10 @@ export function InseringDatasResume() {
           )
         }));
       }
+      addToast("Educação salva com sucesso!", "success");
     } catch (err) {
       console.error("❌ Erro ao enviar educação:", err);
+      addToast("Erro ao salvar educação.", "error");
     }
   };
 
@@ -391,8 +406,10 @@ export function InseringDatasResume() {
       try {
         await resume.EducationRemoveProvide(resumeId, education.backendId);
         console.log("✅ Educação removida do backend");
+        addToast("Educação removida!", "warning");
       } catch (error) {
         console.error("❌ Erro ao remover educação:", error);
+        addToast("Erro ao remover educação.", "error");
       }
     }
 
@@ -475,8 +492,10 @@ export function InseringDatasResume() {
       }));
 
       console.log("✅ Dados pessoais removidos com sucesso!");
+      addToast("Dados pessoais removidos com sucesso!", "warning");
     } catch (error) {
       console.error("❌ Erro ao remover dados pessoais:", error);
+      addToast("Erro ao remover dados pessoais.", "error");
     }
   };
 

@@ -13,6 +13,8 @@ import { ResumePreview } from "./ResumePreview";
 import { useParams } from "react-router-dom";
 import { ResumeProvide } from "../hooks/resumeHook";
 import { updateResumeTemplate } from "../service/ResumeService.jsx";
+import { useToast } from "./ui/use-toast.jsx";
+
 
 export function EditationDatasResume() {
   const [tabValue, setTabValue] = useState("personal");
@@ -21,9 +23,11 @@ export function EditationDatasResume() {
   const [templateHTML, setTemplateHTML] = useState("");
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  
 
   const resume = new ResumeProvide();
   const { resumeId } = useParams();
+  const { addToast } = useToast();
 
   const [resumeData, setResumeData] = useState({
     personalInfo: {
@@ -260,6 +264,7 @@ export function EditationDatasResume() {
 
     if (!resumeId) {
       console.error("Nenhum resumeId encontrado na URL!");
+      addToast("Erro: ID do currículo não encontrado.", "error");
       return;
     }
 
@@ -293,8 +298,10 @@ export function EditationDatasResume() {
           }
         }));
         console.log("Novo personalInfo salvo com ID:", response.data._id);
+        addToast("Informações pessoais criadas com sucesso!", "success");
       } else {
         console.error("Nenhum ID retornado ao criar dados pessoais");
+        addToast("Erro ao criar informações pessoais.", "error");
       }
       return;
     }
@@ -320,11 +327,14 @@ export function EditationDatasResume() {
 
     if (response?.success) {
       console.log("Dados pessoais atualizados com sucesso!");
+      addToast("Informações pessoais atualizadas com sucesso!", "success");
     } else {
       console.warn("⚠ Backend não confirmou sucesso na atualização.");
+      addToast("Erro ao atualizar informações pessoais.", "error");
     }
   } catch (err) {
     console.error("Erro ao salvar dados pessoais:", err);
+    addToast("Erro inesperado ao salvar dados pessoais.", "error");
   }
   };
 
@@ -360,6 +370,7 @@ export function EditationDatasResume() {
     
     if (!experience) {
       console.error("❌ Experiência não encontrada");
+      addToast("Erro: experiência não encontrada.", "error");
       return;
     }
 
@@ -373,6 +384,8 @@ export function EditationDatasResume() {
           experience.period,
           resumeId
         );
+
+
 
         if (response?.data?._id) {
           console.log("✅ Experiência criada com ID:", response.data._id);
@@ -388,8 +401,10 @@ export function EditationDatasResume() {
             )
           }));
         }
+        addToast("Experiência criada com sucesso!", "success");
       } catch (err) {
         console.error("❌ Erro ao criar experiência:", err);
+        addToast("Erro ao criar experiência.", "error");
       }
     } else {
       try {
@@ -405,9 +420,11 @@ export function EditationDatasResume() {
 
         if (response?.success) {
           console.log("✅ Experiência atualizada com sucesso!");
+          addToast("Experiência atualizada com sucesso!", "success");
         }
       } catch (err) {
         console.error("❌ Erro ao atualizar experiência:", err);
+        addToast("Erro ao atualizar experiência.", "error");
       }
     }
   };
@@ -419,8 +436,11 @@ export function EditationDatasResume() {
       try {
         await resume.ExperienceRemoveProvide(resumeId, experience.backendId);
         console.log("✅ Experiência removida do backend");
+        addToast("Experiência removida localmente.", "warning");
       } catch (error) {
         console.error("❌ Erro ao remover experiência:", error);
+        addToast("Erro ao remover experiência.", "error");
+
       }
     }
 
@@ -487,9 +507,12 @@ export function EditationDatasResume() {
               } : edu
             )
           }));
+          addToast("Educação criada com sucesso!", "success");
         }
       } catch (err) {
         console.error("❌ Erro ao criar educação:", err);
+        addToast("Erro ao criar educação.", "error");
+
       }
     } else {
       try {
@@ -504,9 +527,11 @@ export function EditationDatasResume() {
 
         if (response?.success) {
           console.log("✅ Educação atualizada com sucesso!");
+          addToast("Educação atulizada com sucesso!", "success");
         }
       } catch (err) {
         console.error("❌ Erro ao atualizar educação:", err);
+        addToast("Erro ao atualizar educação.", "error");
       }
     }
   };
@@ -518,8 +543,10 @@ export function EditationDatasResume() {
       try {
         await resume.EducationRemoveProvide(resumeId, education.backendId);
         console.log("✅ Educação removida do backend");
+        addToast("Habilidade removida.", "warning");
       } catch (error) {
         console.error("❌ Erro ao remover educação:", error);
+        addToast("Erro ao remover educação.", "error");
       }
     }
 
@@ -578,6 +605,7 @@ export function EditationDatasResume() {
   const handleRemovePersonal = async () => {
     if (!resumeData.personalInfo.id) {
       console.warn("⚠ Nenhum ID de dados pessoais encontrado!");
+      addToast("Nenhum dado pessoal para remover.", "warning");
       return;
     }
 
@@ -602,8 +630,10 @@ export function EditationDatasResume() {
       }));
 
       console.log("✅ Dados pessoais removidos com sucesso!");
+      addToast("Dados pessoais removidos com sucesso!", "warning");
     } catch (error) {
       console.error("❌ Erro ao remover dados pessoais:", error);
+       addToast("Erro ao remover dados pessoais.", "error");
     }
   };
 
@@ -796,13 +826,13 @@ export function EditationDatasResume() {
                   <div className="flex justify-end gap-3">
                     <Button
                       onClick={HandlePersonalInfoEdit}
-                      className="bg-blue-500 hover:bg-blue-600"
+                      className="bg-blue-500 cursor-pointer hover:bg-blue-600"
                     >
                       Salvar Alterações
                     </Button>
                     <Button
                       onClick={handleRemovePersonal}
-                      className="bg-red-500 hover:bg-red-600"
+                      className="bg-red-500 cursor-pointer hover:bg-red-600"
                     >
                       Limpar Dados
                     </Button>
@@ -853,12 +883,13 @@ export function EditationDatasResume() {
                         <div className="flex gap-2">
                           <Button
                             onClick={() => HandleExperienceSave(exp.id)}
-                            className="bg-blue-500 hover:bg-blue-600"
+                            className="bg-blue-500 cursor-pointer hover:bg-blue-600"
                             size="sm"
                           >
                             {exp.saved ? "Atualizar" : "Salvar"}
                           </Button>
                           <Button
+                          className="cursor-pointer"
                             variant="destructive"
                             size="sm"
                             onClick={() => handleRemoveExperience(exp.id)}
@@ -909,12 +940,13 @@ export function EditationDatasResume() {
                         <div className="flex gap-2">
                           <Button
                             onClick={() => HandleEducationSave(edu.id)}
-                            className="bg-blue-500 hover:bg-blue-600"
+                            className="bg-blue-500 cursor-pointer hover:bg-blue-600"
                             size="sm"
                           >
                             {edu.saved ? "Atualizar" : "Salvar"}
                           </Button>
                           <Button
+                           className="cursor-pointer"
                             variant="destructive"
                             size="sm"
                             onClick={() => handleRemoveEducation(edu.id)}
@@ -924,7 +956,7 @@ export function EditationDatasResume() {
                         </div>
                       </div>
                     ))}
-                    <Button onClick={addEducation} variant="outline" className="w-full">
+                    <Button onClick={addEducation} variant="outline" className="w-full cursor-pointer">
                       + Adicionar Educação
                     </Button>
                   </div>
@@ -950,7 +982,7 @@ export function EditationDatasResume() {
                       />
                       <Button
                         type="submit"
-                        className="bg-[#4285F4] hover:bg-[#357AE8]"
+                        className="bg-[#4285F4] cursor-pointer hover:bg-[#357AE8]"
                       >
                         Adicionar
                       </Button>
