@@ -53,9 +53,68 @@ export function InseringDatasResume() {
   useEffect(() => {
     loadAvailableTemplates();
     loadSavedTemplate();
+    loadResumeData();
   }, [resumeId]);
 
+  const loadResumeData = async () => {
+  try {
+    const res = await resume.getResumeComplete(resumeId);
+    if (res.success && res.data) {
+      const { personalDetails, experiences, education, skills, resume: resumeInfo } = res.data;
 
+      if (resumeInfo?.templateId) {
+        const templateId = typeof resumeInfo.templateId === 'object' 
+          ? resumeInfo.templateId._id 
+          : resumeInfo.templateId;
+        
+        setSelectedTemplateId(templateId);
+        console.log("✅ Template salvo carregado:", templateId);
+      }
+
+      setResumeData({
+        personalInfo: {
+          id: personalDetails?._id || null,
+          fullname: personalDetails?.fullname || "",
+          email: personalDetails?.email || "",
+          phone: personalDetails?.phone || "",
+          city: personalDetails?.location?.city || "",
+          state: personalDetails?.location?.state || "",
+          country: personalDetails?.location?.country || "",
+          summary: personalDetails?.summary || "",
+          website: personalDetails?.website || "",
+          github: personalDetails?.github || "",
+          linkedin: personalDetails?.linkedin || "",
+        },
+        experiences: experiences?.map(exp => ({
+          id: exp._id,
+          backendId: exp._id,
+          jobDegree: exp.jobDegree || "",
+          company: exp.company || "",
+          period: exp.period || "",
+          description: exp.description || "",
+          saved: true
+        })) || [],
+        education: education?.map(edu => ({
+          id: edu._id,
+          backendId: edu._id,
+          degree: edu.degree || "",
+          institution: edu.institution || "",
+          period: edu.period || "",
+          saved: true
+        })) || [],
+        skills: skills?.map(skill => ({
+          id: skill._id,
+          backendId: skill._id,
+          skillName: skill.skillName || ""
+        })) || [],
+      });
+
+      console.log("✅ Dados carregados com sucesso");
+    }
+  } catch (error) {
+    console.error("❌ Erro ao carregar dados do currículo:", error);
+  }
+};
 
   const loadAvailableTemplates = async () => {
     try {

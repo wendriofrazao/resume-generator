@@ -112,13 +112,6 @@ export async function experienceWorkService(data, resumeId) {
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');
 
-    const experiences = [ 
-      "jobDegree", "company", "description", "period"
-    ];
-
-    for (const xpWork of experiences) {
-      if (!data[xpWork]) throw new Error(`O campo "${xpWork}" é obrigatório`);
-    }
 
     const newXPWork = await Experience.create({
       resumeId,
@@ -140,14 +133,6 @@ export async function educationService(data, resumeId) {
     const isVerifyResume = await findResumeById(resumeId);
 
     if (!isVerifyResume || isVerifyResume == '') throw new Error('Id não correspondido ao currículo');
-
-    const educations = [ 
-      "degree", "institution", "period"
-    ];
-
-    for (const learn of educations) {
-      if (!data[learn]) throw new Error(`O campo "${learn}" é obrigatório`);
-    }
 
     const newEducation = await Education.create({
       resumeId,
