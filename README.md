@@ -24,7 +24,7 @@ Com ele, qualquer pessoa pode montar um portfólio elegante e responsivo em pouc
 ---
 
 ## 🛠️ Tecnologias utilizadas  
-- **Frontend:** HTML / CSS / JavaScript / React.js + Vite / Tailwind / Material UI
+- **Frontend:** React.js + Vite / Tailwind / Material UI
 - **Backend:** Node.js / Express / Handlebars / bcrypt / nodemailer / validator / cookie-session / express-session
 - **Banco de Dados:** MongoDB
 - **Teste de APIs:** Postman
