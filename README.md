@@ -73,27 +73,12 @@ Backend:
 │   ├── 📄 resumeService.js
 │   ├── 📄 templateService.js
 │   └── 📄 userServices.js
-├── 📁 uploads
-│   └── 🖼️ 1756775896662-788198395.jpg
 ├── 📁 utils
 │   └── 📁 helpers
 │       ├── 📄 generateOtp.js
 │       └── 📄 upload.js
 ├── 📁 validators
 │   └── 📄 authValidator.js
-├── 📁 views
-│   ├── 📁 errors
-│   │   ├── 📄 404.handlebars
-│   │   └── 📄 500.handlebars
-│   ├── 📁 layouts
-│   │   ├── 📄 erros.handlebars
-│   │   ├── 📄 main.handlebars
-│   │   └── 📄 templates.handlebars
-│   ├── 📁 template
-│   │   ├── 📄 internship.handlebars
-│   │   └── 📄 work.handlebars
-│   └── 📁 works
-│       └── 📄 personalCreate.handlebars
 ├── ⚙️ package-lock.json
 ├── ⚙️ package.json
 └── 📄 server.js
